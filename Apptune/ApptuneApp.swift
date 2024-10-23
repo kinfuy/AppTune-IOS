@@ -1,20 +1,23 @@
 //
-//  ApptuneApp.swift
-//  Apptune
+//  SuperIdApp.swift
+//  SuperId
 //
-//  Created by 杨杨杨 on 2024/10/5.
+//  Created by 杨杨杨 on 2024/4/21.
 //
 
+import SwiftDate
 import SwiftUI
 
 @main
 struct ApptuneApp: App {
-    let persistenceController = PersistenceController.shared
+    
+    init() {
+        SwiftDate.defaultRegion = Region.local
+    }
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            ScreenManage()
         }
     }
 }
