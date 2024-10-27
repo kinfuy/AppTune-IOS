@@ -112,7 +112,12 @@ struct UserSettingView: View {
                     .foregroundStyle(Color(hex: "#333333"))
                 })
         )
+        .enableInjection()
     }
+
+    #if DEBUG
+    @ObserveInjection var forceRedraw
+    #endif
 }
 
 #Preview {

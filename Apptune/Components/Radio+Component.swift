@@ -17,7 +17,12 @@ struct RadioButton: View {
         .contentShape(Rectangle())
         .onTapGesture { isSelected = true }
         .disabled(isDisabled)
+        .enableInjection()
     }
+
+    #if DEBUG
+    @ObserveInjection var forceRedraw
+    #endif
 }
 
 private extension RadioButton {

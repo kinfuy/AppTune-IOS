@@ -65,7 +65,12 @@ struct ScreenManage: View {
             }
         }
         .preferredColorScheme(.light)
+        .enableInjection()
     }
+
+    #if DEBUG
+    @ObserveInjection var forceRedraw
+    #endif
 }
 
 #Preview {

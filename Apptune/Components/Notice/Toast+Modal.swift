@@ -39,5 +39,10 @@ struct Toast_Modal: View {
         .background(loading ? .black.opacity(0.88) : .black)
         .cornerRadius(8)
         .frame(maxWidth: UIScreen.main.bounds.width * 0.78)
+        .enableInjection()
     }
+
+    #if DEBUG
+    @ObserveInjection var forceRedraw
+    #endif
 }

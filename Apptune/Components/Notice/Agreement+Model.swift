@@ -48,7 +48,12 @@ struct Agreement_Model: View {
     }
     .frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity /*@END_MENU_TOKEN@*/, maxHeight: .infinity)
     .ignoresSafeArea()
+      .enableInjection()
   }
+
+  #if DEBUG
+  @ObserveInjection var forceRedraw
+  #endif
 }
 
 #Preview {

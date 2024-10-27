@@ -25,6 +25,7 @@ enum APIError: Error {
     case invaldURL
     case invaldCode(Int)
     case serveError(String)
+    case unauthorized(String)
     case noNetwork(String)
 
     var description: String {
@@ -35,6 +36,8 @@ enum APIError: Error {
             return "无效的请求地址"
         case .invaldCode:
             return "Error: \(localizedDescription)"
+        case .unauthorized:
+            return "登录过期或鉴权失败"
         case .serveError:
             return "\(localizedDescription)"
         }
@@ -50,8 +53,7 @@ extension URLSession {
         var data: T?
     }
 
-    func data(for urlRequest: URLRequest) async throws {
-        
+    func data<T: Decodable>(for urlRequest: URLRequest) async throws -> T? {
         // 检查网络连接状态
         var isConnected = CheckInternetConnection.isConnected()
 
@@ -61,18 +63,21 @@ extension URLSession {
         }
 
         if !isConnected {
-            throw APIError.noNetwork("网络连接失败")
+            throw APIError.noNetwork("网络连接失败") // 如果没有网络连接，可以视为无效的 URL
         }
-        
+
         let (data, response) = try await self.data(for: urlRequest)
         guard let response = response as? HTTPURLResponse else { throw APIError.invaldURL }
         guard 200 ... 299 ~= response.statusCode else { throw APIError.invaldCode(response.statusCode) }
-        
-        // Attempt to decode to Response<Void> with no 'data'
-        let res = try JSONDecoder().decode(Response<VoidCodable>.self, from: data)
-        
+        let res = try JSONDecoder().decode(Response<T>.self, from: data)
+
         guard res.code == "000000" else {
+            if res.code == "100004" {
+                try await APIManager.shared.refreshAccessToken()
+                return try await self.data(for: urlRequest)
+            }
             throw APIError.serveError(res.message)
         }
+        return res.data
     }
 }

@@ -77,5 +77,10 @@ struct Version_Modal: View {
 
     }
 
+      .enableInjection()
   }
+
+  #if DEBUG
+  @ObserveInjection var forceRedraw
+  #endif
 }

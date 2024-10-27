@@ -17,12 +17,13 @@
 		F26F15982CC513C300848715 /* Confirm+Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F15972CC513C300848715 /* Confirm+Modal.swift */; };
 		F26F159A2CC5370900848715 /* EmailLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F15992CC5370900848715 /* EmailLoginView.swift */; };
 		F26F159D2CC538CE00848715 /* User+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F159C2CC538CE00848715 /* User+Service.swift */; };
-		F26F15A32CC69D6E00848715 /* User+Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F15A22CC69D6E00848715 /* User+Api.swift */; };
+		F26F15A32CC69D6E00848715 /* User+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F15A22CC69D6E00848715 /* User+API.swift */; };
 		F26F15AD2CC6A92B00848715 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = F26F15AC2CC6A92B00848715 /* SwiftyJSON */; };
 		F27A94832CC00AEC002A2BEA /* ProductView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F27A94822CC00AEC002A2BEA /* ProductView.swift */; };
 		F27C657D2CB16F1B0074B608 /* ApptuneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F27C657C2CB16F1B0074B608 /* ApptuneApp.swift */; };
 		F27C65862CB16F1C0074B608 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F27C65852CB16F1C0074B608 /* Assets.xcassets */; };
 		F27C658A2CB16F1C0074B608 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F27C65892CB16F1C0074B608 /* Preview Assets.xcassets */; };
+		F299FE592CC94D2F0009C956 /* MD5+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = F299FE582CC94D2F0009C956 /* MD5+Util.swift */; };
 		F2A0D5FB2CC360EA00536C58 /* ScalingHeaderScrollView in Frameworks */ = {isa = PBXBuildFile; productRef = F2A0D5FA2CC360EA00536C58 /* ScalingHeaderScrollView */; };
 		F2A0D5FE2CC3862700536C58 /* UserDefault+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A0D5FD2CC3862700536C58 /* UserDefault+Util.swift */; };
 		F2A0D6022CC386DF00536C58 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A0D6012CC386DF00536C58 /* String+Extension.swift */; };
@@ -53,6 +54,8 @@
 		F2B269FB2CB6D671008C46B8 /* TabBar+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269FA2CB6D671008C46B8 /* TabBar+Component.swift */; };
 		F2B269FD2CB6D725008C46B8 /* LanchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269FC2CB6D725008C46B8 /* LanchView.swift */; };
 		F2B26A002CB6D764008C46B8 /* GudieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269FF2CB6D764008C46B8 /* GudieView.swift */; };
+		F2D9250C2CCD0D6B0044B3BA /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = F2D9250B2CCD0D6B0044B3BA /* Inject */; };
+		F2FC0F412CCAA49400CF8ACE /* Base+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FC0F402CCAA49400CF8ACE /* Base+API.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,13 +69,14 @@
 		F26F15972CC513C300848715 /* Confirm+Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Confirm+Modal.swift"; sourceTree = "<group>"; };
 		F26F15992CC5370900848715 /* EmailLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginView.swift; sourceTree = "<group>"; };
 		F26F159C2CC538CE00848715 /* User+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Service.swift"; sourceTree = "<group>"; };
-		F26F15A22CC69D6E00848715 /* User+Api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Api.swift"; sourceTree = "<group>"; };
+		F26F15A22CC69D6E00848715 /* User+API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+API.swift"; sourceTree = "<group>"; };
 		F27A94822CC00AEC002A2BEA /* ProductView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductView.swift; sourceTree = "<group>"; };
 		F27C65792CB16F1B0074B608 /* Apptune.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Apptune.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F27C657C2CB16F1B0074B608 /* ApptuneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApptuneApp.swift; sourceTree = "<group>"; };
 		F27C65852CB16F1C0074B608 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F27C65872CB16F1C0074B608 /* Apptune.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Apptune.entitlements; sourceTree = "<group>"; };
 		F27C65892CB16F1C0074B608 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F299FE582CC94D2F0009C956 /* MD5+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MD5+Util.swift"; sourceTree = "<group>"; };
 		F2A0D5FD2CC3862700536C58 /* UserDefault+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefault+Util.swift"; sourceTree = "<group>"; };
 		F2A0D6012CC386DF00536C58 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		F2A0D6032CC3887800536C58 /* Toast+Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Toast+Component.swift"; sourceTree = "<group>"; };
@@ -100,6 +104,7 @@
 		F2B269FA2CB6D671008C46B8 /* TabBar+Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabBar+Component.swift"; sourceTree = "<group>"; };
 		F2B269FC2CB6D725008C46B8 /* LanchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanchView.swift; sourceTree = "<group>"; };
 		F2B269FF2CB6D764008C46B8 /* GudieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GudieView.swift; sourceTree = "<group>"; };
+		F2FC0F402CCAA49400CF8ACE /* Base+API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Base+API.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +112,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2D9250C2CCD0D6B0044B3BA /* Inject in Frameworks */,
 				F2AE42852CB97162009E72C3 /* Kingfisher in Frameworks */,
 				F2B269722CB57233001230B4 /* SwiftDate in Frameworks */,
 				F26F15AD2CC6A92B00848715 /* SwiftyJSON in Frameworks */,
@@ -181,7 +187,8 @@
 		F26F15A12CC69D4C00848715 /* Apis */ = {
 			isa = PBXGroup;
 			children = (
-				F26F15A22CC69D6E00848715 /* User+Api.swift */,
+				F26F15A22CC69D6E00848715 /* User+API.swift */,
+				F2FC0F402CCAA49400CF8ACE /* Base+API.swift */,
 			);
 			path = Apis;
 			sourceTree = "<group>";
@@ -239,6 +246,7 @@
 			children = (
 				F2A0D5FD2CC3862700536C58 /* UserDefault+Util.swift */,
 				F2A0D6112CC4AFB200536C58 /* Const+Util.swift */,
+				F299FE582CC94D2F0009C956 /* MD5+Util.swift */,
 				F22377E22CC6AC0200F780AE /* Network+Util.swift */,
 			);
 			path = Utils;
@@ -324,6 +332,7 @@
 				F2AE42842CB97162009E72C3 /* Kingfisher */,
 				F2A0D5FA2CC360EA00536C58 /* ScalingHeaderScrollView */,
 				F26F15AC2CC6A92B00848715 /* SwiftyJSON */,
+				F2D9250B2CCD0D6B0044B3BA /* Inject */,
 			);
 			productName = Apptune;
 			productReference = F27C65792CB16F1B0074B608 /* Apptune.app */;
@@ -358,6 +367,7 @@
 				F2AE42832CB97162009E72C3 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				F2A0D5F92CC360EA00536C58 /* XCRemoteSwiftPackageReference "ScalingHeaderScrollView" */,
 				F26F15AB2CC6A92B00848715 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				F2D9250A2CCD0D6B0044B3BA /* XCRemoteSwiftPackageReference "Inject" */,
 			);
 			productRefGroup = F27C657A2CB16F1B0074B608 /* Products */;
 			projectDirPath = "";
@@ -400,15 +410,17 @@
 				F2A0D60E2CC40AAA00536C58 /* Agreement+Model.swift in Sources */,
 				F23F8F732CBD5AD5005546EE /* Font+Extension.swift in Sources */,
 				F2B2697D2CB57B80001230B4 /* Radio+Component.swift in Sources */,
-				F26F15A32CC69D6E00848715 /* User+Api.swift in Sources */,
+				F26F15A32CC69D6E00848715 /* User+API.swift in Sources */,
 				F22377E32CC6AC0200F780AE /* Network+Util.swift in Sources */,
 				F2B269F92CB6C6AA008C46B8 /* SFSymbol+Component.swift in Sources */,
 				F2A0D6102CC49FD800536C58 /* Toast+Modal.swift in Sources */,
+				F299FE592CC94D2F0009C956 /* MD5+Util.swift in Sources */,
 				F2AE42802CB96DFF009E72C3 /* TextColor+Component.swift in Sources */,
 				F23F8F792CBEB2BA005546EE /* UserView.swift in Sources */,
 				F2B269FB2CB6D671008C46B8 /* TabBar+Component.swift in Sources */,
 				F2B26A002CB6D764008C46B8 /* GudieView.swift in Sources */,
 				F2AE427C2CB96CBA009E72C3 /* Tool+Extension.swift in Sources */,
+				F2FC0F412CCAA49400CF8ACE /* Base+API.swift in Sources */,
 				F2B269F72CB6C58C008C46B8 /* Text+Extension.swift in Sources */,
 				F26F15982CC513C300848715 /* Confirm+Modal.swift in Sources */,
 				F2B269772CB574B0001230B4 /* LoginView.swift in Sources */,
@@ -575,6 +587,10 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-Xlinker",
+					"-interposable",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = kinfuy.Apptune;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -615,6 +631,10 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-Xlinker",
+					"-interposable",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = kinfuy.Apptune;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -681,6 +701,14 @@
 				minimumVersion = 7.0.0;
 			};
 		};
+		F2D9250A2CCD0D6B0044B3BA /* XCRemoteSwiftPackageReference "Inject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/krzysztofzablocki/Inject.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -703,6 +731,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F2B269702CB57232001230B4 /* XCRemoteSwiftPackageReference "SwiftDate" */;
 			productName = SwiftDate;
+		};
+		F2D9250B2CCD0D6B0044B3BA /* Inject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F2D9250A2CCD0D6B0044B3BA /* XCRemoteSwiftPackageReference "Inject" */;
+			productName = Inject;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

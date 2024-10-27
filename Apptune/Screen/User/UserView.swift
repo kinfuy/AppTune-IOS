@@ -33,7 +33,7 @@ struct UserView: View {
                 }
                 HStack (alignment: .top) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text(user.username)
+                        Text(user.name)
                             .font(.title3)
                             .fontWeight(/*@START_MENU_TOKEN@*/ .bold/*@END_MENU_TOKEN@*/)
                         HStack {
@@ -59,7 +59,7 @@ struct UserView: View {
                         }
                     }
                     Spacer()
-                    ImgLoader(user.avator)
+                    ImgLoader(user.avator ?? "user")
                         .frame(width: 78, height: 78)
                         .clipShape(Circle())
                         .background(
@@ -154,7 +154,12 @@ struct UserView: View {
                 }
             }
         }
+        .enableInjection()
     }
+
+    #if DEBUG
+    @ObserveInjection var forceRedraw
+    #endif
 }
 
 #Preview {

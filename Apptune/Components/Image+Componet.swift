@@ -28,5 +28,10 @@ struct ImgLoader: View {
                     .resizable()
             }
         }
+        .enableInjection()
     }
+
+    #if DEBUG
+    @ObserveInjection var forceRedraw
+    #endif
 }

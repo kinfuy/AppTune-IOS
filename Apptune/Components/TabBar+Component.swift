@@ -74,7 +74,12 @@ struct MainTabbedView: View {
             .cornerRadius(35)
             .padding(.horizontal)
         }
+        .enableInjection()
     }
+
+    #if DEBUG
+    @ObserveInjection var forceRedraw
+    #endif
 }
 
 extension MainTabbedView {

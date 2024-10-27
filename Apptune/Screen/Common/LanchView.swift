@@ -16,7 +16,12 @@ struct LaunchView: View {
       .frame(width: geometry.size.width, height: geometry.size.height)
     })
 
+      .enableInjection()
   }
+
+  #if DEBUG
+  @ObserveInjection var forceRedraw
+  #endif
 }
 
 #Preview {

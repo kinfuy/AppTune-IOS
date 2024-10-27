@@ -42,11 +42,17 @@ struct ToastView: View {
                 })
             }
         }
+        .enableInjection()
     }
+
+    #if DEBUG
+    @ObserveInjection var forceRedraw
+    #endif
 }
 
 
 extension View {
+    @MainActor
     func toast(isShow: Binding<Bool>, info: String = "", duration: Double = 1.0) -> some View {
         ZStack {
             self
