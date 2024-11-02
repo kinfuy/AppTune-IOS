@@ -11,10 +11,6 @@ struct UserView: View {
   @EnvironmentObject var router: Router
   @EnvironmentObject var userService: UserService
 
-  var user: UserInfo {
-    return userService.user
-  }
-
   var body: some View {
     ZStack {
       VStack {
@@ -32,11 +28,14 @@ struct UserView: View {
         }
         HStack(alignment: .top) {
           VStack(alignment: .leading, spacing: 8) {
-            Text(user.name)
+            Text(userService.profile.name)
               .font(.title3)
-              .fontWeight( /*@START_MENU_TOKEN@*/.bold /*@END_MENU_TOKEN@*/)
+              .fontWeight(.bold)
               .onTapGesture {
-                router.navigate(to: .userProfile)
+                Tap.shared.play(.light)
+                DispatchQueue.main.async {
+                  router.navigate(to: .userProfile)
+                }
               }
             HStack {
               Text("社区创始人")
@@ -45,14 +44,14 @@ struct UserView: View {
             }
             HStack(spacing: 32) {
               VStack(alignment: .leading) {
-                Text(user.follow.description)
+                Text(userService.stats.follow.description)
                   .font(.system(size: 16))
                 Text("关注")
                   .foregroundColor(.gray)
                   .font(.system(size: 12))
               }
               VStack(alignment: .leading) {
-                Text(user.fans.description)
+                Text(userService.stats.fans.description)
                   .font(.system(size: 16))
                 Text("粉丝")
                   .foregroundColor(.gray)
@@ -61,7 +60,7 @@ struct UserView: View {
             }
           }
           Spacer()
-          ImgLoader(user.avatar)
+          ImgLoader(userService.profile.avatar)
             .frame(width: 78, height: 78)
             .clipShape(Circle())
             .background(
@@ -74,17 +73,19 @@ struct UserView: View {
                 .stroke(Color.white, lineWidth: 2)
             )
             .onTapGesture {
-              router.navigate(to: .userProfile)
+              Tap.shared.play(.light)
+              DispatchQueue.main.async {
+                router.navigate(to: .userProfile)
+              }
             }
-
         }
         .padding(.horizontal)
         .padding(.vertical, 32)
         HStack {
           VStack(alignment: .leading, spacing: 4) {
             HStack {
-              Text(user.coin.description)
-                .fontWeight( /*@START_MENU_TOKEN@*/.bold /*@END_MENU_TOKEN@*/)
+              Text(userService.stats.coin.description)
+                .fontWeight(.bold)
                 .font(.system(size: 22))
                 .foregroundColor(.white)
               Text("积分")
@@ -144,7 +145,6 @@ struct UserView: View {
             .blur(radius: 40)
             .padding(.leading)
           Spacer()
-
         }
         Spacer()
       }
@@ -153,7 +153,7 @@ struct UserView: View {
     .onAppear {
       Task {
         do {
-          try await userService.loadUser()
+          try await userService.refreshUserInfo()
         } catch let APIError.serveError(_, message) {
           print("业务错误：\(message)")
         } catch {

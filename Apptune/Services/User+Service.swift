@@ -6,14 +6,25 @@
 //
 import SwiftUI
 
-struct UserInfo {
+// 基本用户信息
+struct UserProfile {
   var email: String
   var role: String
   var name: String
   var avatar: String
+  var mobile: String?
+  var sex: Int?
+}
+
+// 用户统计信息
+struct UserStats {
   var follow: Int
   var fans: Int
   var coin: Int
+}
+
+// 用户认证信息
+struct UserAuth {
   var accessToken: String
   var refreshToken: String
 }
@@ -21,127 +32,155 @@ struct UserInfo {
 class UserService: ObservableObject {
   static let shared = UserService()
 
-  init() {
-    let loginEmail = UserDefaults.standard.string(forKey: "loginEmail")
-    let accessToken = UserDefaults.standard.string(forKey: "accessToken")
-    let refreshToken = UserDefaults.standard.string(forKey: "refreshToken")
-
-    if let loginEmail = loginEmail,
-      let accessToken = accessToken,
-      let refreshToken = refreshToken,
-      !loginEmail.isEmpty && !accessToken.isEmpty && !refreshToken.isEmpty
-    {
-      isLogin = true
-      self.user.email = loginEmail
-      self.user.accessToken = accessToken
-      self.user.refreshToken = refreshToken
-    }
-  }
-
+  // MARK: - Published Properties
   @Published var isLogin = false
+  @Published var profile: UserProfile
+  @Published var stats: UserStats
+  @Published var auth: UserAuth
 
-  @Published var user: UserInfo = UserInfo(
-    email: "",
-    role: "",
-    name: "--",
-    avatar: "p_8",
-    follow: 0,
-    fans: 0,
-    coin: 0,
-    accessToken: "",
-    refreshToken: ""
-  )
-
-  func logout() {
-    isLogin = false
-    clearUserData()
-    clearToken()
+  // MARK: - Constants
+  private let storage = UserDefaults.standard
+  private enum StorageKeys {
+    static let loginEmail = "loginEmail"
+    static let accessToken = "accessToken"
+    static let refreshToken = "refreshToken"
   }
 
-  func login(u: UserInfo) {
-    isLogin = true
-    updateUserInfo(u)
-    saveUserDefaults()
-  }
-
-  func setToken(access: String, refresh: String) {
-    user.accessToken = access
-    user.refreshToken = refresh
-    UserDefaults.standard.set(access, forKey: "accessToken")
-    UserDefaults.standard.set(refresh, forKey: "refreshToken")
-  }
-
-  func clearToken() {
-    user.accessToken = ""
-    user.refreshToken = ""
-    UserDefaults.standard.removeObject(forKey: "accessToken")
-    UserDefaults.standard.removeObject(forKey: "refreshToken")
-  }
-
-  func loadUser() async throws {
-    if !isLogin || user.email.isEmpty { return }
-
-    do {
-      let u = try await UserAPI.shared.fetchUserInfo(email: user.email)
-      DispatchQueue.main.async {
-        self.updateUserInfo(
-          UserInfo(
-            email: u.email,
-            role: u.role,
-            name: u.name,
-            avatar: u.avatar,
-            follow: self.user.follow,
-            fans: self.user.fans,
-            coin: self.user.coin,
-            accessToken: self.user.accessToken,
-            refreshToken: self.user.refreshToken
-          ))
-      }
-    } catch let APIError.serveError(code, _) {
-      if code == "100004" || code == "100006" {
-        DispatchQueue.main.async {
-          self.logout()
-        }
-      }
-    }
-  }
-
-  private func clearUserData() {
-    user = UserInfo(
+  // MARK: - Initialization
+  init() {
+    // 初始化默认值
+    self.profile = UserProfile(
       email: "",
       role: "",
       name: "--",
       avatar: "p_8",
+      mobile: nil,
+      sex: nil
+    )
+
+    self.stats = UserStats(
       follow: 0,
       fans: 0,
-      coin: 0,
+      coin: 0
+    )
+
+    self.auth = UserAuth(
       accessToken: "",
       refreshToken: ""
     )
-    UserDefaults.standard.removeObject(forKey: "loginEmail")
-    UserDefaults.standard.removeObject(forKey: "accessToken")
-    UserDefaults.standard.removeObject(forKey: "refreshToken")
-  }
 
-  private func updateUserInfo(_ u: UserInfo) {
-    user.avatar = u.avatar
-    user.email = u.email
-    user.role = u.role
-    user.name = u.name
-    user.follow = u.follow
-    user.fans = u.fans
-    user.coin = u.coin
-    if !u.accessToken.isEmpty {
-      user.accessToken = u.accessToken
-    }
-    if !u.refreshToken.isEmpty {
-      user.refreshToken = u.refreshToken
+    // 从本地存储恢复登录状态
+    if let loginEmail = storage.string(forKey: StorageKeys.loginEmail),
+      let accessToken = storage.string(forKey: StorageKeys.accessToken),
+      let refreshToken = storage.string(forKey: StorageKeys.refreshToken),
+      !loginEmail.isEmpty && !accessToken.isEmpty && !refreshToken.isEmpty
+    {
+      isLogin = true
+      profile.email = loginEmail
+      auth.accessToken = accessToken
+      auth.refreshToken = refreshToken
     }
   }
 
-  private func saveUserDefaults() {
-    UserDefaults.standard.set(user.email, forKey: "loginEmail")
-    UserDefaults.standard.set(user.accessToken, forKey: "accessToken")
-    UserDefaults.standard.set(user.refreshToken, forKey: "refreshToken")
+  // MARK: - Authentication Methods
+  func login(response: UserResponse) {
+    isLogin = true
+    updateProfile(
+      UserProfile(
+        email: response.email,
+        role: response.role,
+        name: response.name,
+        avatar: response.avatar,
+        mobile: "",
+        sex: 1
+      ))
+    setToken(access: response.accessToken ?? "", refresh: response.refreshToken ?? "")
+    saveToStorage()
+  }
+
+  func logout() {
+    isLogin = false
+    clearAll()
+  }
+
+  // MARK: - Token Management
+  func setToken(access: String, refresh: String) {
+    auth.accessToken = access
+    auth.refreshToken = refresh
+    storage.set(access, forKey: StorageKeys.accessToken)
+    storage.set(refresh, forKey: StorageKeys.refreshToken)
+  }
+
+  func clearToken() {
+    auth = UserAuth(accessToken: "", refreshToken: "")
+    storage.removeObject(forKey: StorageKeys.accessToken)
+    storage.removeObject(forKey: StorageKeys.refreshToken)
+  }
+
+  // MARK: - User Data Management
+  func updateProfile(_ newProfile: UserProfile) {
+    profile = newProfile
+  }
+
+  func updateStats(_ newStats: UserStats) {
+    stats = newStats
+  }
+
+  // MARK: - Data Refresh
+  func refreshUserInfo() async throws {
+    guard isLogin && !profile.email.isEmpty else { return }
+
+    do {
+      let info = try await UserAPI.shared.fetchUserInfo(email: profile.email)
+      DispatchQueue.main.async { [weak self] in
+        guard let self = self else { return }
+        self.updateProfile(
+          UserProfile(
+            email: info.email,
+            role: info.role,
+            name: info.name,
+            avatar: info.avatar,
+            mobile: info.mobile,
+            sex: info.sex
+          ))
+      }
+    } catch let APIError.serveError(code, _) {
+      if code == "100004" || code == "100006" {
+        DispatchQueue.main.async { [weak self] in
+          self?.logout()
+        }
+      }
+      throw APIError.serveError(code: code, message: "刷新用户信息失败")
+    }
+  }
+
+  // MARK: - Private Helper Methods
+  private func clearAll() {
+    // 清除用户资料
+    profile = UserProfile(
+      email: "",
+      role: "",
+      name: "--",
+      avatar: "p_8",
+      mobile: nil,
+      sex: nil
+    )
+
+    // 清除统计数据
+    stats = UserStats(
+      follow: 0,
+      fans: 0,
+      coin: 0
+    )
+
+    // 清除认证信息
+    clearToken()
+
+    // 清除存储
+    storage.removeObject(forKey: StorageKeys.loginEmail)
+  }
+
+  private func saveToStorage() {
+    storage.set(profile.email, forKey: StorageKeys.loginEmail)
   }
 }

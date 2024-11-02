@@ -6,20 +6,20 @@
 //
 import Foundation
 
-struct UserLoginResponse: Decodable {
+struct UserResponse: Decodable {
   var email: String
   var role: String
   var name: String
   var avatar: String
-  var accessToken: String
-  var refreshToken: String
-}
+  var mobile: String?
+  var sex: Int?
 
-struct UserInfoResponse: Decodable {
-  var email: String
-  var role: String
-  var name: String
-  var avatar: String
+  var accessToken: String?
+  var refreshToken: String?
+
+  var follow: Int?
+  var fans: Int?
+  var coin: Int?
 }
 
 class UserAPI {
@@ -35,9 +35,9 @@ class UserAPI {
     _ = try await apiManager.session.data(for: request) as VoidCodable
   }
 
-  func sign(email: String, password: String, code: String) async throws -> UserLoginResponse {
+  func sign(email: String, password: String, code: String) async throws -> UserResponse {
     do {
-      let response: UserLoginResponse
+      let response: UserResponse
       if code.isEmpty {
         response = try await login(email: email, password: password)
       } else {
@@ -45,9 +45,24 @@ class UserAPI {
       }
 
       UserService.shared.setToken(
-        access: response.accessToken,
-        refresh: response.refreshToken
-      )
+        access: response.accessToken ?? "", refresh: response.refreshToken ?? "")
+
+      UserService.shared.updateProfile(
+        UserProfile(
+          email: response.email,
+          role: response.role,
+          name: response.name,
+          avatar: response.avatar,
+          mobile: response.mobile,
+          sex: response.sex
+        ))
+
+      UserService.shared.updateStats(
+        UserStats(
+          follow: response.follow ?? 0,
+          fans: response.fans ?? 0,
+          coin: response.coin ?? 0
+        ))
 
       return response
     } catch {
@@ -56,16 +71,35 @@ class UserAPI {
     }
   }
 
-  func fetchUserInfo(email: String) async throws -> UserInfoResponse {
+  func fetchUserInfo(email: String) async throws -> UserResponse {
     let request = try apiManager.createRequest(
       url: "\(BASR_SERVE_URL)/user/userInfo",
       method: "POST",
       body: ["email": email]
     )
-    return try await apiManager.session.data(for: request)
+    let response: UserResponse = try await apiManager.session.data(for: request)
+
+    UserService.shared.updateProfile(
+      UserProfile(
+        email: response.email,
+        role: response.role,
+        name: response.name,
+        avatar: response.avatar,
+        mobile: response.mobile,
+        sex: response.sex
+      ))
+
+    UserService.shared.updateStats(
+      UserStats(
+        follow: response.follow ?? 0,
+        fans: response.fans ?? 0,
+        coin: response.coin ?? 0
+      ))
+
+    return response
   }
 
-  private func login(email: String, password: String) async throws -> UserLoginResponse {
+  private func login(email: String, password: String) async throws -> UserResponse {
     let psd = MD5(string: "\(email)\(password)")
     let request = try apiManager.createRequest(
       url: "\(BASR_SERVE_URL)/login",
@@ -76,13 +110,23 @@ class UserAPI {
   }
 
   private func register(email: String, password: String, code: String) async throws
-    -> UserLoginResponse
+    -> UserResponse
   {
     let psd = MD5(string: "\(email)\(password)")
     let request = try apiManager.createRequest(
       url: "\(BASR_SERVE_URL)/register",
       method: "POST",
       body: ["email": email, "password": psd, "code": code]
+    )
+    return try await apiManager.session.data(for: request)
+  }
+
+  @discardableResult
+  func updateUserInfo(_ info: [String: Any]) async throws -> UserResponse {
+    let request = try apiManager.createRequest(
+      url: "\(BASR_SERVE_URL)/user/update",
+      method: "POST",
+      body: info
     )
     return try await apiManager.session.data(for: request)
   }

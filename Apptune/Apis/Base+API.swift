@@ -18,7 +18,7 @@ class APIManager {
   let session = URLSession(configuration: .default)
 
   func getToken() -> String? {
-    let token = UserService.shared.user.accessToken
+    let token = UserService.shared.auth.accessToken
     return token.isEmpty ? nil : token
   }
 
@@ -43,8 +43,8 @@ class APIManager {
   }
 
   func refreshAccessToken() async throws {
-    let refreshToken = UserService.shared.user.refreshToken
-    let accessToken = UserService.shared.user.accessToken
+    let refreshToken = UserService.shared.auth.refreshToken
+    let accessToken = UserService.shared.auth.accessToken
 
     guard !refreshToken.isEmpty else {
       await Router.shared.navigate(to: .login)

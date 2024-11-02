@@ -270,7 +270,7 @@ class Router: ObservableObject {
     }
     // 覆盖弹出层
     .background(.black.opacity(0.01))
-    .frame(width: .infinity, height: .infinity)
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
   }
 
   @MainActor

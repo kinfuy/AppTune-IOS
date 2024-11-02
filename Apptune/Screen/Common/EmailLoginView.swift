@@ -152,25 +152,13 @@ struct EmailLoginView: View {
             isLoading = true
             Task {
               do {
-                let user = try await UserAPI.shared.sign(
+                let response = try await UserAPI.shared.sign(
                   email: email,
                   password: password,
                   code: code
                 )
 
-                userService.login(
-                  u: UserInfo(
-                    email: user.email,
-                    role: user.role,
-                    name: user.name,
-                    avatar: user.avatar,
-                    follow: 0,
-                    fans: 0,
-                    coin: 0,
-                    accessToken: user.accessToken,
-                    refreshToken: user.refreshToken
-                  )
-                )
+                userService.login(response: response)
 
                 isLoading = false
                 router.popToTabBar(true)

@@ -23,7 +23,7 @@ enum TabbedItems: Int, CaseIterable {
         case .home:
             return "活动"
         case .product:
-            return "产品"
+            return "空间"
         case .person:
             return "我的"
         }

@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F21CFCD52CD6462400CAB613 /* EventCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD02CD6462300CAB613 /* EventCard.swift */; };
+		F21CFCD62CD6462400CAB613 /* ModuleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD12CD6462300CAB613 /* ModuleCard.swift */; };
+		F21CFCD72CD6462400CAB613 /* ProductCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD22CD6462300CAB613 /* ProductCard.swift */; };
+		F21CFCD82CD6462400CAB613 /* TitleBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD32CD6462300CAB613 /* TitleBar.swift */; };
+		F21CFCDD2CD6463A00CAB613 /* ProductTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD92CD6463A00CAB613 /* ProductTab.swift */; };
+		F21CFCDE2CD6463A00CAB613 /* ContentViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCDB2CD6463A00CAB613 /* ContentViews.swift */; };
+		F21CFCF22CD647C300CAB613 /* ScrollPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCF12CD647C300CAB613 /* ScrollPreference.swift */; };
+		F21CFCF42CD64E7100CAB613 /* File+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCF32CD64E7100CAB613 /* File+API.swift */; };
 		F22377E12CC6ABBB00F780AE /* UrlSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22377E02CC6ABBB00F780AE /* UrlSession+Extension.swift */; };
 		F22377E32CC6AC0200F780AE /* Network+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22377E22CC6AC0200F780AE /* Network+Util.swift */; };
 		F237E5A02CCE6BFB00CC1074 /* AboutAuthorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F237E59F2CCE6BFA00CC1074 /* AboutAuthorView.swift */; };
@@ -61,6 +69,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F21CFCD02CD6462300CAB613 /* EventCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCard.swift; sourceTree = "<group>"; };
+		F21CFCD12CD6462300CAB613 /* ModuleCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleCard.swift; sourceTree = "<group>"; };
+		F21CFCD22CD6462300CAB613 /* ProductCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCard.swift; sourceTree = "<group>"; };
+		F21CFCD32CD6462300CAB613 /* TitleBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleBar.swift; sourceTree = "<group>"; };
+		F21CFCD92CD6463A00CAB613 /* ProductTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductTab.swift; sourceTree = "<group>"; };
+		F21CFCDB2CD6463A00CAB613 /* ContentViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViews.swift; sourceTree = "<group>"; };
+		F21CFCF12CD647C300CAB613 /* ScrollPreference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollPreference.swift; sourceTree = "<group>"; };
+		F21CFCF32CD64E7100CAB613 /* File+API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "File+API.swift"; sourceTree = "<group>"; };
 		F22377E02CC6ABBB00F780AE /* UrlSession+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UrlSession+Extension.swift"; sourceTree = "<group>"; };
 		F22377E22CC6AC0200F780AE /* Network+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Network+Util.swift"; sourceTree = "<group>"; };
 		F237E59F2CCE6BFA00CC1074 /* AboutAuthorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAuthorView.swift; sourceTree = "<group>"; };
@@ -127,6 +143,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F21CFCD42CD6462300CAB613 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F21CFCD02CD6462300CAB613 /* EventCard.swift */,
+				F21CFCD12CD6462300CAB613 /* ModuleCard.swift */,
+				F21CFCD22CD6462300CAB613 /* ProductCard.swift */,
+				F21CFCD32CD6462300CAB613 /* TitleBar.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		F21CFCDA2CD6463A00CAB613 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F21CFCD92CD6463A00CAB613 /* ProductTab.swift */,
+				F21CFCF12CD647C300CAB613 /* ScrollPreference.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F21CFCDC2CD6463A00CAB613 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F21CFCDB2CD6463A00CAB613 /* ContentViews.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F21CFCF52CD669B100CAB613 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
 		F23F8F702CBD5A54005546EE /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -195,6 +246,7 @@
 			children = (
 				F26F15A22CC69D6E00848715 /* User+API.swift */,
 				F2FC0F402CCAA49400CF8ACE /* Base+API.swift */,
+				F21CFCF32CD64E7100CAB613 /* File+API.swift */,
 			);
 			path = Apis;
 			sourceTree = "<group>";
@@ -202,6 +254,9 @@
 		F27A94812CC00AD9002A2BEA /* Product */ = {
 			isa = PBXGroup;
 			children = (
+				F21CFCDA2CD6463A00CAB613 /* Models */,
+				F21CFCDC2CD6463A00CAB613 /* Views */,
+				F21CFCD42CD6462300CAB613 /* Components */,
 				F27A94822CC00AEC002A2BEA /* ProductView.swift */,
 			);
 			path = Product;
@@ -287,6 +342,7 @@
 		F2B269782CB578C4001230B4 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				F21CFCF52CD669B100CAB613 /* Protocol */,
 				F2A0D5FC2CC3860B00536C58 /* Utils */,
 				F23F8F712CBD5A6D005546EE /* Modify */,
 				F23F8F702CBD5A54005546EE /* Extensions */,
@@ -402,9 +458,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				F27A94832CC00AEC002A2BEA /* ProductView.swift in Sources */,
+				F21CFCDD2CD6463A00CAB613 /* ProductTab.swift in Sources */,
 				F2A0D60C2CC3A28D00536C58 /* Version+Modal.swift in Sources */,
 				F2A0D6042CC3887800536C58 /* Toast+Component.swift in Sources */,
+				F21CFCDE2CD6463A00CAB613 /* ContentViews.swift in Sources */,
 				F2AE42822CB97118009E72C3 /* Image+Componet.swift in Sources */,
+				F21CFCF42CD64E7100CAB613 /* File+API.swift in Sources */,
 				F2A0D5FE2CC3862700536C58 /* UserDefault+Util.swift in Sources */,
 				F23F8F752CBEB154005546EE /* ToggleStyle+Extension.swift in Sources */,
 				F2A0D6062CC38FDF00536C58 /* UserSettingView.swift in Sources */,
@@ -413,9 +472,11 @@
 				F27C657D2CB16F1B0074B608 /* ApptuneApp.swift in Sources */,
 				F2AE427E2CB96D6B009E72C3 /* Tap+Extension.swift in Sources */,
 				F26F159D2CC538CE00848715 /* User+Service.swift in Sources */,
+				F21CFCD72CD6462400CAB613 /* ProductCard.swift in Sources */,
 				F2B2697A2CB578DD001230B4 /* Color+Extension.swift in Sources */,
 				F2A0D60E2CC40AAA00536C58 /* Agreement+Model.swift in Sources */,
 				F23F8F732CBD5AD5005546EE /* Font+Extension.swift in Sources */,
+				F21CFCD82CD6462400CAB613 /* TitleBar.swift in Sources */,
 				F2B2697D2CB57B80001230B4 /* Radio+Component.swift in Sources */,
 				F26F15A32CC69D6E00848715 /* User+API.swift in Sources */,
 				F22377E32CC6AC0200F780AE /* Network+Util.swift in Sources */,
@@ -435,6 +496,7 @@
 				F2A0D6022CC386DF00536C58 /* String+Extension.swift in Sources */,
 				F23F8F7B2CBEBC87005546EE /* AppState.swift in Sources */,
 				F26F159A2CC5370900848715 /* EmailLoginView.swift in Sources */,
+				F21CFCD52CD6462400CAB613 /* EventCard.swift in Sources */,
 				F2B269752CB57260001230B4 /* ScreenManage.swift in Sources */,
 				F2A0D6082CC3958100536C58 /* Router+Extension.swift in Sources */,
 				F2A0D6122CC4AFB200536C58 /* Const+Util.swift in Sources */,
@@ -445,6 +507,8 @@
 				F2B269F52CB6C2C5008C46B8 /* ActiveHomeView.swift in Sources */,
 				F2AE42872CB97814009E72C3 /* View+Extension.swift in Sources */,
 				F2B269FD2CB6D725008C46B8 /* LanchView.swift in Sources */,
+				F21CFCD62CD6462400CAB613 /* ModuleCard.swift in Sources */,
+				F21CFCF22CD647C300CAB613 /* ScrollPreference.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,37 +1,67 @@
-import SwiftUI
 import Kingfisher
-  
-struct ImgLoader: View {
-    let url: String
-  
-    init(_ img: String) {
-        self.url = img
-    }
-      
-    var body: some View {
-        Group {
-            // 检查 URL 是否以 http 或 https 开头
-            if url.hasPrefix("http") {
-                // 使用 Kingfisher 加载远程图片
-                KFImage(URL(string: url))
-                    .placeholder {
-                        Image("empty")
-                            .resizable()
-                            .loading(true, size: 1)
-                    }
-                    .resizable()
-                    .loadDiskFileSynchronously()
-                    .fade(duration: 0.25)
-            } else {
-                // 加载本地图片
-                Image(url)
-                    .resizable()
-            }
-        }
-        .enableInjection()
-    }
+import SwiftUI
 
-    #if DEBUG
-    @ObserveInjection var forceRedraw
-    #endif
+@MainActor
+struct ImgLoader: View {
+  private let url: String
+  private let placeholder: String = "empty"
+
+  // MARK: - Init
+  init(_ img: String) {
+    self.url = img
+  }
+
+  // MARK: - Body
+  var body: some View {
+    Group {
+      switch getImageType(url) {
+      case .remote:
+        remoteImage
+      case .assets:
+        assetImage
+      case .local:
+        localImage
+      }
+    }
+    .enableInjection()
+  }
+
+  // MARK: - Private Methods
+  private enum ImageType {
+    case remote
+    case assets
+    case local
+  }
+
+  private func getImageType(_ url: String) -> ImageType {
+    if url.hasPrefix("http") { return .remote }
+    if url.hasPrefix("assets") { return .assets }
+    return .local
+  }
+
+  // MARK: - Image Views
+  private var remoteImage: some View {
+    kfImage(url)
+  }
+
+  private var assetImage: some View {
+    kfImage("\(IMAGE_SERVER_URL)\(url)")
+  }
+
+  private var localImage: some View {
+    Image(url)
+      .resizable()
+  }
+
+  private func kfImage(_ urlString: String) -> some View {
+    KFImage(URL(string: urlString))
+      .placeholder {
+        Image(placeholder)
+          .resizable()
+          .loading(true, size: 1)
+      }
+      .resizable()
+      .loadDiskFileSynchronously()
+      .fade(duration: 0.25)
+  }
 }
