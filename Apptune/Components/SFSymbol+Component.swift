@@ -87,5 +87,10 @@ struct RotatingSymbol: View {
       .onAppear {
         isAnimating = true
       }
+      .enableInjection()
   }
+
+  #if DEBUG
+  @ObserveInjection var forceRedraw
+  #endif
 }

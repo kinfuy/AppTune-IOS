@@ -1,17 +1,23 @@
-import UIKit
+import SwiftUI
 
-extension UINavigationController: UIGestureRecognizerDelegate {
-  override open func viewDidLoad() {
-    super.viewDidLoad()
-    interactivePopGestureRecognizer?.delegate = self
+extension View {
+  func interactivePopGesture(enable: Bool, onTrigger: @escaping () -> Void) -> some View {
+    modifier(InteractivePopGestureModifier(enable: enable, onTrigger: onTrigger))
   }
+}
 
-  public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-    // 确保只有当堆栈中有多个视图控制器时才进行判断
-    guard viewControllers.count > 1 else {
-      return false
-    }
+struct InteractivePopGestureModifier: ViewModifier {
+  let enable: Bool
+  let onTrigger: () -> Void
 
-    return true
+  func body(content: Content) -> some View {
+    content.simultaneousGesture(
+      DragGesture()
+        .onEnded { value in
+          if enable && value.translation.width > 100 {
+            onTrigger()
+          }
+        }
+    )
   }
 }

@@ -22,16 +22,18 @@ struct EmailLoginView: View {
   @State private var isLoading: Bool = false
 
   func validata() -> Bool {
-    if email == "" {
+    if email.isEmpty {
+      router.openNotice(open: .toast(Toast(msg: "请输入邮箱")))
       return false
     }
     if isLoginEmail {
-      if code == "" && password == "" {
+      if code.isEmpty && password.isEmpty {
+        router.openNotice(open: .toast(Toast(msg: "请输入验证码和密码")))
         return false
       }
-
     } else {
-      if password == "" {
+      if password.isEmpty {
+        router.openNotice(open: .toast(Toast(msg: "请输入密码")))
         return false
       }
     }
@@ -41,11 +43,11 @@ struct EmailLoginView: View {
   func initTimer() {
     isTimeStart = true
     count = 60
-    Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+    Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
       if self.count > 0 {
         self.count -= 1
       } else {
-        self.count = 60
+        timer.invalidate()
         isTimeStart = false
       }
     }
@@ -75,7 +77,8 @@ struct EmailLoginView: View {
               Spacer()
             }
 
-            TextField("", text: $password, prompt: Text("输入密码"))
+            SecureField("", text: $password, prompt: Text("输入密码"))
+
               .padding(8)
               .background(Color(hex: "#fafafa"))
               .cornerRadius(4)
@@ -98,10 +101,11 @@ struct EmailLoginView: View {
                     .color(.theme)
                     .onTapGesture {
                       Tap.shared.play(.light)
-                      if email == "" {
-                        _ = router.openNotice(open: .toast(Toast(msg: "请先填写邮箱")))
+                      if email.isEmpty {
+                        router.openNotice(open: .toast(Toast(msg: "请先填写邮箱")))
                         return
                       }
+
                       let loading = router.openNotice(
                         open: .toast(
                           Toast(
@@ -109,22 +113,17 @@ struct EmailLoginView: View {
                             autoClose: false,
                             loading: true,
                             clickMask: false
-                          ))
+                          )
+                        )
                       )
+
                       Task {
                         do {
                           try await UserAPI.shared.sendCode(email: email)
                           router.closeNotice(id: loading)
-                          DispatchQueue.main.async {
-                            self.initTimer()
-                          }
-                        } catch let APIError.serveError(errMsg) {
-                          router.closeNotice(id: loading)
-                          _ = router.openNotice(open: .toast(Toast(msg: errMsg)))
+                          initTimer()
                         } catch {
                           router.closeNotice(id: loading)
-                          let _ = router.openNotice(
-                            open: .toast(Toast(msg: error.localizedDescription)))
                         }
                       }
                     }
@@ -148,38 +147,37 @@ struct EmailLoginView: View {
         .onTapGesture {
           if isLoading { return }
           Tap.shared.play(.light)
+
           if validata() {
             isLoading = true
             Task {
               do {
                 let user = try await UserAPI.shared.sign(
-                  email: email, password: password, code: code)
-                print(user)
+                  email: email,
+                  password: password,
+                  code: code
+                )
+
                 userService.login(
                   u: UserInfo(
                     email: user.email,
                     role: user.role,
                     name: user.name,
+                    avatar: user.avatar,
                     follow: 0,
                     fans: 0,
                     coin: 0,
                     accessToken: user.accessToken,
-                    refreshToken: user.refreshToken)
+                    refreshToken: user.refreshToken
+                  )
                 )
+
                 isLoading = false
                 router.popToTabBar(true)
-
-              } catch let APIError.serveError(errMsg) {
-                _ = router.openNotice(open: .toast(Toast(msg: errMsg)))
-                isLoading = false
               } catch {
-                let _ = router.openNotice(
-                  open: .toast(Toast(msg: error.localizedDescription)))
                 isLoading = false
               }
             }
-          } else {
-            let _ = router.openNotice(open: .toast(Toast(msg: "请完善信息后操作")))
           }
         }
       HStack {
@@ -214,7 +212,8 @@ struct EmailLoginView: View {
             }
           }
           .foregroundStyle(Color(hex: "#333333"))
-        })
+        }
+      )
     )
     .enableInjection()
   }
