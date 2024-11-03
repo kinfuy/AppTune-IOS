@@ -48,6 +48,8 @@ enum SFSymbol: String, Codable {
   case email = "envelope"
   case apple = "apple.logo"
   case loading = "arrow.triangle.2.circlepath"
+  case task = "star.circle"
+  case shop = "cart.circle"
 }
 
 extension SFSymbol: View {
@@ -91,6 +93,6 @@ struct RotatingSymbol: View {
   }
 
   #if DEBUG
-  @ObserveInjection var forceRedraw
+    @ObserveInjection var forceRedraw
   #endif
 }

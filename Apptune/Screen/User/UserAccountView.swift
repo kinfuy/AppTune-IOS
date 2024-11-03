@@ -15,13 +15,6 @@ struct UserAccountView: View {
   var body: some View {
     VStack {
       VStack {
-        HStack {
-          Text("用户名")
-          Spacer()
-          Text(attributedString(str: userService.profile.name))
-            .foregroundColor(.gray)
-        }
-        .padding(.top, 24)
 
         HStack {
           Text("邮箱")
@@ -52,7 +45,7 @@ struct UserAccountView: View {
           open: .confirm(
             Confirm(
               title: "确认注销",
-              desc: "注销后需要重新登录",
+              desc: "注销将删除该账号私有数据？",
               onSuccess: {
                 userService.logout()
                 router.navigate(to: .login)

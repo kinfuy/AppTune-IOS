@@ -128,7 +128,12 @@ struct ProductView: View {
             title: selectedTab.rawValue,
             showPublish: selectedTab == .myProducts || selectedTab == .myEvents,
             onPublish: {
-              print("发布新\(selectedTab == .myProducts ? "产品" : "活动")")
+              Tap.shared.play(.light)
+              if selectedTab == .myProducts {
+                router.navigate(to: .publishProduct)
+              } else if selectedTab == .myEvents {
+                router.navigate(to: .publishActivity)
+              }
             },
             isSticky: scrollOffset > titleBarHeight
           )

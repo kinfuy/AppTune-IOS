@@ -47,7 +47,7 @@ class UserAPI {
       UserService.shared.setToken(
         access: response.accessToken ?? "", refresh: response.refreshToken ?? "")
 
-      UserService.shared.updateProfile(
+      await UserService.shared.updateProfile(
         UserProfile(
           email: response.email,
           role: response.role,
@@ -57,7 +57,7 @@ class UserAPI {
           sex: response.sex
         ))
 
-      UserService.shared.updateStats(
+      await UserService.shared.updateStats(
         UserStats(
           follow: response.follow ?? 0,
           fans: response.fans ?? 0,
@@ -79,7 +79,7 @@ class UserAPI {
     )
     let response: UserResponse = try await apiManager.session.data(for: request)
 
-    UserService.shared.updateProfile(
+    await UserService.shared.updateProfile(
       UserProfile(
         email: response.email,
         role: response.role,
@@ -89,7 +89,7 @@ class UserAPI {
         sex: response.sex
       ))
 
-    UserService.shared.updateStats(
+    await UserService.shared.updateStats(
       UserStats(
         follow: response.follow ?? 0,
         fans: response.fans ?? 0,

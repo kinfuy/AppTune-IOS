@@ -42,6 +42,10 @@ enum GeneralRouterDestination {
   case emailLogin  // 邮箱登录
   case aboutAuthor  //关于作者
   case userProfile  // 用户详情
+  case coinTasks
+  case coinShop
+  case publishProduct  // 发布产品
+  case publishActivity  // 发布活动
 
   static func isWhiteListRoute(to: GeneralRouterDestination) -> Bool {
     let authRoutes: [GeneralRouterDestination] = [.login, .emailLogin]
@@ -228,6 +232,14 @@ class Router: ObservableObject {
       AnyView(AboutAuthorView())
     case .userProfile:
       AnyView(UserProfileView())
+    case .coinTasks:
+      AnyView(CoinTasksView())
+    case .coinShop:
+      AnyView(CoinShopView())
+    case .publishProduct:
+      AnyView(PublishProductView())
+    case .publishActivity:
+      AnyView(PublishActivityView())
     }
   }
 
