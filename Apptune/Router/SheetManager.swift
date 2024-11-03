@@ -23,7 +23,8 @@ enum SheetType: Identifiable {
                 fullScreen: false,
                 dismissible: true,
                 onDismiss: onDismiss
-            )å
+            )
+        }
     }
 }
 

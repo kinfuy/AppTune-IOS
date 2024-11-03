@@ -26,7 +26,7 @@ final class PublishActivityViewModel: ObservableObject {
       return
     }
 
-    isLoading = trueå
+    isLoading = true
   }
 
   // 重置表单
