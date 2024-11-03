@@ -15,7 +15,7 @@ struct PublishActivityView: View {
 
         Button("发布") {
           Task {
-            await viewModel.publishActivity()
+            try await viewModel.publishActivity()
           }
         }
       }

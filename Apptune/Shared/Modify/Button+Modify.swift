@@ -1,11 +1,11 @@
 import SwiftUI
 
 extension View {
-  func buttonStyle(_ bgColor: Color, _ sizeColor: Color = .white) -> some View {
+    func buttonStyle(_ bgColor: Color, _ sizeColor: Color = .white, _ radius: CGFloat = 16 ) -> some View {
     frame(height: 36)
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .background(bgColor)
-      .cornerRadius(16)
+      .cornerRadius(radius)
       .foregroundColor(sizeColor)
   }
 
@@ -15,7 +15,7 @@ extension View {
       .foregroundColor(.white)
       .background(
         LinearGradient(
-          colors: [.theme, .blue.opacity(0.6)],
+          colors: [.theme, .theme.opacity(0.6)],
           startPoint: .leading,
           endPoint: .trailing)
       )

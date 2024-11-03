@@ -200,4 +200,5 @@ struct ProductView: View {
 
 #Preview {
   ProductView()
+    .environmentObject(Router())
 }

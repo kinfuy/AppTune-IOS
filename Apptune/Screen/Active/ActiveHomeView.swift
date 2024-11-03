@@ -85,12 +85,7 @@ struct ActiveCardView: View {
     .background(.white)
     .cornerRadius(16)
     .frame(maxHeight: 240)
-    .enableInjection()
   }
-
-  #if DEBUG
-    @ObserveInjection var forceRedraw
-  #endif
 }
 
 struct TopActiveCardView: View {
@@ -98,7 +93,7 @@ struct TopActiveCardView: View {
     VStack {
       VStack(alignment: .leading, spacing: 8) {
         Text("新人奖励")
-          .foregroundColor(.blue.opacity(0.68))
+          .foregroundColor(.theme.opacity(0.68))
           .font(.system(size: 14))
           .fontWeight(.bold)
         HStack {
@@ -139,17 +134,12 @@ struct TopActiveCardView: View {
       .cornerRadius(12)
     }
     .frame(maxWidth: .infinity)
-    .enableInjection()
   }
-
-  #if DEBUG
-    @ObserveInjection var forceRedraw
-  #endif
 }
 
 struct ActiveHomeView: View {
   @EnvironmentObject var router: Router
-
+  @EnvironmentObject var notice: NoticeManager
   @State var current: Catalog = .all
 
   @State private var isLoading: Bool = false
@@ -301,7 +291,7 @@ struct ActiveHomeView: View {
           Group {
             ActiveCardView()
               .onTapGesture {
-                _ = router.openNotice(
+                notice.openNotice(
                   open: .toast(
                     Toast(
                       msg: "敬请期待\(Date().description)"
@@ -339,12 +329,7 @@ struct ActiveHomeView: View {
     .background(Color(hex: "#f4f4f4"))
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .padding(.bottom, 32)
-    .enableInjection()
   }
-
-  #if DEBUG
-    @ObserveInjection var forceRedraw
-  #endif
 }
 
 #Preview {

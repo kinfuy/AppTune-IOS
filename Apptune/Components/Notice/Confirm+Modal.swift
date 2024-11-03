@@ -10,6 +10,7 @@ import SwiftUI
 struct Confirm_Modal: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var router: Router
+    @EnvironmentObject var notice: NoticeManager
     var id:String
     var titile: String
     var desc: String = ""
@@ -39,7 +40,7 @@ struct Confirm_Modal: View {
                         .onTapGesture {
                             Tap.shared.play(.light)
                             DispatchQueue.main.async {
-                                router.closeNotice(id:id)
+                                notice.closeNotice(id:id)
                                 onCancel()
                             }
                         }
@@ -52,7 +53,7 @@ struct Confirm_Modal: View {
                         .onTapGesture {
                             Tap.shared.play(.light)
                             DispatchQueue.main.async {
-                                router.closeNotice(id:id)
+                                notice.closeNotice(id:id)
                                 onSubmit()
                             }
                         }
@@ -66,10 +67,5 @@ struct Confirm_Modal: View {
         }
         .frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity /*@END_MENU_TOKEN@*/, maxHeight: .infinity)
         .ignoresSafeArea()
-        .enableInjection()
     }
-
-    #if DEBUG
-    @ObserveInjection var forceRedraw
-    #endif
 }

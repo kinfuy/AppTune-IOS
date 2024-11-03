@@ -40,19 +40,19 @@ extension URLSession {
       if !CheckInternetConnection.isConnected() {
         try await Task.sleep(nanoseconds: 1)
         if !CheckInternetConnection.isConnected() {
-          await Router.shared.openNotice(open: .toast(Toast(msg: "网络连接失败")))
+          await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "网络连接失败")))
           throw APIError.serveError(code: "999999", message: "网络连接失败")
         }
       }
 
       let (data, response) = try await self.data(for: urlRequest)
       guard let response = response as? HTTPURLResponse else {
-        await Router.shared.openNotice(open: .toast(Toast(msg: "无效的请求")))
+        await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "无效的请求")))
         throw APIError.serveError(code: "999999", message: "无效的请求")
       }
 
       guard 200...299 ~= response.statusCode else {
-        await Router.shared.openNotice(open: .toast(Toast(msg: "HTTP错误: \(response.statusCode)")))
+        await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "HTTP错误: \(response.statusCode)")))
         throw APIError.serveError(code: "999999", message: "请求失败")
       }
 
@@ -82,14 +82,14 @@ extension URLSession {
         throw APIError.serveError(code: res.code, message: "请重新登录")
 
       default:
-        await Router.shared.openNotice(open: .toast(Toast(msg: res.message)))
+        await NoticeManager.shared.openNotice(open: .toast(Toast(msg: res.message)))
         throw APIError.serveError(code: res.code, message: res.message)
       }
 
     } catch let error as APIError {
       throw error
     } catch {
-        await Router.shared.openNotice(open: .toast(Toast(msg: error.localizedDescription)))
+        await NoticeManager.shared.openNotice(open: .toast(Toast(msg: error.localizedDescription)))
         throw APIError.serveError(code: "999999", message: error.localizedDescription)
     }
   }

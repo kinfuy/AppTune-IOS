@@ -10,6 +10,7 @@ import SwiftUI
 struct Version_Modal: View {
   @EnvironmentObject var appState: AppState
   @EnvironmentObject var router: Router
+  @EnvironmentObject var notice: NoticeManager
   @Default(\.skinVersion) var skinVersion
 
   var body: some View {
@@ -50,7 +51,7 @@ struct Version_Modal: View {
             .foregroundColor(.white)
             .background(
               LinearGradient(
-                colors: [.theme, .blue.opacity(0.6)],
+                colors: [.theme, .theme.opacity(0.6)],
                 startPoint: .leading,
                 endPoint: .trailing)
             )
@@ -68,19 +69,13 @@ struct Version_Modal: View {
           .font(.system(size: 14))
           .color(Color(hex: "#f4f4f4"))
           .onTapGesture {
-            skinVersion = appState.latestVersion
             Tap.shared.play(.light)
-            router.closeNotice(id: VERSION_NOTICE_ID)
+            skinVersion = appState.latestVersion
+            notice.closeNotice(id: VERSION_NOTICE_ID)
           }
       }
       .padding(.top, 8)
 
     }
-
-      .enableInjection()
   }
-
-  #if DEBUG
-  @ObserveInjection var forceRedraw
-  #endif
 }

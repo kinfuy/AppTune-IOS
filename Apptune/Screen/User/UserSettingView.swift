@@ -9,6 +9,7 @@ import SwiftUI
 
 struct UserSettingView: View {
   @EnvironmentObject var router: Router
+  @EnvironmentObject var notice: NoticeManager
   @EnvironmentObject var appState: AppState
   @EnvironmentObject var userService: UserService
   var title: String = ""
@@ -95,7 +96,7 @@ struct UserSettingView: View {
         .frame(height: 38)
         .onTapGesture {
           Tap.shared.play(.light)
-          let _ = router.openNotice(
+          notice.openNotice(
             open: .confirm(
               Confirm(
                 title: "确认退出登录？",
@@ -126,12 +127,7 @@ struct UserSettingView: View {
           .foregroundStyle(Color(hex: "#333333"))
         })
     )
-    .enableInjection()
   }
-
-  #if DEBUG
-    @ObserveInjection var forceRedraw
-  #endif
 }
 
 #Preview {

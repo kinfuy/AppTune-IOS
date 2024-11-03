@@ -10,6 +10,7 @@ import SwiftUI
 struct Agreement_Model: View {
   @EnvironmentObject var appState: AppState
   @EnvironmentObject var router: Router
+    @EnvironmentObject var notice: NoticeManager
   @Default(\.isAgreeMent) var isAgree: Bool
   var body: some View {
     VStack {
@@ -36,7 +37,7 @@ struct Agreement_Model: View {
           .frame(height: 48)
           .onTapGesture {
             isAgree = true
-            router.closeNotice(id: AGGREEMENT_NOTICE_ID)
+            notice.closeNotice(id: AGGREEMENT_NOTICE_ID)
           }
       }
       .padding()
@@ -48,12 +49,7 @@ struct Agreement_Model: View {
     }
     .frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity /*@END_MENU_TOKEN@*/, maxHeight: .infinity)
     .ignoresSafeArea()
-      .enableInjection()
   }
-
-  #if DEBUG
-  @ObserveInjection var forceRedraw
-  #endif
 }
 
 #Preview {

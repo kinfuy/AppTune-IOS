@@ -9,6 +9,7 @@ import SwiftUI
 
 struct UserAccountView: View {
   @EnvironmentObject var router: Router
+    @EnvironmentObject var notice: NoticeManager
   @EnvironmentObject var appState: AppState
   @EnvironmentObject var userService: UserService
 
@@ -41,7 +42,7 @@ struct UserAccountView: View {
       .padding(.bottom, 8)
 
       Button(action: {
-        router.openNotice(
+        notice.openNotice(
           open: .confirm(
             Confirm(
               title: "确认注销",
@@ -82,10 +83,6 @@ struct UserAccountView: View {
         })
     )
   }
-
-  #if DEBUG
-    @ObserveInjection var forceRedraw
-  #endif
 }
 
 #Preview {

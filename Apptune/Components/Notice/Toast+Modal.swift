@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Toast_Modal: View {
-    @EnvironmentObject var router: Router
+    @EnvironmentObject var notice: NoticeManager
     var id: String
     var messgae: String = ""
     var time: CGFloat = 1.5
@@ -39,10 +39,5 @@ struct Toast_Modal: View {
         .background(loading ? .black.opacity(0.88) : .black)
         .cornerRadius(8)
         .frame(maxWidth: UIScreen.main.bounds.width * 0.78)
-        .enableInjection()
     }
-
-    #if DEBUG
-    @ObserveInjection var forceRedraw
-    #endif
 }

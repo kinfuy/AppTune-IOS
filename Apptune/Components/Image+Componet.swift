@@ -23,7 +23,6 @@ struct ImgLoader: View {
         localImage
       }
     }
-    .enableInjection()
   }
 
   // MARK: - Private Methods

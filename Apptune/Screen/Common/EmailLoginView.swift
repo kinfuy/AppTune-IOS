@@ -9,6 +9,7 @@ import SwiftUI
 
 struct EmailLoginView: View {
   @EnvironmentObject var router: Router
+    @EnvironmentObject var notice: NoticeManager
   @EnvironmentObject var appState: AppState
   @EnvironmentObject var userService: UserService
 
@@ -23,17 +24,17 @@ struct EmailLoginView: View {
 
   func validata() -> Bool {
     if email.isEmpty {
-      router.openNotice(open: .toast(Toast(msg: "请输入邮箱")))
+        notice.openNotice(open: .toast(Toast(msg: "请输入邮箱")))
       return false
     }
     if isLoginEmail {
       if code.isEmpty && password.isEmpty {
-        router.openNotice(open: .toast(Toast(msg: "请输入验证码和密码")))
+          notice.openNotice(open: .toast(Toast(msg: "请输入验证码和密码")))
         return false
       }
     } else {
       if password.isEmpty {
-        router.openNotice(open: .toast(Toast(msg: "请输入密码")))
+          notice.openNotice(open: .toast(Toast(msg: "请输入密码")))
         return false
       }
     }
@@ -102,11 +103,11 @@ struct EmailLoginView: View {
                     .onTapGesture {
                       Tap.shared.play(.light)
                       if email.isEmpty {
-                        router.openNotice(open: .toast(Toast(msg: "请先填写邮箱")))
+                        notice.openNotice(open: .toast(Toast(msg: "请先填写邮箱")))
                         return
                       }
 
-                      let loading = router.openNotice(
+                      let loading = notice.openNotice(
                         open: .toast(
                           Toast(
                             msg: "请求中",
@@ -120,10 +121,10 @@ struct EmailLoginView: View {
                       Task {
                         do {
                           try await UserAPI.shared.sendCode(email: email)
-                          router.closeNotice(id: loading)
+                          notice.closeNotice(id: loading)
                           initTimer()
                         } catch {
-                          router.closeNotice(id: loading)
+                          notice.closeNotice(id: loading)
                         }
                       }
                     }
@@ -203,10 +204,5 @@ struct EmailLoginView: View {
         }
       )
     )
-    .enableInjection()
   }
-
-  #if DEBUG
-    @ObserveInjection var forceRedraw
-  #endif
 }

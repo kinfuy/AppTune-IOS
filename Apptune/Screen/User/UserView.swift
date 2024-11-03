@@ -10,6 +10,7 @@ import SwiftUI
 struct UserView: View {
     @EnvironmentObject var router: Router
     @EnvironmentObject var userService: UserService
+    @EnvironmentObject var notice: NoticeManager
 
     var body: some View {
         ZStack {
@@ -285,18 +286,13 @@ struct UserView: View {
                         try await userService.refreshUserInfo()
                     }
                     catch {
-                        router.openNotice(open: .toast(Toast(msg: error.localizedDescription)))
+                        notice.openNotice(open: .toast(Toast(msg: error.localizedDescription)))
                     }
                 }
             }
            
         }
-        .enableInjection()
     }
-
-    #if DEBUG
-        @ObserveInjection var forceRedraw
-    #endif
 }
 
 #Preview {

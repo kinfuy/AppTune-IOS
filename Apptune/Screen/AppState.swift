@@ -52,7 +52,7 @@ class AppState: ObservableObject {
                             let  updateAvailable = self.latestVersion.compare(self.currentVersion, options: .numeric) == .orderedDescending
                             if(updateAvailable) {
                                 if(!self.isSkinVersion || ignoreSkin){
-                                   _ = Router.shared.openNotice(open: .version(VERSION_NOTICE_ID))
+                                   _ = NoticeManager.shared.openNotice(open: .version(VERSION_NOTICE_ID))
                                     completion(true)
                                     return
                                 }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F20D194B2CD78269006296D0 /* SheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20D194A2CD78269006296D0 /* SheetManager.swift */; };
+		F20D194E2CD783F5006296D0 /* AppStoreSearch+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20D194D2CD783F5006296D0 /* AppStoreSearch+Sheet.swift */; };
 		F21CFCD52CD6462400CAB613 /* EventCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD02CD6462300CAB613 /* EventCard.swift */; };
 		F21CFCD62CD6462400CAB613 /* ModuleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD12CD6462300CAB613 /* ModuleCard.swift */; };
 		F21CFCD72CD6462400CAB613 /* ProductCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD22CD6462300CAB613 /* ProductCard.swift */; };
@@ -24,6 +26,9 @@
 		F21CFD102CD7246A00CAB613 /* PublishProductView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFD0F2CD7246A00CAB613 /* PublishProductView.swift */; };
 		F21CFD122CD7247300CAB613 /* PublishProductViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFD112CD7247300CAB613 /* PublishProductViewModel.swift */; };
 		F21CFD142CD75F9C00CAB613 /* Product+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFD132CD75F9C00CAB613 /* Product+API.swift */; };
+		F21CFD192CD7778D00CAB613 /* NoticeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFD152CD7778D00CAB613 /* NoticeManager.swift */; };
+		F21CFD1A2CD7778D00CAB613 /* RouterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFD162CD7778D00CAB613 /* RouterManager.swift */; };
+		F21CFD1B2CD7778D00CAB613 /* RouterDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFD172CD7778D00CAB613 /* RouterDestination.swift */; };
 		F22377E12CC6ABBB00F780AE /* UrlSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22377E02CC6ABBB00F780AE /* UrlSession+Extension.swift */; };
 		F22377E32CC6AC0200F780AE /* Network+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22377E22CC6AC0200F780AE /* Network+Util.swift */; };
 		F237E5A02CCE6BFB00CC1074 /* AboutAuthorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F237E59F2CCE6BFA00CC1074 /* AboutAuthorView.swift */; };
@@ -32,7 +37,6 @@
 		F23F8F752CBEB154005546EE /* ToggleStyle+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23F8F742CBEB154005546EE /* ToggleStyle+Extension.swift */; };
 		F23F8F792CBEB2BA005546EE /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23F8F782CBEB2BA005546EE /* UserView.swift */; };
 		F23F8F7B2CBEBC87005546EE /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23F8F7A2CBEBC87005546EE /* AppState.swift */; };
-		F23F8F7D2CBEC254005546EE /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23F8F7C2CBEC254005546EE /* AppRouter.swift */; };
 		F26F15982CC513C300848715 /* Confirm+Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F15972CC513C300848715 /* Confirm+Modal.swift */; };
 		F26F159A2CC5370900848715 /* EmailLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F15992CC5370900848715 /* EmailLoginView.swift */; };
 		F26F159D2CC538CE00848715 /* User+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F159C2CC538CE00848715 /* User+Service.swift */; };
@@ -78,6 +82,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F20D194A2CD78269006296D0 /* SheetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
+		F20D194D2CD783F5006296D0 /* AppStoreSearch+Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppStoreSearch+Sheet.swift"; sourceTree = "<group>"; };
 		F21CFCD02CD6462300CAB613 /* EventCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCard.swift; sourceTree = "<group>"; };
 		F21CFCD12CD6462300CAB613 /* ModuleCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleCard.swift; sourceTree = "<group>"; };
 		F21CFCD22CD6462300CAB613 /* ProductCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCard.swift; sourceTree = "<group>"; };
@@ -95,6 +101,9 @@
 		F21CFD0F2CD7246A00CAB613 /* PublishProductView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublishProductView.swift; sourceTree = "<group>"; };
 		F21CFD112CD7247300CAB613 /* PublishProductViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublishProductViewModel.swift; sourceTree = "<group>"; };
 		F21CFD132CD75F9C00CAB613 /* Product+API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Product+API.swift"; sourceTree = "<group>"; };
+		F21CFD152CD7778D00CAB613 /* NoticeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoticeManager.swift; sourceTree = "<group>"; };
+		F21CFD162CD7778D00CAB613 /* RouterManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouterManager.swift; sourceTree = "<group>"; };
+		F21CFD172CD7778D00CAB613 /* RouterDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouterDestination.swift; sourceTree = "<group>"; };
 		F22377E02CC6ABBB00F780AE /* UrlSession+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UrlSession+Extension.swift"; sourceTree = "<group>"; };
 		F22377E22CC6AC0200F780AE /* Network+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Network+Util.swift"; sourceTree = "<group>"; };
 		F237E59F2CCE6BFA00CC1074 /* AboutAuthorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAuthorView.swift; sourceTree = "<group>"; };
@@ -103,7 +112,6 @@
 		F23F8F742CBEB154005546EE /* ToggleStyle+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToggleStyle+Extension.swift"; sourceTree = "<group>"; };
 		F23F8F782CBEB2BA005546EE /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		F23F8F7A2CBEBC87005546EE /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
-		F23F8F7C2CBEC254005546EE /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		F26F15972CC513C300848715 /* Confirm+Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Confirm+Modal.swift"; sourceTree = "<group>"; };
 		F26F15992CC5370900848715 /* EmailLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginView.swift; sourceTree = "<group>"; };
 		F26F159C2CC538CE00848715 /* User+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Service.swift"; sourceTree = "<group>"; };
@@ -161,6 +169,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F20D194C2CD783D8006296D0 /* Sheet */ = {
+			isa = PBXGroup;
+			children = (
+				F20D194D2CD783F5006296D0 /* AppStoreSearch+Sheet.swift */,
+			);
+			path = Sheet;
+			sourceTree = "<group>";
+		};
 		F21CFCD42CD6462300CAB613 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -210,6 +226,18 @@
 			);
 			name = Coin;
 			path = Apptune/Screen/Coin;
+			sourceTree = SOURCE_ROOT;
+		};
+		F21CFD182CD7778D00CAB613 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				F21CFD152CD7778D00CAB613 /* NoticeManager.swift */,
+				F21CFD162CD7778D00CAB613 /* RouterManager.swift */,
+				F20D194A2CD78269006296D0 /* SheetManager.swift */,
+				F21CFD172CD7778D00CAB613 /* RouterDestination.swift */,
+			);
+			name = Router;
+			path = Apptune/Router;
 			sourceTree = SOURCE_ROOT;
 		};
 		F23F8F702CBD5A54005546EE /* Extensions */ = {
@@ -321,6 +349,7 @@
 				F2B2697B2CB57B51001230B4 /* Components */,
 				F2B269782CB578C4001230B4 /* Shared */,
 				F2B269732CB57252001230B4 /* Screen */,
+				F21CFD182CD7778D00CAB613 /* Router */,
 				F27C657C2CB16F1B0074B608 /* ApptuneApp.swift */,
 				F27C65852CB16F1C0074B608 /* Assets.xcassets */,
 				F27C65872CB16F1C0074B608 /* Apptune.entitlements */,
@@ -369,7 +398,6 @@
 				F23F8F762CBEB1DE005546EE /* Setting */,
 				F2B269F32CB6C1CE008C46B8 /* Active */,
 				F2B269742CB57260001230B4 /* ScreenManage.swift */,
-				F23F8F7C2CBEC254005546EE /* AppRouter.swift */,
 				F23F8F7A2CBEBC87005546EE /* AppState.swift */,
 			);
 			path = Screen;
@@ -389,6 +417,7 @@
 		F2B2697B2CB57B51001230B4 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				F20D194C2CD783D8006296D0 /* Sheet */,
 				F2A0D60A2CC3A27400536C58 /* Notice */,
 				F2B2697C2CB57B80001230B4 /* Radio+Component.swift */,
 				F2A0D6032CC3887800536C58 /* Toast+Component.swift */,
@@ -497,6 +526,7 @@
 				F21CFCDD2CD6463A00CAB613 /* ProductTab.swift in Sources */,
 				F2A0D60C2CC3A28D00536C58 /* Version+Modal.swift in Sources */,
 				F2A0D6042CC3887800536C58 /* Toast+Component.swift in Sources */,
+				F20D194B2CD78269006296D0 /* SheetManager.swift in Sources */,
 				F21CFCDE2CD6463A00CAB613 /* ContentViews.swift in Sources */,
 				F2AE42822CB97118009E72C3 /* Image+Componet.swift in Sources */,
 				F21CFCF42CD64E7100CAB613 /* File+API.swift in Sources */,
@@ -509,6 +539,7 @@
 				F27C657D2CB16F1B0074B608 /* ApptuneApp.swift in Sources */,
 				F21CFD0D2CD7245700CAB613 /* PublishActivityView.swift in Sources */,
 				F2AE427E2CB96D6B009E72C3 /* Tap+Extension.swift in Sources */,
+				F20D194E2CD783F5006296D0 /* AppStoreSearch+Sheet.swift in Sources */,
 				F26F159D2CC538CE00848715 /* User+Service.swift in Sources */,
 				F21CFD072CD691BB00CAB613 /* CoinShopViewModel.swift in Sources */,
 				F21CFCD72CD6462400CAB613 /* ProductCard.swift in Sources */,
@@ -524,6 +555,7 @@
 				F2A0D6102CC49FD800536C58 /* Toast+Modal.swift in Sources */,
 				F299FE592CC94D2F0009C956 /* MD5+Util.swift in Sources */,
 				F2AE42802CB96DFF009E72C3 /* TextColor+Component.swift in Sources */,
+				F21CFD1A2CD7778D00CAB613 /* RouterManager.swift in Sources */,
 				F23F8F792CBEB2BA005546EE /* UserView.swift in Sources */,
 				F2B269FB2CB6D671008C46B8 /* TabBar+Component.swift in Sources */,
 				F2B26A002CB6D764008C46B8 /* GudieView.swift in Sources */,
@@ -545,13 +577,14 @@
 				F2A0D6082CC3958100536C58 /* Router+Extension.swift in Sources */,
 				F2A0D6122CC4AFB200536C58 /* Const+Util.swift in Sources */,
 				F2B2697F2CB58055001230B4 /* Button+Modify.swift in Sources */,
+				F21CFD1B2CD7778D00CAB613 /* RouterDestination.swift in Sources */,
 				F21CFD0E2CD7245700CAB613 /* PublishActivityViewModel.swift in Sources */,
 				F22377E12CC6ABBB00F780AE /* UrlSession+Extension.swift in Sources */,
-				F23F8F7D2CBEC254005546EE /* AppRouter.swift in Sources */,
 				F237E5A02CCE6BFB00CC1074 /* AboutAuthorView.swift in Sources */,
 				F2B269F52CB6C2C5008C46B8 /* ActiveHomeView.swift in Sources */,
 				F2AE42872CB97814009E72C3 /* View+Extension.swift in Sources */,
 				F2B269FD2CB6D725008C46B8 /* LanchView.swift in Sources */,
+				F21CFD192CD7778D00CAB613 /* NoticeManager.swift in Sources */,
 				F21CFCD62CD6462400CAB613 /* ModuleCard.swift in Sources */,
 				F21CFCF22CD647C300CAB613 /* ScrollPreference.swift in Sources */,
 			);

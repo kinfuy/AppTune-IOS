@@ -10,6 +10,7 @@ import SwiftUI
 
 struct UserProfileView: View {
     @EnvironmentObject var router: Router
+    @EnvironmentObject var notice: NoticeManager
     @EnvironmentObject var userService: UserService
     @State private var selectedItem: PhotosPickerItem?
     @State private var name: String = ""
@@ -110,7 +111,7 @@ struct UserProfileView: View {
             let url = try await FileAPI.shared.uploadAvatar(imageData)
             return url
         } catch {
-            router.openNotice(open: .toast(.init(msg: "图片上传失败")))
+            notice.openNotice(open: .toast(.init(msg: "图片上传失败")))
             return nil
         }
     }
@@ -119,10 +120,10 @@ struct UserProfileView: View {
     private func updateUserInfo(_ info: [String: Any]) async {
         do {
             let _ = try await UserAPI.shared.updateUserInfo(info)
-            router.openNotice(open: .toast(Toast(msg: "更新成功")))
+            notice.openNotice(open: .toast(Toast(msg: "更新成功")))
             router.back()
         } catch {
-            router.openNotice(open: .toast(Toast(msg: "更新失败")))
+            notice.openNotice(open: .toast(Toast(msg: "更新失败")))
         }
     }
 
