@@ -45,17 +45,7 @@ struct Version_Modal: View {
         }) {
           Text("立即更新")
             .font(.system(size: 16))
-            .fontWeight(.bold)
-            .frame(minWidth: 0, maxWidth: .infinity)
-            .padding(8)
-            .foregroundColor(.white)
-            .background(
-              LinearGradient(
-                colors: [.theme, .theme.opacity(0.6)],
-                startPoint: .leading,
-                endPoint: .trailing)
-            )
-            .cornerRadius(30)
+            .primaryButton()
             .padding(.horizontal, 30)
 
         }

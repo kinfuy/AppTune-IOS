@@ -15,7 +15,7 @@ extension View {
       .foregroundColor(.white)
       .background(
         LinearGradient(
-          colors: [.theme, .theme.opacity(0.6)],
+          colors: [.theme, Color(hex: "#0D92F4")],
           startPoint: .leading,
           endPoint: .trailing)
       )

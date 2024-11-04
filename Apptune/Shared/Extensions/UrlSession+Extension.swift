@@ -36,13 +36,11 @@ extension URLSession {
 
   func data<T: Decodable>(for urlRequest: URLRequest, retrying: Bool = false) async throws -> T {
     do {
-      // 检查网络连接
-      if !CheckInternetConnection.isConnected() {
-        try await Task.sleep(nanoseconds: 1)
-        if !CheckInternetConnection.isConnected() {
-          await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "网络连接失败")))
-          throw APIError.serveError(code: "999999", message: "网络连接失败")
-        }
+      // 使用异步网络检查，支持重试
+      let isConnected = await CheckInternetConnection.checkConnection()
+      guard isConnected else {
+        await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "网络连接失败")))
+        throw APIError.serveError(code: "999999", message: "网络连接失败")
       }
 
       let (data, response) = try await self.data(for: urlRequest)
@@ -52,7 +50,8 @@ extension URLSession {
       }
 
       guard 200...299 ~= response.statusCode else {
-        await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "HTTP错误: \(response.statusCode)")))
+        await NoticeManager.shared.openNotice(
+          open: .toast(Toast(msg: "HTTP错误: \(response.statusCode)")))
         throw APIError.serveError(code: "999999", message: "请求失败")
       }
 
@@ -89,8 +88,8 @@ extension URLSession {
     } catch let error as APIError {
       throw error
     } catch {
-        await NoticeManager.shared.openNotice(open: .toast(Toast(msg: error.localizedDescription)))
-        throw APIError.serveError(code: "999999", message: error.localizedDescription)
+      await NoticeManager.shared.openNotice(open: .toast(Toast(msg: error.localizedDescription)))
+      throw APIError.serveError(code: "999999", message: error.localizedDescription)
     }
   }
 }

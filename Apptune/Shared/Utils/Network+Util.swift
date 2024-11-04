@@ -1,29 +1,45 @@
-
 import Foundation
-import SystemConfiguration
+import Network
 
 public class CheckInternetConnection {
-    
-    class func isConnected() -> Bool {
-        var address = sockaddr_in(sin_len: 0, sin_family: 0, sin_port: 0, sin_addr: in_addr(s_addr: 0), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
-        address.sin_len = UInt8(MemoryLayout.size(ofValue: address))
-        address.sin_family = sa_family_t(AF_INET)
-        
-        let defaultRouteConnection = withUnsafePointer(to: &address) {
-            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { socketAddress in
-                SCNetworkReachabilityCreateWithAddress(nil, socketAddress)
-            }
-        }
-        
-        var flags: SCNetworkReachabilityFlags = SCNetworkReachabilityFlags(rawValue: 0)
-        if SCNetworkReachabilityGetFlags(defaultRouteConnection!, &flags) == false {
-            return false
-        }
-        
-        let isConnected = (flags.rawValue & UInt32(kSCNetworkFlagsReachable)) != 0
-        let needsConnection = (flags.rawValue & UInt32(kSCNetworkFlagsConnectionRequired)) != 0
-        
-        let ret = (isConnected && !needsConnection)
-        return ret
+  private static let monitor = NWPathMonitor()
+  private static var isMonitoring = false
+  private static var currentStatus = false
+
+  private static let maxRetries = 2
+  private static let retryInterval: UInt64 = 1_000_000_000  // 1秒
+
+  class func isConnected() -> Bool {
+    if !isMonitoring {
+      startMonitoring()
     }
+    return currentStatus
+  }
+
+  class func checkConnection(retries: Int = maxRetries) async -> Bool {
+    if !isMonitoring {
+      startMonitoring()
+    }
+
+    var remainingRetries = retries
+    while remainingRetries > 0 && !currentStatus {
+      try? await Task.sleep(nanoseconds: retryInterval)
+      remainingRetries -= 1
+    }
+
+    return currentStatus
+  }
+
+  private class func startMonitoring() {
+    monitor.pathUpdateHandler = { path in
+      currentStatus = path.status == .satisfied
+    }
+    monitor.start(queue: DispatchQueue.global(qos: .background))
+    isMonitoring = true
+  }
+
+  class func stopMonitoring() {
+    monitor.cancel()
+    isMonitoring = false
+  }
 }

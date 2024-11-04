@@ -39,10 +39,8 @@ struct Confirm_Modal: View {
                         .contentShape(Rectangle())
                         .onTapGesture {
                             Tap.shared.play(.light)
-                            DispatchQueue.main.async {
-                                notice.closeNotice(id:id)
-                                onCancel()
-                            }
+                            notice.closeNotice(id:id)
+                            onCancel()
                         }
 
                     Text("确认")

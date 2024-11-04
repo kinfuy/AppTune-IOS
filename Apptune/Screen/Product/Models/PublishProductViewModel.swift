@@ -3,15 +3,11 @@ import UIKit
 
 @MainActor
 class PublishProductViewModel: ObservableObject {
-
-  static let shared = PublishProductViewModel()
-
   @Published var searchResults: [AppSearchInfo] = []
 
   @Published var productName: String = ""
   @Published var productDescription: String = ""
   @Published var price: String = ""
-  @Published var stock: String = ""
   @Published var iconUrl: String = ""
   @Published var link: String = ""
 
@@ -20,8 +16,8 @@ class PublishProductViewModel: ObservableObject {
   @Published var selectedApp: AppSearchInfo?
 
   var isValid: Bool {
-    !productName.isEmpty && !productDescription.isEmpty && !price.isEmpty && !stock.isEmpty
-      && (Double(price) ?? 0) > 0 && (Int(stock) ?? 0) >= 0
+    !productName.isEmpty && !productDescription.isEmpty && !price.isEmpty
+      && (Double(price) ?? 0) >= 0
   }
 
   var hasAppStoreInfo: Bool {
@@ -56,5 +52,14 @@ class PublishProductViewModel: ObservableObject {
 
     isLoading = true
     isLoading = false
+  }
+
+  func handleSelectedApp(_ app: AppSearchInfo) {
+    self.iconUrl = app.iconUrl
+    self.productName = app.name
+    self.link = app.appStoreUrl
+    self.productDescription = app.description
+    self.price = String(app.price)
+
   }
 }
