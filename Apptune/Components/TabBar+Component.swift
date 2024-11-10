@@ -59,7 +59,9 @@ struct MainTabbedView: View {
                 HStack {
                     ForEach(TabbedItems.allCases, id: \.self) { item in
                         Button {
+                            router.isShowModules = false
                             router.currentTab = item
+                            
                         } label: {
                             CustomTabItem(
                                 imageName: item.iconName, title: item.title,

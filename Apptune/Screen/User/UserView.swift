@@ -239,23 +239,6 @@ struct UserView: View {
                 .shadow(color: Color.theme.opacity(0.3), radius: 15, x: 0, y: 5)
                 .padding(.bottom, 16)
 
-                VStack {
-                    HStack {
-                        Text("我的发布")
-                        Spacer()
-                        SFSymbol.rightArrow
-                    }
-                    .padding(.bottom, 24)
-                    HStack {
-                        Text("我的参与")
-                        Spacer()
-                        SFSymbol.rightArrow
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(.white)
-                .cornerRadius(16)
                 Spacer()
             }
             .padding()
@@ -286,7 +269,7 @@ struct UserView: View {
                         try await userService.refreshUserInfo()
                     }
                     catch {
-                        notice.openNotice(open: .toast(Toast(msg: error.localizedDescription)))
+                        notice.openNotice(open: .toast(error.localizedDescription))
                     }
                 }
             }

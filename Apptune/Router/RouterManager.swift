@@ -6,6 +6,8 @@ class Router: ObservableObject {
 
   let noticeManager = NoticeManager.shared
 
+  // 产品是否显示模块
+  @Published var isShowModules: Bool = false
   @Published var currentTab: TabbedItems = .home
   @Published var isTabViewHidden: Bool = false
   @Published var path = NavigationPath()
@@ -50,12 +52,11 @@ class Router: ObservableObject {
     paths.append(destination)
   }
 
-  func popToTabBar(_ home: Bool = true) {
+  func toTabBar(_ tab: TabbedItems, isShowModules: Bool = false) {
     path = NavigationPath()
     paths = []
-    if home {
-      currentTab = .home
-    }
+    currentTab = tab
+    self.isShowModules = isShowModules
   }
 
   func back(to numberOfScreen: Int = 1) {

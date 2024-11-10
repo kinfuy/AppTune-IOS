@@ -5,6 +5,7 @@ struct TitleBar: View {
   let showPublish: Bool
   let onPublish: () -> Void
   let isSticky: Bool
+  var pubText:String = "发布"
 
   var body: some View {
     HStack {
@@ -17,7 +18,7 @@ struct TitleBar: View {
         Button(action: onPublish) {
           HStack(spacing: 4) {
             Image(systemName: "plus.circle.fill")
-            Text("发布")
+            Text(pubText)
           }
           .foregroundColor(.theme)
           .padding(.horizontal, 12)

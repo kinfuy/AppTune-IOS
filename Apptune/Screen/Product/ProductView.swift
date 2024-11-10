@@ -9,19 +9,34 @@ import SwiftUI
 
 struct ProductView: View {
   @State private var selectedTab: ProductTab = .joinedEvents
-  @State private var showModules = true
   @State private var scrollOffset: CGFloat = 0
   @EnvironmentObject var router: Router
+  @StateObject private var viewModel = ProductViewModel()
+
   private let titleBarHeight: CGFloat = 60
   let tabBarHeight: CGFloat = 70
 
-  // 模块数据
-  let modules = [
-    (tab: ProductTab.joinedEvents, icon: "person.2.fill", color: Color.theme, count: 5),
-    (tab: ProductTab.followedProducts, icon: "star.fill", color: Color.orange, count: 8),
-    (tab: ProductTab.myProducts, icon: "cube.fill", color: Color.purple, count: 3),
-    (tab: ProductTab.myEvents, icon: "calendar.badge.plus", color: Color.theme, count: 2),
-  ]
+  // 将模块数据改为计算属性
+  var modules: [(tab: ProductTab, icon: String, color: Color, count: Int)] {
+    [
+      (
+        tab: ProductTab.joinedEvents, icon: "person.2.fill",
+        color: Color.orange,
+        count: viewModel.totalJoinedEvents
+      ),
+      (
+        tab: ProductTab.myProducts, icon: "cube.fill",
+        color: Color.purple,
+        count: viewModel.totalMyProducts
+      ),
+      (
+        tab: ProductTab.myEvents,
+        icon: "calendar.badge.plus",
+        color: Color.theme,
+        count: viewModel.totalMyEvents
+      ),
+    ]
+  }
 
   // 模块卡片网格
   var moduleGrid: some View {
@@ -40,12 +55,17 @@ struct ProductView: View {
         ) {
           withAnimation(.spring()) {
             selectedTab = module.tab
-            showModules = false
+            router.isShowModules = true
           }
         }
       }
     }
     .padding(.horizontal)
+    .onAppear {
+      Task {
+        await viewModel.refreshAll()
+      }
+    }
   }
 
   // 侧边栏
@@ -82,13 +102,13 @@ struct ProductView: View {
       Button(action: {
         withAnimation(.spring(response: 0.3)) {
           Tap.shared.play(.light)
-          showModules = true
+          router.isShowModules = false
         }
       }) {
-        Image(systemName: "chevron.right.circle.fill")
+        Image(systemName: "chevron.left.circle.fill")
           .font(.system(size: 24))
           .foregroundColor(.red)
-          .rotationEffect(.degrees(showModules ? 0 : 180))
+          .rotationEffect(.degrees(router.isShowModules ? 0 : 180))
       }
       .frame(height: 50)
     }
@@ -105,8 +125,7 @@ struct ProductView: View {
     ZStack {
       Color(hex: "#f4f4f4").ignoresSafeArea()
 
-      if showModules {
-        // 模块入口卡片视图
+      if !router.isShowModules {
         VStack(alignment: .leading, spacing: 24) {
           HStack {
             Text("我的空间")
@@ -121,9 +140,7 @@ struct ProductView: View {
         }
         .padding(.top)
       } else {
-        // 内容视图
         VStack(spacing: 0) {
-          // 标题栏（固定在顶部）
           TitleBar(
             title: selectedTab.rawValue,
             showPublish: selectedTab == .myProducts || selectedTab == .myEvents,
@@ -135,7 +152,8 @@ struct ProductView: View {
                 router.navigate(to: .publishActivity)
               }
             },
-            isSticky: scrollOffset > titleBarHeight
+            isSticky: scrollOffset > titleBarHeight,
+            pubText: selectedTab == .myProducts ? "发布" : "新建"
           )
           .zIndex(1)
 
@@ -166,19 +184,15 @@ struct ProductView: View {
                   switch selectedTab {
                   case .joinedEvents:
                     JoinedEventsView()
-                  case .followedProducts:
-                    FollowedProductsView()
                   case .myProducts:
                     MyProductsView()
                   case .myEvents:
                     MyEventsView()
                   }
                 }
-                .padding(.top, 0)
-                .padding(.bottom, tabBarHeight)
-                .animation(.none, value: selectedTab)
+                .environmentObject(viewModel)
+                .padding(.vertical)
               }
-
               .coordinateSpace(name: "scroll")
               .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
                 scrollOffset = -value
@@ -190,9 +204,9 @@ struct ProductView: View {
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .padding(.bottom, 32)
-    .onChange(of: router.currentTab) { oldValue, newValue in
-      if oldValue == .product && newValue != .product {
-        showModules = true
+    .onAppear {
+      Task {
+        await viewModel.refreshAll()
       }
     }
   }

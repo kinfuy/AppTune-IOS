@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EmailLoginView: View {
   @EnvironmentObject var router: Router
-    @EnvironmentObject var notice: NoticeManager
+  @EnvironmentObject var notice: NoticeManager
   @EnvironmentObject var appState: AppState
   @EnvironmentObject var userService: UserService
 
@@ -24,17 +24,17 @@ struct EmailLoginView: View {
 
   func validata() -> Bool {
     if email.isEmpty {
-        notice.openNotice(open: .toast(Toast(msg: "请输入邮箱")))
+      notice.openNotice(open: .toast("请输入邮箱"))
       return false
     }
     if isLoginEmail {
       if code.isEmpty && password.isEmpty {
-          notice.openNotice(open: .toast(Toast(msg: "请输入验证码和密码")))
+        notice.openNotice(open: .toast("请输入验证码和密码"))
         return false
       }
     } else {
       if password.isEmpty {
-          notice.openNotice(open: .toast(Toast(msg: "请输入密码")))
+        notice.openNotice(open: .toast("请输入密码"))
         return false
       }
     }
@@ -162,7 +162,7 @@ struct EmailLoginView: View {
                 userService.login(response: response)
 
                 isLoading = false
-                router.popToTabBar(true)
+                router.toTabBar(.home)
               } catch {
                 isLoading = false
               }

@@ -30,6 +30,36 @@ struct AppStoreSearchResponse: Codable {
   let results: [AppSearchInfo]
 }
 
+struct ProductInfo: Codable, Identifiable {
+  let id: Int
+  let name: String
+  let description: String
+  let icon: String
+  let link: String
+  let category: String
+  let price: Int?
+  let createTime: Date
+  let developer: String?
+}
+
+struct EventInfo:Codable, Identifiable {
+    let id:Int;
+    let name:String;
+    let description:String;
+    let cover:String;
+    let smallCover:String;
+    let startAt:Date;
+    let endAt:Data;
+    let joined:Int
+    let status: String
+    
+}
+
+struct ProductListResponse: Codable {
+  let items: [ProductInfo]
+  let total: Int
+}
+
 class ProductAPI {
   static let shared = ProductAPI()
   private let apiManager = APIManager.shared
@@ -45,60 +75,60 @@ class ProductAPI {
       body: nil
     )
 
-    let response: AppStoreSearchResponse = try await apiManager.session.data(for: request)
+    let response: AppStoreSearchResponse = try await apiManager.session.data(
+      for: request, loading: false)
     return response.results
   }
 
-  // func createProduct(product: CreateProductDto) async throws -> Product {
-  //   let urlString = "\(BASR_SERVE_URL)/product"
+  func publishProduct(
+    name: String, description: String, icon: String, link: String,
+    category: String, appId: String?, developer: String?,
+    price: Double?, bundleId: String?, version: String?
+  ) async throws {
+    let params: [String: Any] = [
+      "from": "ios",
+      "name": name,
+      "description": description,
+      "icon": icon,
+      "link": link,
+      "category": category,
+      "appId": appId,
+      "developer": developer,
+      "price": price,
+      "bundleId": bundleId,
+      "version": version,
+    ].compactMapValues { $0 }  // 移除所有 nil 值
 
-  //   let request = try apiManager.createRequest(
-  //     url: urlString,
-  //     method: "POST",
-  //     body: product.dictionary
-  //   )
+    let request = try apiManager.createRequest(
+      url: "\(BASR_SERVE_URL)/product",
+      method: "POST",
+      body: params
+    )
 
-  //   return try await apiManager.session.data(for: request)
-  // }
-}
+    let _ = try await apiManager.session.data(for: request)
+  }
 
-// 创建产品的数据模型
-// struct CreateProductDto: Codable {
-//   let name: String
-//   let description: String
-//   let price: Double
-//   let stock: Int
-//   let isAvailable: Bool
-//   let appStoreInfo: AppStoreInfo?
+  func getProductList(page: Int = 1, pageSize: Int = 10) async throws -> ProductListResponse {
+    let urlString = "\(BASR_SERVE_URL)/product/my?page=\(page)&pageSize=\(pageSize)"
 
-//   var dictionary: [String: Any] {
-//     var dict: [String: Any] = [
-//       "name": name,
-//       "description": description,
-//       "price": price,
-//       "stock": stock,
-//       "isAvailable": isAvailable,
-//     ]
+    let request = try apiManager.createRequest(
+      url: urlString,
+      method: "GET",
+      body: nil
+    )
 
-//     if let appInfo = appStoreInfo {
-//       dict["appStoreInfo"] = [
-//         "appId": appInfo.appId,
-//         "bundleId": appInfo.bundleId,
-//         "appStoreUrl": appInfo.appStoreUrl,
-//       ]
-//     }
+    return try await apiManager.session.data(for: request)
+  }
 
-//     return dict
-//   }
-// }
+  func getFollowedProducts(page: Int = 1, pageSize: Int = 10) async throws -> ProductListResponse {
+    let urlString = "\(BASR_SERVE_URL)/product/followed?page=\(page)&pageSize=\(pageSize)"
 
-struct Product: Codable {
-  let id: Int
-  let name: String
-  let description: String
-  let price: Double
-  let stock: Int
-  let isAvailable: Bool
-  let createTime: Date
-  let updateTime: Date
+    let request = try apiManager.createRequest(
+      url: urlString,
+      method: "GET",
+      body: nil
+    )
+
+    return try await apiManager.session.data(for: request)
+  }
 }

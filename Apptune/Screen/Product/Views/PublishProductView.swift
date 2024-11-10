@@ -1,56 +1,139 @@
 import SwiftUI
 
+
 struct PublishProductView: View {
-  @StateObject var viewModel: PublishProductViewModel = PublishProductViewModel()
+  @StateObject private var viewModel: PublishProductViewModel = PublishProductViewModel()
   @EnvironmentObject private var router: Router
+  @EnvironmentObject private var notice: NoticeManager
   @EnvironmentObject private var sheet: SheetManager
+  @State private var showImagePicker = false
+    
+    
+  var EditView: some View {
+        VStack {
+            Section(content: {
+                VStack {
+                    VStack {
+                        HStack {
+                          if viewModel.iconUrl != "" {
+                            ImgLoader(viewModel.iconUrl)
+                              .frame(width: 80, height: 80)
+                              .cornerRadius(16)
+                              .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+                          } else {
+                            RoundedRectangle(cornerRadius: 16)
+                              .fill(Color.gray.opacity(0.1))
+                              .frame(width: 80, height: 80)
+                              .overlay(
+                                Image(systemName: "photo")
+                                  .font(.system(size: 30))
+                                  .foregroundColor(.gray)
+                              )
+                          }
+                        }
+                        .onTapGesture {
+                            showImagePicker = true
+                        }
+                       
+                    }
+                    .padding(.bottom, 16)
+                    VStack{
+                        HStack {
+                            Text("产品名称")
+                                .foregroundColor(.gray)
+                            Spacer()
+                        }
+                        TextField("", text: $viewModel.productName, prompt: Text("产品名称"))
+                            .multilineTextAlignment(.leading)
+                            .padding(8)
+                            .background(Color(hex: "#fafafa"))
+                            .cornerRadius(4)
+                    }
+                    .padding(.bottom, 16)
+                    VStack{
+                        HStack{
+                            Text("链接")
+                                .foregroundColor(.gray)
+                            Spacer()
+                           
+                        }
+                        TextField("", text: $viewModel.link, prompt: Text("产品名称"))
+                            .multilineTextAlignment(.leading)
+                            .padding(8)
+                            .background(Color(hex: "#fafafa"))
+                            .cornerRadius(4)
+                    }
+                }
+                .padding()
+                .background(.white)
+                .cornerRadius(8)
+            })
+            Section(content: {
+                VStack {
+                    VStack {
+                        HStack {
+                            Text("描述")
+                                .foregroundColor(.gray)
+                            Spacer()
+                        }
+                        TextEditor(text: $viewModel.productDescription)
+                          .frame(height: 120)
+                          .padding(4)
+                          .background(
+                            RoundedRectangle(cornerRadius: 8)
+                              .fill(Color(.systemBackground))
+                          )
+                          .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                              .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+                          )
+                    }
+                    HStack {
+                        Text("分组")
+                            .foregroundColor(.gray)
+                        Spacer()
+                       
+                    }
+                    .frame(height: 36)
+                }
+                .padding()
+                .background(.white)
+                .cornerRadius(8)
+            })
+        }
+        .frame(maxWidth: .infinity)
+    }
 
   var body: some View {
     VStack {
-      Form {
-        // App Store 导入部分
-        Section {
-          Button(action: {
-            sheet.show(
-              .appStoreSearch(
-                onSubmit: { app in
-                  // 处理选中的 app
-                  viewModel.handleSelectedApp(app)
-                }
-              ))
-          }) {
-            Label("从 App Store 导入", systemImage: "magnifyingglass")
-              .foregroundColor(.theme)
-          }
+        ScrollView{
+            VStack {
+              Section {
+                  HStack{
+                      Button(action: {
+                        sheet.show(
+                          .appStoreSearch(
+                            onSubmit: { app in
+                              // 处理选中的 app
+                              viewModel.handleSelectedApp(app)
+                            }
+                          ))
+                      }) {
+                        Label("从 App Store 导入", systemImage: "magnifyingglass")
+                          .foregroundColor(.theme)
+                      }
+                      Spacer()
+                  }
+                  .padding(.horizontal)
+                  .padding(.vertical, 12)
+                  .background(.white)
+                  .cornerRadius(8)
+              }
+              .padding(.bottom, 12)
+              EditView
+            }
+            .padding()
         }
-
-        // 产品基本信息
-        Section(header: Text("产品信息")) {
-          // 图标预览
-          if viewModel.iconUrl != "" {
-            ImgLoader(viewModel.iconUrl)
-              .frame(width: 60, height: 60)
-              .cornerRadius(12)
-          }
-
-          // 产品名称
-          TextField("产品名称", text: $viewModel.productName)
-            .textInputAutocapitalization(.never)
-
-          // 产品描述
-          TextEditor(text: $viewModel.productDescription)
-            .frame(height: 200)
-            .overlay(
-              RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-            )
-        }
-
-
-        Section(header: Text("其他信息")) {
-          TextField("链接", text: $viewModel.link)
-        }
-      }
       Spacer()
       VStack {
         Text("发布")
@@ -58,7 +141,11 @@ struct PublishProductView: View {
           .primaryButton()
           .frame(height: 42)
           .onTapGesture {
-            if viewModel.isLoading || !viewModel.isValid {
+            if viewModel.isLoading {
+              return
+            }
+            if let error = viewModel.checkValid() {
+              notice.openNotice(open: .toast(error))
               return
             }
             Tap.shared.play(.light)
@@ -91,5 +178,18 @@ struct PublishProductView: View {
         }
       }
     )
+    .sheet(isPresented: $showImagePicker) {
+      ImagePicker(image: $viewModel.selectedImage)
+    }
   }
 }
+
+#Preview {
+  PublishProductView()
+    .environmentObject(Router())
+    .environmentObject(NoticeManager())
+    .environmentObject(SheetManager())
+
+}
+
+

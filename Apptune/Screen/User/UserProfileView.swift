@@ -111,7 +111,7 @@ struct UserProfileView: View {
             let url = try await FileAPI.shared.uploadAvatar(imageData)
             return url
         } catch {
-            notice.openNotice(open: .toast(.init(msg: "图片上传失败")))
+            notice.openNotice(open: .toast("图片上传失败"))
             return nil
         }
     }
@@ -120,10 +120,10 @@ struct UserProfileView: View {
     private func updateUserInfo(_ info: [String: Any]) async {
         do {
             let _ = try await UserAPI.shared.updateUserInfo(info)
-            notice.openNotice(open: .toast(Toast(msg: "更新成功")))
+            notice.openNotice(open: .toast("更新成功"))
             router.back()
         } catch {
-            notice.openNotice(open: .toast(Toast(msg: "更新失败")))
+            notice.openNotice(open: .toast("更新失败"))
         }
     }
 

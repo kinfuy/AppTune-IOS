@@ -47,13 +47,15 @@ struct ProductCard: View {
         .lineLimit(3)
 
       HStack(spacing: 16) {
-        Label("\(stars)", systemImage: "star.fill")
+        Label("\(stars)", systemImage: "heart")
           .font(.system(size: 12))
-          .foregroundColor(.orange)
-
-        Label("开源", systemImage: "lock.open")
-          .font(.system(size: 12))
-          .foregroundColor(.green)
+          .foregroundColor(.pink)
+          
+        Spacer()
+        
+        Label("审核中", systemImage: "lock")
+            .font(.system(size: 12))
+            .foregroundColor(.orange)
       }
     }
     .padding()
@@ -61,4 +63,9 @@ struct ProductCard: View {
     .cornerRadius(16)
     .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
   }
+}
+
+
+#Preview {
+    ProductCard(title: "suka", description: "测试文案", stars: 11, category: "测试", logo: "user", developer: "杨杨杨")
 }

@@ -3,8 +3,7 @@ import SwiftUI
 struct EventCard: View {
   let title: String
   let date: String
-  let location: String
-  let participants: Int
+  let joined: Int
   let status: String
   let cover: String
   let organizer: String
@@ -53,8 +52,7 @@ struct EventCard: View {
 
         HStack(spacing: 16) {
           Label(date, systemImage: "calendar")
-          Label(location, systemImage: "location")
-          Label("\(participants)人参与", systemImage: "person.2")
+          Label("\(joined)人参与", systemImage: "person.2")
         }
         .font(.system(size: 12))
         .foregroundColor(.gray)

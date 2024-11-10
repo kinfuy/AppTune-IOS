@@ -101,7 +101,7 @@ struct LoginView: View {
           userService.login(response: response)
 
           notice.closeNotice(id: loading)
-          router.popToTabBar(true)
+          router.toTabBar(.home)
 
         } catch {
           isLoading = false
@@ -110,7 +110,7 @@ struct LoginView: View {
     }
 
     AppDelegate.shared.onLoginError = {
-      notice.openNotice(open: .toast(Toast(msg: "Apple 登录失败，请使用邮箱登录")))
+      notice.openNotice(open: .toast("Apple 授权失败"))
       isLoading = false
     }
 
@@ -125,7 +125,7 @@ struct LoginView: View {
           .color(.gray)
           .onTapGesture {
             Tap.shared.play(.light)
-            router.popToTabBar()
+            router.toTabBar(.home)
           }
       }
       .padding(.horizontal)

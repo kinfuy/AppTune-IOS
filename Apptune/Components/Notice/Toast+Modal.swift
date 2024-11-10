@@ -12,7 +12,7 @@ struct Toast_Modal: View {
     var id: String
     var messgae: String = ""
     var time: CGFloat = 1.5
-    var loading: Bool = true
+    var loading: Bool = false
 
     var body: some View {
         VStack {

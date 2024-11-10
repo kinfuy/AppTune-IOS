@@ -10,18 +10,37 @@ class PublishProductViewModel: ObservableObject {
   @Published var price: String = ""
   @Published var iconUrl: String = ""
   @Published var link: String = ""
+  @Published var category: String = ""
+  @Published var appId: String = ""
+  @Published var developer: String = ""
+  @Published var bundleId: String = ""
+  @Published var version: String = ""
 
   @Published var isLoading: Bool = false
 
   @Published var selectedApp: AppSearchInfo?
 
+  @Published var selectedImage: UIImage? {
+    didSet {
+      if let image = selectedImage {
+        uploadCustomImage(image)
+      }
+    }
+  }
+
   var isValid: Bool {
-    !productName.isEmpty && !productDescription.isEmpty && !price.isEmpty
-      && (Double(price) ?? 0) >= 0
+    !productName.isEmpty && !productDescription.isEmpty && !link.isEmpty && !iconUrl.isEmpty
   }
 
   var hasAppStoreInfo: Bool {
     !searchResults.isEmpty
+  }
+
+  func checkValid() -> String? {
+    if !isValid {
+      return "请输入完整的产品信息"
+    }
+    return nil
   }
 
   func fetchAppStoreInfo(name: String) async {
@@ -45,21 +64,54 @@ class PublishProductViewModel: ObservableObject {
     link = app.appStoreUrl
   }
 
+  @MainActor
   func publishProduct() async {
-    guard isValid else {
-      return
-    }
-
     isLoading = true
-    isLoading = false
+    do {
+      let priceValue = Double(price)
+      try await ProductAPI.shared.publishProduct(
+        name: productName,
+        description: productDescription,
+        icon: iconUrl,
+        link: link,
+        category: category,
+        appId: appId.isEmpty ? nil : appId,
+        developer: developer.isEmpty ? nil : developer,
+        price: priceValue,
+        bundleId: bundleId.isEmpty ? nil : bundleId,
+        version: version.isEmpty ? nil : version
+      )
+      isLoading = false
+      Router.shared.toTabBar(.product, isShowModules: true)
+    } catch {
+      isLoading = false
+    }
   }
 
   func handleSelectedApp(_ app: AppSearchInfo) {
-    self.iconUrl = app.iconUrl
     self.productName = app.name
-    self.link = app.appStoreUrl
     self.productDescription = app.description
+    self.iconUrl = app.iconUrl
+    self.link = app.appStoreUrl
+    self.category = app.category
     self.price = String(app.price)
+    self.appId = app.appId
+    self.developer = app.developer
+    self.bundleId = app.bundleId
+    self.version = app.version ?? ""
+  }
 
+  private func uploadCustomImage(_ image: UIImage) {
+    Task {
+      do {
+        let url = try await FileAPI.shared.uploadImage(image, extraData: ["type": "product"])
+        await MainActor.run {
+          self.iconUrl = url
+        }
+      } catch {
+        print("Upload failed: \(error)")
+        // 处理错误...
+      }
+    }
   }
 }

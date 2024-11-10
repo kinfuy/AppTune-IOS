@@ -10,6 +10,7 @@ enum GeneralRouterDestination {
   case userProfile  // 用户详情
   case coinTasks  // 积分任务
   case coinShop  // 积分商店
+  case productDetail  // 产品详情
   case publishProduct  // 发布产品
   case publishActivity  // 发布活动
 
@@ -50,6 +51,8 @@ extension GeneralRouterDestination {
       PublishProductView()
     case .publishActivity:
       PublishActivityView()
+    case .productDetail:
+      ProductDetailView()
     }
   }
 }
