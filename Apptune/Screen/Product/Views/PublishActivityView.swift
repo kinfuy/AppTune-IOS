@@ -15,7 +15,7 @@ struct PublishActivityView: View {
 
     var body: some View {
         Group {
-            if !producttService.selfProducts.isEmpty {
+            if producttService.selfProducts.isEmpty {
                 noProductsView
             } else {
                 activityForm

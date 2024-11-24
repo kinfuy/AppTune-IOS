@@ -38,6 +38,11 @@ class UserService: ObservableObject {
     @Published var profile: UserProfile
     @Published var stats: UserStats
     @Published var auth: UserAuth
+    
+    
+    var isAdmin:Bool {
+        return isLogin && profile.role == "admin"
+    }
 
     // MARK: - Constants
 

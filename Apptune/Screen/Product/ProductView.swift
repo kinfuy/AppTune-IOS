@@ -11,8 +11,10 @@ struct ProductView: View {
     @State private var selectedTab: ProductTab = .joinedEvents
     @State private var scrollOffset: CGFloat = 0
     @EnvironmentObject var router: Router
+    @EnvironmentObject var notice: NoticeManager
     @EnvironmentObject var productService: ProductService
     @EnvironmentObject var activeService: ActiveService
+    @EnvironmentObject var userService: UserService
 
     private let titleBarHeight: CGFloat = 60
     let tabBarHeight: CGFloat = 70
@@ -21,11 +23,15 @@ struct ProductView: View {
     func load() async {
         await productService.refreshAll()
         await activeService.refreshAll()
+        if userService.isAdmin {
+            await productService.loadPendingProductReviews()
+            await activeService.loadPendingActiveReviews()
+        }
     }
 
     // 将模块数据改为计算属性
     var modules: [(tab: ProductTab, icon: String, color: Color, count: Int)] {
-        [
+        var baseModules = [
             (
                 tab: ProductTab.joinedEvents,
                 icon: "person.2.fill",
@@ -43,8 +49,21 @@ struct ProductView: View {
                 icon: "calendar.badge.plus",
                 color: Color.theme,
                 count: activeService.totalSelfActive
-            ),
+            )
         ]
+        
+        if userService.isAdmin  {
+            baseModules.append(
+                (
+                    tab: ProductTab.review,
+                    icon: "checkmark.seal.fill",
+                    color: Color.blue,
+                    count: productService.pendingProductReviews.count
+                )
+            )
+        }
+        
+        return baseModules
     }
 
     // 模块卡片网格
@@ -192,6 +211,8 @@ struct ProductView: View {
                                         MyProductsView()
                                     case .myEvents:
                                         MyActicesView()
+                                    case .review:
+                                        ReviewView()
                                     }
                                 }
                                 .padding(.vertical)
@@ -209,6 +230,12 @@ struct ProductView: View {
         .padding(.bottom, 32)
         .onAppear {
             Task {
+                do {
+                    try await userService.refreshUserInfo()
+                }
+                catch {
+                    notice.openNotice(open: .toast(error.localizedDescription))
+                }
                 await load()
             }
         }
@@ -220,4 +247,5 @@ struct ProductView: View {
         .environmentObject(Router())
         .environmentObject(ProductService())
         .environmentObject(ActiveService())
+        .environmentObject(UserService())
 }

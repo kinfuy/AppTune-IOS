@@ -8,58 +8,73 @@
 import SwiftUI
 
 struct ActiveInfo: Codable, Identifiable {
-    let id: String
-    let title: String
-    let description: String
-    let cover: String
-    let smallCover: String
-    let startAt: Date
-    let endAt: Date
-    let joinCount: Int
-    let likeCount: Int
-    let status: Int
-    let createTime: Date
+  let id: String
+  let title: String
+  let description: String
+  let cover: String
+  let smallCover: String
+  let startAt: Date
+  let endAt: Date
+  let joinCount: Int
+  let likeCount: Int
+  let status: Int
+  let createTime: Date
 }
-    
+
 class ActiveAPI {
-    static let shared = ActiveAPI()
-    private let apiManager = APIManager.shared
-    
-    
-    func getSelfActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<ActiveInfo> {
-      let urlString = "\(BASR_SERVE_URL)/active/myList?page=\(page)&pageSize=\(pageSize)"
+  static let shared = ActiveAPI()
+  private let apiManager = APIManager.shared
 
-      let request = try apiManager.createRequest(
-        url: urlString,
-        method: "GET",
-        body: nil
-      )
+  func getReviewActiveList() async throws -> ListResponse<
+    ActiveInfo
+  > {
+    let urlString = "\(BASR_SERVE_URL)/active/auditList"
 
-      return try await apiManager.session.data(for: request)
-    }
+    let request = try apiManager.createRequest(
+      url: urlString,
+      method: "GET",
+      body: nil
+    )
 
-    func getJoinedActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<ActiveInfo> {
-      let urlString = "\(BASR_SERVE_URL)/active/joinList?page=\(page)&pageSize=\(pageSize)"
+    return try await apiManager.session.data(for: request)
+  }
 
-      let request = try apiManager.createRequest(
-        url: urlString,
-        method: "GET",
-        body: nil
-      )
+  func getSelfActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<ActiveInfo>
+  {
+    let urlString = "\(BASR_SERVE_URL)/active/myList?page=\(page)&pageSize=\(pageSize)"
 
-      return try await apiManager.session.data(for: request)
-    }
+    let request = try apiManager.createRequest(
+      url: urlString,
+      method: "GET",
+      body: nil
+    )
 
-    func getActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<ActiveInfo> {
-      let urlString = "\(BASR_SERVE_URL)/active/list?page=\(page)&pageSize=\(pageSize)"
+    return try await apiManager.session.data(for: request)
+  }
 
-      let request = try apiManager.createRequest(
-        url: urlString,
-        method: "GET",
-        body: nil
-      )
+  func getJoinedActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<
+    ActiveInfo
+  > {
+    let urlString = "\(BASR_SERVE_URL)/active/joinList?page=\(page)&pageSize=\(pageSize)"
 
-      return try await apiManager.session.data(for: request)
-    }
+    let request = try apiManager.createRequest(
+      url: urlString,
+      method: "GET",
+      body: nil
+    )
+
+    return try await apiManager.session.data(for: request)
+  }
+
+  func getActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<ActiveInfo> {
+    let urlString = "\(BASR_SERVE_URL)/active/list?page=\(page)&pageSize=\(pageSize)"
+
+    let request = try apiManager.createRequest(
+      url: urlString,
+      method: "GET",
+      body: nil
+    )
+
+    return try await apiManager.session.data(for: request)
+  }
 }
-

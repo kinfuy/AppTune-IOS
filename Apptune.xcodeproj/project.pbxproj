@@ -86,6 +86,7 @@
 		F2B269FB2CB6D671008C46B8 /* TabBar+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269FA2CB6D671008C46B8 /* TabBar+Component.swift */; };
 		F2B269FD2CB6D725008C46B8 /* LanchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269FC2CB6D725008C46B8 /* LanchView.swift */; };
 		F2B26A002CB6D764008C46B8 /* GudieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269FF2CB6D764008C46B8 /* GudieView.swift */; };
+		F2B34CCF2CF35EE1009023B8 /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B34CCE2CF35EE1009023B8 /* ReviewView.swift */; };
 		F2D6AE222CD929A600896DD9 /* ProductViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D6AE212CD929A500896DD9 /* ProductViewModel.swift */; };
 		F2D6AE242CD92C4800896DD9 /* Empty+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D6AE232CD92C4800896DD9 /* Empty+Component.swift */; };
 		F2F4C6D52CE100E1003F20A5 /* ImagePicker+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F4C6D42CE100E1003F20A5 /* ImagePicker+Component.swift */; };
@@ -172,6 +173,7 @@
 		F2B269FA2CB6D671008C46B8 /* TabBar+Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabBar+Component.swift"; sourceTree = "<group>"; };
 		F2B269FC2CB6D725008C46B8 /* LanchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanchView.swift; sourceTree = "<group>"; };
 		F2B269FF2CB6D764008C46B8 /* GudieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GudieView.swift; sourceTree = "<group>"; };
+		F2B34CCE2CF35EE1009023B8 /* ReviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
 		F2D6AE212CD929A500896DD9 /* ProductViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductViewModel.swift; sourceTree = "<group>"; };
 		F2D6AE232CD92C4800896DD9 /* Empty+Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Empty+Component.swift"; sourceTree = "<group>"; };
 		F2F4C6D42CE100E1003F20A5 /* ImagePicker+Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImagePicker+Component.swift"; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 				F21CFD0F2CD7246A00CAB613 /* PublishProductView.swift */,
 				F21CFD0A2CD7245700CAB613 /* PublishActivityView.swift */,
 				F2FAEAF82CDFB643007BD6D8 /* ProductDetailView.swift */,
+				F2B34CCE2CF35EE1009023B8 /* ReviewView.swift */,
 				F21CFCDB2CD6463A00CAB613 /* ContentViews.swift */,
 			);
 			path = Views;
@@ -600,6 +603,7 @@
 				F299FE592CC94D2F0009C956 /* MD5+Util.swift in Sources */,
 				F2FAEAFB2CE04C03007BD6D8 /* Message+Modal.swift in Sources */,
 				F2AE42802CB96DFF009E72C3 /* TextColor+Component.swift in Sources */,
+				F2B34CCF2CF35EE1009023B8 /* ReviewView.swift in Sources */,
 				F21CFD1A2CD7778D00CAB613 /* RouterManager.swift in Sources */,
 				F23F8F792CBEB2BA005546EE /* UserView.swift in Sources */,
 				F28829882CF30053002D012A /* Tag+Service.swift in Sources */,

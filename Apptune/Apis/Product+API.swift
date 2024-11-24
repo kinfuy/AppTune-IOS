@@ -42,8 +42,6 @@ struct ProductInfo: Codable, Identifiable {
   let developer: String?
 }
 
-
-
 struct ListResponse<T: Codable>: Codable {
   let items: [T]
   let total: Int
@@ -99,8 +97,23 @@ class ProductAPI {
     let _ = try await apiManager.session.data(for: request)
   }
 
-  func getSelfProductList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<ProductInfo> {
-    let urlString = "\(BASR_SERVE_URL)/product/my?page=\(page)&pageSize=\(pageSize)"
+  func getSelfProductList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<
+    ProductInfo
+  > {
+    let urlString = "\(BASR_SERVE_URL)/product/myList?page=\(page)&pageSize=\(pageSize)"
+
+    let request = try apiManager.createRequest(
+      url: urlString,
+      method: "GET",
+      body: nil
+    )
+    return try await apiManager.session.data(for: request)
+  }
+
+  func getAuditProductList() async throws -> ListResponse<
+    ProductInfo
+  > {
+    let urlString = "\(BASR_SERVE_URL)/product/auditList"
 
     let request = try apiManager.createRequest(
       url: urlString,

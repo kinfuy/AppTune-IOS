@@ -8,161 +8,172 @@
 import SwiftUI
 
 enum ActiveType: CaseIterable {
-    case my
-    case all
-    case joined
+  case my
+  case all
+  case joined
 }
 
 class ActiveService: ObservableObject {
-    static let shared = ActiveService()
-    
-    // 活动列表
-    @Published var selfActives: [ActiveInfo] = []
-    @Published var allActives: [ActiveInfo] = []
-    @Published var joinedActives: [ActiveInfo] = []
-    
-    // 加载状态
-    @Published var isSelfLoading = false
-    @Published var isAllLoading = false
-    @Published var isJoinedLoading = false
-    
-    // 总数统计
-    @Published var totalSelfActive: Int = 0
-    @Published var totalAllActive: Int = 0
-    @Published var totalJoinedActive: Int = 0
-    
-    // 使用 actor 来管理页码
-    private actor PageManager {
-        private var pages: [ActiveType: Int]
-        
-        init() {
-            self.pages = [.my: 1, .all: 1, .joined: 1]
-        }
-        
-        func getCurrentPage(for type: ActiveType) -> Int {
-            return pages[type, default: 1]
-        }
-        
-        func updatePage(for type: ActiveType, refresh: Bool) {
-            if refresh {
-                pages[type] = 1
-            } else {
-                pages[type] = (pages[type, default: 1]) + 1
-            }
-        }
+  static let shared = ActiveService()
+
+  // 活动列表
+  @Published var selfActives: [ActiveInfo] = []
+  @Published var allActives: [ActiveInfo] = []
+  @Published var joinedActives: [ActiveInfo] = []
+  @Published var pendingActiveReviews: [ActiveInfo] = []
+
+  // 加载状态
+  @Published var isSelfLoading = false
+  @Published var isAllLoading = false
+  @Published var isJoinedLoading = false
+
+  // 总数统计
+  @Published var totalSelfActive: Int = 0
+  @Published var totalAllActive: Int = 0
+  @Published var totalJoinedActive: Int = 0
+
+  // 使用 actor 来管理页码
+  private actor PageManager {
+    private var pages: [ActiveType: Int]
+
+    init() {
+      self.pages = [.my: 1, .all: 1, .joined: 1]
     }
-    
-    private let pageManager = PageManager()
-    private let pageSize = 150
-    
-    // 获取对应类型的状态
-    private func getState(for type: ActiveType) -> (
-        actives: Binding<[ActiveInfo]>,
-        isLoading: Binding<Bool>,
-        total: Binding<Int>
-    ) {
+
+    func getCurrentPage(for type: ActiveType) -> Int {
+      return pages[type, default: 1]
+    }
+
+    func updatePage(for type: ActiveType, refresh: Bool) {
+      if refresh {
+        pages[type] = 1
+      } else {
+        pages[type] = (pages[type, default: 1]) + 1
+      }
+    }
+  }
+
+  private let pageManager = PageManager()
+  private let pageSize = 150
+
+  // 获取对应类型的状态
+  private func getState(for type: ActiveType) -> (
+    actives: Binding<[ActiveInfo]>,
+    isLoading: Binding<Bool>,
+    total: Binding<Int>
+  ) {
+    switch type {
+    case .my:
+      return (
+        actives: .init(get: { self.selfActives }, set: { self.selfActives = $0 }),
+        isLoading: .init(get: { self.isSelfLoading }, set: { self.isSelfLoading = $0 }),
+        total: .init(get: { self.totalSelfActive }, set: { self.totalSelfActive = $0 })
+      )
+    case .all:
+      return (
+        actives: .init(get: { self.allActives }, set: { self.allActives = $0 }),
+        isLoading: .init(get: { self.isAllLoading }, set: { self.isAllLoading = $0 }),
+        total: .init(get: { self.totalAllActive }, set: { self.totalAllActive = $0 })
+      )
+    case .joined:
+      return (
+        actives: .init(get: { self.joinedActives }, set: { self.joinedActives = $0 }),
+        isLoading: .init(get: { self.isJoinedLoading }, set: { self.isJoinedLoading = $0 }),
+        total: .init(get: { self.totalJoinedActive }, set: { self.totalJoinedActive = $0 })
+      )
+    }
+  }
+
+  // 判断是否还有更多数据
+  func hasMore(for type: ActiveType) -> Bool {
+    let state = getState(for: type)
+    return state.actives.wrappedValue.count < state.total.wrappedValue
+  }
+
+  // 统一的加载方法
+  @MainActor
+  private func loadActives(type: ActiveType, refresh: Bool) async {
+    let state = getState(for: type)
+
+    guard !state.isLoading.wrappedValue else { return }
+
+    // 使用 actor 安全地管理页码
+    await pageManager.updatePage(for: type, refresh: refresh)
+    let currentPage = await pageManager.getCurrentPage(for: type)
+
+    state.isLoading.wrappedValue = true
+
+    do {
+      let response = try await {
         switch type {
         case .my:
-            return (
-                actives: .init(get: { self.selfActives }, set: { self.selfActives = $0 }),
-                isLoading: .init(get: { self.isSelfLoading }, set: { self.isSelfLoading = $0 }),
-                total: .init(get: { self.totalSelfActive }, set: { self.totalSelfActive = $0 })
-            )
+          return try await ActiveAPI.shared.getSelfActiveList(
+            page: currentPage,
+            pageSize: pageSize
+          )
         case .all:
-            return (
-                actives: .init(get: { self.allActives }, set: { self.allActives = $0 }),
-                isLoading: .init(get: { self.isAllLoading }, set: { self.isAllLoading = $0 }),
-                total: .init(get: { self.totalAllActive }, set: { self.totalAllActive = $0 })
-            )
+          return try await ActiveAPI.shared.getActiveList(
+            page: currentPage,
+            pageSize: pageSize
+          )
         case .joined:
-            return (
-                actives: .init(get: { self.joinedActives }, set: { self.joinedActives = $0 }),
-                isLoading: .init(get: { self.isJoinedLoading }, set: { self.isJoinedLoading = $0 }),
-                total: .init(get: { self.totalJoinedActive }, set: { self.totalJoinedActive = $0 })
-            )
+          return try await ActiveAPI.shared.getJoinedActiveList(
+            page: currentPage,
+            pageSize: pageSize
+          )
         }
+      }()
+
+      // 直接在 MainActor 上更新状态
+      if refresh {
+        state.actives.wrappedValue = response.items
+      } else {
+        state.actives.wrappedValue.append(contentsOf: response.items)
+      }
+      state.total.wrappedValue = response.total
+      state.isLoading.wrappedValue = false
+
+    } catch {
+      state.isLoading.wrappedValue = false
     }
-    
-    // 判断是否还有更多数据
-    func hasMore(for type: ActiveType) -> Bool {
-        let state = getState(for: type)
-        return state.actives.wrappedValue.count < state.total.wrappedValue
+  }
+
+  // 公开的加载方法也标记为 @MainActor
+  @MainActor
+  func loadSelfActives(refresh: Bool = false) async {
+    await loadActives(type: .my, refresh: refresh)
+  }
+
+  @MainActor
+  func loadAllActives(refresh: Bool = false) async {
+    await loadActives(type: .all, refresh: refresh)
+  }
+
+  @MainActor
+  func loadJoinedActives(refresh: Bool = false) async {
+    await loadActives(type: .joined, refresh: refresh)
+  }
+
+  @MainActor
+  func loadPendingActiveReviews() async {
+    do {
+      // 获取待审核活动列表,不需要分页
+        let response = try await ActiveAPI.shared.getReviewActiveList()
+      self.pendingActiveReviews = response.items
+    } catch {
+      NoticeManager.shared.openNotice(open: .toast(error.localizedDescription))
     }
-    
-    
-    // 统一的加载方法
-    @MainActor
-    private func loadActives(type: ActiveType, refresh: Bool) async {
-        let state = getState(for: type)
-        
-        guard !state.isLoading.wrappedValue else { return }
-        
-        // 使用 actor 安全地管理页码
-        await pageManager.updatePage(for: type, refresh: refresh)
-        let currentPage = await pageManager.getCurrentPage(for: type)
-        
-        state.isLoading.wrappedValue = true
-        
-        do {
-            let response = try await {
-                switch type {
-                case .my:
-                    return try await ActiveAPI.shared.getSelfActiveList(
-                        page: currentPage,
-                        pageSize: pageSize
-                    )
-                case .all:
-                    return try await ActiveAPI.shared.getActiveList(
-                        page: currentPage,
-                        pageSize: pageSize
-                    )
-                case .joined:
-                    return try await ActiveAPI.shared.getJoinedActiveList(
-                        page: currentPage,
-                        pageSize: pageSize
-                    )
-                }
-            }()
-            
-            // 直接在 MainActor 上更新状态
-            if refresh {
-                state.actives.wrappedValue = response.items
-            } else {
-                state.actives.wrappedValue.append(contentsOf: response.items)
-            }
-            state.total.wrappedValue = response.total
-            state.isLoading.wrappedValue = false
-            
-        } catch {
-            state.isLoading.wrappedValue = false
+  }
+
+  // 刷新所有数据
+  @MainActor
+  func refreshAll() async {
+    await withTaskGroup(of: Void.self) { group in
+      for type in ActiveType.allCases {
+        group.addTask {
+          await self.loadActives(type: type, refresh: true)
         }
+      }
     }
-    
-    // 公开的加载方法也标记为 @MainActor
-    @MainActor
-    func loadSelfActives(refresh: Bool = false) async {
-        await loadActives(type: .my, refresh: refresh)
-    }
-    
-    @MainActor
-    func loadAllActives(refresh: Bool = false) async {
-        await loadActives(type: .all, refresh: refresh)
-    }
-    
-    @MainActor
-    func loadJoinedActives(refresh: Bool = false) async {
-        await loadActives(type: .joined, refresh: refresh)
-    }
-    
-    // 刷新所有数据
-    @MainActor
-    func refreshAll() async {
-        await withTaskGroup(of: Void.self) { group in
-            for type in ActiveType.allCases {
-                group.addTask {
-                    await self.loadActives(type: type, refresh: true)
-                }
-            }
-        }
-    }
+  }
 }
