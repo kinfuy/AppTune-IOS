@@ -8,6 +8,7 @@ struct ScreenManage: View {
   @StateObject var sheet = SheetManager.shared
   @StateObject var productService = ProductService()
   @StateObject var activeService = ActiveService()
+  @StateObject var tagService = TagService()
 
   @State private var launchViewAlpha: CGFloat = 1
   @State private var showGuide = false
@@ -39,6 +40,7 @@ struct ScreenManage: View {
               .environmentObject(userService)
               .environmentObject(productService)
               .environmentObject(activeService)
+              .environmentObject(tagService)
               .onAppear {
                 let auth = router.checkAuth(to: route)
                 if !auth {
@@ -56,6 +58,7 @@ struct ScreenManage: View {
         .environmentObject(sheet)
         .environmentObject(productService)
         .environmentObject(activeService)
+        .environmentObject(tagService)
         .opacity(launchViewAlpha == 1 ? 0 : 1)
         .navigationBarBackButtonHidden(true)
         .interactivePopGesture(enable: true) {
@@ -75,6 +78,7 @@ struct ScreenManage: View {
             .environmentObject(sheet)
             .environmentObject(productService)
             .environmentObject(activeService)
+            .environmentObject(tagService)
         }
         .fullScreenCover(
           isPresented: Binding(
@@ -89,6 +93,7 @@ struct ScreenManage: View {
             .environmentObject(userService)
             .environmentObject(sheet)
             .environmentObject(productService)
+            .environmentObject(tagService)
         }
 
         // 只在非 sheet 状态下显示 notice
@@ -100,6 +105,7 @@ struct ScreenManage: View {
                 .environmentObject(userService)
                 .environmentObject(sheet)
                 .environmentObject(productService)
+                .environmentObject(tagService)
                 .ignoresSafeArea()
                 .transition(.opacity)
         }

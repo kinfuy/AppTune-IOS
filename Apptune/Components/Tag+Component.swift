@@ -300,6 +300,7 @@ struct TagPicker: View {
     @EnvironmentObject var tagService: TagService
     @Binding var tag: Tag
     @State private var sheet: Bool = false
+    var theme:Color = .theme
 
     var isExist: Bool {
         return tagService.tags.contains(where: {$0.name == tag.name})
@@ -308,8 +309,9 @@ struct TagPicker: View {
     var body: some View {
         HStack {
             if tag.name == "" {
-                Text("添加标签".t())
-                    .foregroundColor(.gray)
+                Text("# 添加标签".t())
+                    .font(.system(size: 12))
+                    .foregroundColor(theme)
             } else {
                 Text(tag.name)
                     .foregroundColor(tag.color)
@@ -320,9 +322,9 @@ struct TagPicker: View {
                             .fill(tag.color.opacity(0.1))
                     )
             }
-            SFSymbol.rightArrow
-                .foregroundColor(.gray)
         }
+        .padding(4)
+        .background(theme.opacity(0.1))
         .onTapGesture {
             sheet.toggle()
             Task {

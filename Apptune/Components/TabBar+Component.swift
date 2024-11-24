@@ -14,7 +14,7 @@ enum TabbedItems: Int, CaseIterable {
     
     
     static func isWhiteListTabbar(to: TabbedItems) -> Bool {
-        let authRoutes: [TabbedItems] = [.home, .product]
+        let authRoutes: [TabbedItems] = [.home]
         return authRoutes.contains(where: { $0 == to })
     }
 

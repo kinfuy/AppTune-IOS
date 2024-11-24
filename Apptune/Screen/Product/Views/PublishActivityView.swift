@@ -15,7 +15,7 @@ struct PublishActivityView: View {
 
     var body: some View {
         Group {
-            if producttService.selfProducts.isEmpty {
+            if !producttService.selfProducts.isEmpty {
                 noProductsView
             } else {
                 activityForm
@@ -96,85 +96,107 @@ struct PublishActivityView: View {
 
     // 活动表单视图
     private var activityForm: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                // 产品选择卡片
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("选择产品")
-                        .font(.headline)
-                        .foregroundColor(Color(hex: "#666666"))
+        VStack{
+            ScrollView {
+                VStack(spacing: 20) {
+                    // 产品选择卡片
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("选择产品")
+                            .font(.headline)
+                            .foregroundColor(Color(hex: "#666666"))
 
-                    // 产品选择列表
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 12) {
-                            ForEach(producttService.selfProducts) { product in
-                                ProductSelectCard(
-                                    product: product,
-                                    isSelected: selectedProduct?.id == product.id
-                                )
-                                .onTapGesture {
-                                    selectedProduct = product
-                                    viewModel.selectedProductId = product.id
+                        // 产品选择列表
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 12) {
+                                ForEach(producttService.selfProducts) { product in
+                                    ProductSelectCard(
+                                        product: product,
+                                        isSelected: selectedProduct?.id == product.id
+                                    )
+                                    .onTapGesture {
+                                        selectedProduct = product
+                                        viewModel.selectedProductId = product.id
+                                    }
                                 }
                             }
+                            .padding(.horizontal)
                         }
-                        .padding(.horizontal)
                     }
-                }
-                .padding(.horizontal)
+                    .padding(.horizontal)
 
-                // 活动信息卡片
-                VStack(alignment: .leading, spacing: 12) {
-                    VStack(spacing: 16) {
-                        // 活动信息输入
+                    HStack{
+                        Text("活动信息")
+                            .font(.headline)
+                            .foregroundColor(Color(hex: "#666666"))
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    // 活动信息卡片
+                    VStack(alignment: .leading, spacing: 12) {
                         VStack(spacing: 16) {
-                            CustomTextField(
-                                text: $viewModel.activityName,
-                                placeholder: "活动标题"
-                            )
+                            // 活动信息输入
+                            VStack(spacing: 16) {
+                                CustomTextField(
+                                    text: $viewModel.activityName,
+                                    placeholder: "活动标题"
+                                )
 
-                            CustomTextField(
-                                text: $viewModel.activityDescription,
-                                placeholder: "活动描述",
-                                isMultiline: true
-                            )
+                                Divider()
+                                
+                                CustomTextField(
+                                    text: $viewModel.activityDescription,
+                                    placeholder: "活动描述",
+                                    isMultiline: true
+                                )
 
-                            // 标签选择器
-                            TagPicker(tag: .constant(Tag()))
+                                HStack{
+                                    TagPicker(tag: .constant(Tag()))
+                                    Spacer()
+                                }
 
-                            // 时间选择部分
-                        }
-                    }
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(12)
-                    .shadow(color: .gray.opacity(0.05), radius: 8)
-                }
-                .padding(.horizontal)
-
-                HStack {
-                    VStack(spacing: 4) {
-                        SFSymbol.eye
-                            .font(.system(size: 12))
-                            .foregroundColor(.gray)
-                        Text("预览")
-                            .font(.system(size: 12))
-                            .foregroundColor(.gray)
-                    }
-                    .padding(.trailing, 8)
-                    // 发布按钮
-                    Text("发布活动")
-                        .onTapGesture {
-                            Task {
-                                try await viewModel.publishActivity()
                             }
                         }
-                        .buttonStyle(.black)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        .shadow(color: .gray.opacity(0.05), radius: 8)
+                    }
+                    .padding(.horizontal)
+                    
+                    HStack{
+                        Text("活动信息")
+                            .font(.headline)
+                            .foregroundColor(Color(hex: "#666666"))
+                        Spacer()
+                    }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
             }
+            Spacer()
+            HStack {
+                VStack(spacing: 4) {
+                    SFSymbol.eye
+                        .font(.system(size: 12))
+                        .foregroundColor(.gray)
+                    Text("预览")
+                        .font(.system(size: 12))
+                        .foregroundColor(.gray)
+                }
+                .padding(.trailing, 8)
+                // 发布按钮
+                Text("发布活动")
+                    .onTapGesture {
+                        Task {
+                            try await viewModel.publishActivity()
+                        }
+                    }
+                    .buttonStyle(.black)
+                    .frame(height: 42)
+            }
+            .padding(.horizontal)
+            .padding(.bottom)
         }
-        .background(Color(hex: "#f8f9fa"))
+       
     }
 }
 
@@ -188,24 +210,23 @@ struct CustomTextField: View {
         VStack(alignment: .leading, spacing: 8) {
             if isMultiline {
                 TextEditor(text: $text)
-                    .frame(height: 100)
+                    .frame(height: 180)
                     .padding(8)
-                    .background(Color(hex: "#f8f9fa"))
                     .cornerRadius(8)
                     .overlay(
-                        Group {
-                            if text.isEmpty {
-                                Text(placeholder)
-                                    .foregroundColor(.gray)
-                                    .padding(.leading, 12)
-                                    .padding(.top, 12)
+                        VStack{
+                            HStack{
+                                if text.isEmpty {
+                                    Text(placeholder)
+                                        .foregroundColor(.gray)
+                                }
+                                Spacer()
                             }
+                            Spacer()
                         }
                     )
             } else {
                 TextField(placeholder, text: $text)
-                    .padding()
-                    .background(Color(hex: "#f8f9fa"))
                     .cornerRadius(8)
             }
         }
@@ -220,14 +241,17 @@ struct ProductSelectCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             // 产品图标
-            ImgLoader(product.icon)
-                .frame(width: 36, height: 36)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.gray.opacity(0.1), lineWidth: 1)
-                )
+            HStack{
+                ImgLoader(product.icon)
+                    .frame(width: 42, height: 42)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.gray.opacity(0.1), lineWidth: 1)
+                    )
 
+                Spacer()
+            }
             // 产品名称
             Text(product.name)
                 .font(.subheadline)

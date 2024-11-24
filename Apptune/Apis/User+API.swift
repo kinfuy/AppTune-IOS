@@ -7,127 +7,175 @@
 import Foundation
 
 struct UserResponse: Decodable {
-  var email: String
-  var role: String
-  var name: String
-  var avatar: String
-  var mobile: String?
-  var sex: Int?
+    var email: String
+    var role: String
+    var name: String
+    var avatar: String
+    var mobile: String?
+    var sex: Int?
 
-  var accessToken: String?
-  var refreshToken: String?
+    var accessToken: String?
+    var refreshToken: String?
 
-  var follow: Int?
-  var fans: Int?
-  var coin: Int?
+    var follow: Int?
+    var fans: Int?
+    var coin: Int?
 }
 
 class UserAPI {
-  static let shared = UserAPI()
-  private let apiManager = APIManager.shared
+    static let shared = UserAPI()
+    private let apiManager = APIManager.shared
 
-  func sendCode(email: String) async throws {
-    let request = try apiManager.createRequest(
-      url: "\(BASR_SERVE_URL)/sendCode",
-      method: "POST",
-      body: ["email": email]
-    )
-    _ = try await apiManager.session.data(for: request) as VoidCodable
-  }
-
-  func sign(email: String, password: String, code: String) async throws -> UserResponse {
-    do {
-      let response: UserResponse
-      if code.isEmpty {
-        response = try await login(email: email, password: password)
-      } else {
-        response = try await register(email: email, password: password, code: code)
-      }
-
-      UserService.shared.setToken(
-        access: response.accessToken ?? "", refresh: response.refreshToken ?? "")
-
-      await UserService.shared.updateProfile(
-        UserProfile(
-          email: response.email,
-          role: response.role,
-          name: response.name,
-          avatar: response.avatar,
-          mobile: response.mobile,
-          sex: response.sex
-        ))
-
-      await UserService.shared.updateStats(
-        UserStats(
-          follow: response.follow ?? 0,
-          fans: response.fans ?? 0,
-          coin: response.coin ?? 0
-        ))
-
-      return response
-    } catch {
-      UserService.shared.clearToken()
-      throw error
+    func sendCode(email: String) async throws {
+        let request = try apiManager.createRequest(
+            url: "\(BASR_SERVE_URL)/sendCode",
+            method: "POST",
+            body: ["email": email]
+        )
+        _ = try await apiManager.session.data(for: request) as VoidCodable
     }
-  }
 
-  func fetchUserInfo(email: String) async throws -> UserResponse {
-    let request = try apiManager.createRequest(
-      url: "\(BASR_SERVE_URL)/user/userInfo",
-      method: "POST",
-      body: ["email": email]
-    )
-    let response: UserResponse = try await apiManager.session.data(for: request)
+    func sign(email: String, password: String, code: String) async throws -> UserResponse {
+        do {
+            let response: UserResponse
+            if code.isEmpty {
+                response = try await login(email: email, password: password)
+            } else {
+                response = try await register(email: email, password: password, code: code)
+            }
 
-    await UserService.shared.updateProfile(
-      UserProfile(
-        email: response.email,
-        role: response.role,
-        name: response.name,
-        avatar: response.avatar,
-        mobile: response.mobile,
-        sex: response.sex
-      ))
+            UserService.shared.setToken(
+                access: response.accessToken ?? "", refresh: response.refreshToken ?? "")
 
-    await UserService.shared.updateStats(
-      UserStats(
-        follow: response.follow ?? 0,
-        fans: response.fans ?? 0,
-        coin: response.coin ?? 0
-      ))
+            await UserService.shared.updateProfile(
+                UserProfile(
+                    email: response.email,
+                    role: response.role,
+                    name: response.name,
+                    avatar: response.avatar,
+                    mobile: response.mobile,
+                    sex: response.sex
+                ))
 
-    return response
-  }
+            await UserService.shared.updateStats(
+                UserStats(
+                    follow: response.follow ?? 0,
+                    fans: response.fans ?? 0,
+                    coin: response.coin ?? 0
+                ))
 
-  private func login(email: String, password: String) async throws -> UserResponse {
-    let psd = MD5(string: "\(email)\(password)")
-    let request = try apiManager.createRequest(
-      url: "\(BASR_SERVE_URL)/login",
-      method: "POST",
-      body: ["email": email, "password": psd]
-    )
-    return try await apiManager.session.data(for: request)
-  }
+            return response
+        } catch {
+            UserService.shared.clearToken()
+            throw error
+        }
+    }
 
-  private func register(email: String, password: String, code: String) async throws
-    -> UserResponse
-  {
-    let psd = MD5(string: "\(email)\(password)")
-    let request = try apiManager.createRequest(
-      url: "\(BASR_SERVE_URL)/register",
-      method: "POST",
-      body: ["email": email, "password": psd, "code": code]
-    )
-    return try await apiManager.session.data(for: request)
-  }
+    func signApple(idToken: String, email: String?, name: String?) async throws -> UserResponse {
+        var body: [String: Any] = ["idToken": idToken]
+        if let email = email {
+            body["email"] = email
+        }
+        if let name = name {
+            body["name"] = name
+        }
+        
+        let request = try apiManager.createRequest(
+            url: "\(BASR_SERVE_URL)/loginByApple",
+            method: "POST",
+            body: body
+        )
+        
+        do {
+            let response: UserResponse = try await apiManager.session.data(for: request)
+            
+            UserService.shared.setToken(
+                access: response.accessToken ?? "", 
+                refresh: response.refreshToken ?? ""
+            )
+            
+            await UserService.shared.updateProfile(
+                UserProfile(
+                    email: response.email,
+                    role: response.role,
+                    name: response.name,
+                    avatar: response.avatar,
+                    mobile: response.mobile,
+                    sex: response.sex
+                )
+            )
+            
+            await UserService.shared.updateStats(
+                UserStats(
+                    follow: response.follow ?? 0,
+                    fans: response.fans ?? 0,
+                    coin: response.coin ?? 0
+                )
+            )
+            
+            return response
+        } catch {
+            UserService.shared.clearToken()
+            throw error
+        }
+    }
 
-  @discardableResult
-  func updateUserInfo(_ info: [String: Any]) async throws -> UserResponse {
-    let request = try apiManager.createRequest(
-      url: "\(BASR_SERVE_URL)/user/update",
-      method: "POST",
-      body: info
-    )
-    return try await apiManager.session.data(for: request)
-  }
+    func fetchUserInfo(email: String) async throws -> UserResponse {
+        let request = try apiManager.createRequest(
+            url: "\(BASR_SERVE_URL)/user/userInfo",
+            method: "POST",
+            body: ["email": email]
+        )
+        let response: UserResponse = try await apiManager.session.data(for: request)
+
+        await UserService.shared.updateProfile(
+            UserProfile(
+                email: response.email,
+                role: response.role,
+                name: response.name,
+                avatar: response.avatar,
+                mobile: response.mobile,
+                sex: response.sex
+            ))
+
+        await UserService.shared.updateStats(
+            UserStats(
+                follow: response.follow ?? 0,
+                fans: response.fans ?? 0,
+                coin: response.coin ?? 0
+            ))
+
+        return response
+    }
+
+    private func login(email: String, password: String) async throws -> UserResponse {
+        let psd = MD5(string: "\(email)\(password)")
+        let request = try apiManager.createRequest(
+            url: "\(BASR_SERVE_URL)/login",
+            method: "POST",
+            body: ["email": email, "password": psd]
+        )
+        return try await apiManager.session.data(for: request)
+    }
+
+    private func register(email: String, password: String, code: String) async throws
+        -> UserResponse {
+        let psd = MD5(string: "\(email)\(password)")
+        let request = try apiManager.createRequest(
+            url: "\(BASR_SERVE_URL)/register",
+            method: "POST",
+            body: ["email": email, "password": psd, "code": code]
+        )
+        return try await apiManager.session.data(for: request)
+    }
+
+    @discardableResult
+    func updateUserInfo(_ info: [String: Any]) async throws -> UserResponse {
+        let request = try apiManager.createRequest(
+            url: "\(BASR_SERVE_URL)/user/update",
+            method: "POST",
+            body: info
+        )
+        return try await apiManager.session.data(for: request)
+    }
 }

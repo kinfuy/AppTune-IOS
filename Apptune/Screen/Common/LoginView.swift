@@ -12,7 +12,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, ASAuthorizationControllerDel
   ASAuthorizationControllerPresentationContextProviding
 {
   static let shared = AppDelegate()
-  var onLoginSuccess: ((String, String, String) -> Void)?
+  var onLoginSuccess: ((String, String?, String?) -> Void)?
   var onLoginError: (() -> Void)?
 
   func authorizationController(
@@ -20,40 +20,32 @@ class AppDelegate: NSObject, UIApplicationDelegate, ASAuthorizationControllerDel
     didCompleteWithAuthorization authorization: ASAuthorization
   ) {
     if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-      let userIdentifier = appleIDCredential.user
-
-      // 获取已保存的邮箱
-      let savedEmail = UserDefaults.standard.string(forKey: "apple_\(userIdentifier)_email") ?? ""
-      let savedName = UserDefaults.standard.string(forKey: "apple_\(userIdentifier)_name") ?? ""
-
-      // 如果是首次登录，保存用户信息
-      if let email = appleIDCredential.email, !email.isEmpty {
-        UserDefaults.standard.set(email, forKey: "apple_\(userIdentifier)_email")
-
-        let fullName = [
-          appleIDCredential.fullName?.givenName,
-          appleIDCredential.fullName?.familyName,
-        ].compactMap { $0 }.joined(separator: " ")
-
-        let name = fullName.isEmpty ? "用户\(String(email.prefix(4)))" : fullName
-        UserDefaults.standard.set(name, forKey: "apple_\(userIdentifier)_name")
-
-        onLoginSuccess?(userIdentifier, email, name)
-      }
-      // 使用保存的信息
-      else if !savedEmail.isEmpty {
-        onLoginSuccess?(userIdentifier, savedEmail, savedName)
-      }
-      // 没有邮箱信息，无法登录
-      else {
+      // 获取身份令牌
+      guard let identityToken = appleIDCredential.identityToken,
+            let identityTokenString = String(data: identityToken, encoding: .utf8) else {
         onLoginError?()
+        return
       }
+
+      // 组合姓名
+      let name = [
+        appleIDCredential.fullName?.familyName,
+        appleIDCredential.fullName?.givenName
+      ].compactMap { $0 }.joined(separator: "")
+
+      // 直接传递 Apple 提供的原始信息给服务器
+      onLoginSuccess?(
+        identityTokenString,
+        appleIDCredential.email,
+        name.isEmpty ? nil : name
+      )
     }
   }
 
   func authorizationController(
     controller: ASAuthorizationController, didCompleteWithError error: Error
   ) {
+    print("Apple 登录错误:", error.localizedDescription)
     onLoginError?()
   }
 
@@ -84,22 +76,21 @@ struct LoginView: View {
     authorizationController.presentationContextProvider = AppDelegate.shared
 
     // 设置回调
-    AppDelegate.shared.onLoginSuccess = { userId, email, name in
+    AppDelegate.shared.onLoginSuccess = { idToken, email, name in
       Task {
         do {
           let loading = notice.openNotice(
             open: .toast(Toast(msg: "登录中...", autoClose: false, loading: true))
           )
 
-          let response = try await UserAPI.shared.sign(
+          // 将用户信息传递给服务器
+          let response = try await UserAPI.shared.signApple(
+            idToken: idToken,
             email: email,
-            password: "123456",
-            code: "000000"
+            name: name // 直接传递组合后的姓名
           )
 
-          // 使用新的 UserService 登录方法
           userService.login(response: response)
-
           notice.closeNotice(id: loading)
           router.toTabBar(.home)
 
