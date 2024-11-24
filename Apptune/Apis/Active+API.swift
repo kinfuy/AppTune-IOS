@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ActiveInfo: Codable, Identifiable {
-    let id: Int
+    let id: String
     let title: String
     let description: String
     let cover: String
@@ -18,7 +18,7 @@ struct ActiveInfo: Codable, Identifiable {
     let joinCount: Int
     let likeCount: Int
     let status: Int
-    let createTime: TimeInterval
+    let createTime: Date
 }
     
 class ActiveAPI {

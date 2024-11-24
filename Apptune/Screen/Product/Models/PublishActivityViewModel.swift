@@ -2,7 +2,7 @@ import Foundation
 
 @MainActor
 final class PublishActivityViewModel: ObservableObject {
-    @Published var selectedProductId: Int?
+    @Published var selectedProductId: String?
     // 基本信息
     @Published var activityName: String = ""
     @Published var activityDescription: String = ""

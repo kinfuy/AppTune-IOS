@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 extension URL: ExpressibleByStringLiteral {
     public init(stringLiteral value: StaticString) {
@@ -108,8 +109,13 @@ extension URLSession {
             }
 
             guard let responseData = baseResponse.data else {
-                await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "数据为空")))
-                throw APIError.serveError(code: baseResponse.code, message: "数据为空")
+                if T.self == VoidCodable.self {
+                    if loadId != "" {
+                        await NoticeManager.shared.closeNotice(id: loadId)
+                    }
+                    return VoidCodable() as! T
+                }
+                throw APIError.systemError(message: "数据为空")
             }
 
             // 解析具体数据
@@ -118,9 +124,16 @@ extension URLSession {
                 if T.self == VoidCodable.self {
                     responseObject = VoidCodable() as! T
                 } else {
-                    let jsonData = try JSONSerialization.data(withJSONObject: responseData.value)
-                    decoder.dateDecodingStrategy = .millisecondsSince1970
-                    responseObject = try decoder.decode(T.self, from: jsonData)
+                    let json = JSON(responseData.value)
+                    
+                    if let jsonData = try? json.rawData() {
+                        decoder.dateDecodingStrategy = .millisecondsSince1970
+                        decoder.keyDecodingStrategy = .convertFromSnakeCase
+                        responseObject = try decoder.decode(T.self, from: jsonData)
+                        print("sss222s",responseObject)
+                    } else {
+                        throw APIError.systemError(message: "JSON 序列化失败")
+                    }
                 }
             } catch {
                 await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "数据解析失败")))
@@ -191,5 +204,29 @@ private struct AnyCodable: Codable {
 
     init(value: Any) {
         self.value = value
+    }
+}
+
+// 添加一个辅助方法用于手动解析
+private func parseJSON(_ json: JSON) throws -> Any {
+    switch json.type {
+    case .array:
+        return try json.arrayValue.map { try parseJSON($0) }
+    case .dictionary:
+        var dict = [String: Any]()
+        for (key, value) in json {
+            dict[key] = try parseJSON(value)
+        }
+        return dict
+    case .string:
+        return json.stringValue
+    case .number:
+        return json.numberValue
+    case .bool:
+        return json.boolValue
+    case .null:
+        return NSNull()
+    default:
+        throw APIError.systemError(message: "未支持的 JSON 类型")
     }
 }

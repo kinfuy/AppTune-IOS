@@ -20,7 +20,7 @@ struct ProductView: View {
     @MainActor
     func load() async {
         await productService.refreshAll()
-//        await activeService.refreshAll()
+        await activeService.refreshAll()
     }
 
     // 将模块数据改为计算属性
@@ -70,11 +70,6 @@ struct ProductView: View {
             }
         }
         .padding(.horizontal)
-        .onAppear {
-            Task {
-                await load()
-            }
-        }
     }
 
     // 侧边栏

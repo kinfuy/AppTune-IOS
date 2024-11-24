@@ -31,7 +31,7 @@ struct AppStoreSearchResponse: Codable {
 }
 
 struct ProductInfo: Codable, Identifiable {
-  let id: Int
+  let id: String
   let name: String
   let description: String
   let icon: String
