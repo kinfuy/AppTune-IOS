@@ -32,12 +32,12 @@ struct Toast_Modal: View {
         .if(loading, transform: { view in
             view
                 .frame(width: 100, height: 100)
-
         })
         .padding(.vertical, 8)
         .padding(.horizontal, 16)
         .background(loading ? .black.opacity(0.88) : .black)
         .cornerRadius(8)
         .frame(maxWidth: UIScreen.main.bounds.width * 0.78)
+        .allowsHitTesting(false)
     }
 }

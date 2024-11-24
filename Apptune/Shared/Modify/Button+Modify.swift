@@ -2,7 +2,7 @@ import SwiftUI
 
 extension View {
     func buttonStyle(_ bgColor: Color, _ sizeColor: Color = .white, _ radius: CGFloat = 16 ) -> some View {
-    frame(height: 36)
+    frame(height: 42)
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .background(bgColor)
       .cornerRadius(radius)

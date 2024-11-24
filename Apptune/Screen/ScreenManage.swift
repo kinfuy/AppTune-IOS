@@ -6,6 +6,8 @@ struct ScreenManage: View {
   @StateObject var notice = NoticeManager.shared
   @StateObject var userService = UserService.shared
   @StateObject var sheet = SheetManager.shared
+  @StateObject var productService = ProductService()
+  @StateObject var activeService = ActiveService()
 
   @State private var launchViewAlpha: CGFloat = 1
   @State private var showGuide = false
@@ -35,6 +37,8 @@ struct ScreenManage: View {
               .environmentObject(notice)
               .environmentObject(sheet)
               .environmentObject(userService)
+              .environmentObject(productService)
+              .environmentObject(activeService)
               .onAppear {
                 let auth = router.checkAuth(to: route)
                 if !auth {
@@ -50,6 +54,8 @@ struct ScreenManage: View {
         .environmentObject(notice)
         .environmentObject(userService)
         .environmentObject(sheet)
+        .environmentObject(productService)
+        .environmentObject(activeService)
         .opacity(launchViewAlpha == 1 ? 0 : 1)
         .navigationBarBackButtonHidden(true)
         .interactivePopGesture(enable: true) {
@@ -67,6 +73,8 @@ struct ScreenManage: View {
             .environmentObject(notice)
             .environmentObject(userService)
             .environmentObject(sheet)
+            .environmentObject(productService)
+            .environmentObject(activeService)
         }
         .fullScreenCover(
           isPresented: Binding(
@@ -80,6 +88,7 @@ struct ScreenManage: View {
             .environmentObject(notice)
             .environmentObject(userService)
             .environmentObject(sheet)
+            .environmentObject(productService)
         }
 
         // 只在非 sheet 状态下显示 notice
@@ -90,10 +99,9 @@ struct ScreenManage: View {
                 .environmentObject(notice)
                 .environmentObject(userService)
                 .environmentObject(sheet)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-          .background(Color.black.opacity(0.01))
-          .ignoresSafeArea()
-          .transition(.opacity)
+                .environmentObject(productService)
+                .ignoresSafeArea()
+                .transition(.opacity)
         }
 
         // 启动页

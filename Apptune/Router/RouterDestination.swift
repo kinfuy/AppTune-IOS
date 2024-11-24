@@ -21,6 +21,7 @@ enum GeneralRouterDestination {
 }
 
 enum SheetDestination: Hashable {
+    
 }
 
 enum FullScreenDestination: Hashable {
@@ -30,29 +31,29 @@ enum FullScreenDestination: Hashable {
 extension GeneralRouterDestination {
   @ViewBuilder
   func buildView() -> some View {
-    switch self {
-    case .login:
-      LoginView()
-    case .setting:
-      UserSettingView()
-    case .accountSetting:
-      UserAccountView()
-    case .emailLogin:
-      EmailLoginView()
-    case .aboutAuthor:
-      AboutAuthorView()
-    case .userProfile:
-      UserProfileView()
-    case .coinTasks:
-      CoinTasksView()
-    case .coinShop:
-      CoinShopView()
-    case .publishProduct:
-      PublishProductView()
-    case .publishActivity:
-      PublishActivityView()
-    case .productDetail:
-      ProductDetailView()
-    }
+      switch self {
+      case .login:
+          LoginView()
+      case .setting:
+          UserSettingView()
+      case .accountSetting:
+          UserAccountView()
+      case .emailLogin:
+          EmailLoginView()
+      case .aboutAuthor:
+          AboutAuthorView()
+      case .userProfile:
+          UserProfileView()
+      case .coinTasks:
+          CoinTasksView()
+      case .coinShop:
+          CoinShopView()
+      case .publishProduct:
+          PublishProductView()
+      case .publishActivity:
+          PublishActivityView()
+      case .productDetail:
+          ProductDetailView()
+      }
   }
 }

@@ -42,22 +42,13 @@ struct ProductInfo: Codable, Identifiable {
   let developer: String?
 }
 
-struct EventInfo:Codable, Identifiable {
-    let id:Int;
-    let name:String;
-    let description:String;
-    let cover:String;
-    let smallCover:String;
-    let startAt:Date;
-    let endAt:Data;
-    let joined:Int
-    let status: String
-    
-}
 
-struct ProductListResponse: Codable {
-  let items: [ProductInfo]
+
+struct ListResponse<T: Codable>: Codable {
+  let items: [T]
   let total: Int
+  let page: Int
+  let pageSize: Int
 }
 
 class ProductAPI {
@@ -108,7 +99,7 @@ class ProductAPI {
     let _ = try await apiManager.session.data(for: request)
   }
 
-  func getProductList(page: Int = 1, pageSize: Int = 10) async throws -> ProductListResponse {
+  func getSelfProductList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<ProductInfo> {
     let urlString = "\(BASR_SERVE_URL)/product/my?page=\(page)&pageSize=\(pageSize)"
 
     let request = try apiManager.createRequest(
@@ -116,19 +107,6 @@ class ProductAPI {
       method: "GET",
       body: nil
     )
-
-    return try await apiManager.session.data(for: request)
-  }
-
-  func getFollowedProducts(page: Int = 1, pageSize: Int = 10) async throws -> ProductListResponse {
-    let urlString = "\(BASR_SERVE_URL)/product/followed?page=\(page)&pageSize=\(pageSize)"
-
-    let request = try apiManager.createRequest(
-      url: urlString,
-      method: "GET",
-      body: nil
-    )
-
     return try await apiManager.session.data(for: request)
   }
 }

@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		F20D194B2CD78269006296D0 /* SheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20D194A2CD78269006296D0 /* SheetManager.swift */; };
 		F20D194E2CD783F5006296D0 /* AppStoreSearch+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20D194D2CD783F5006296D0 /* AppStoreSearch+Sheet.swift */; };
-		F21CFCD52CD6462400CAB613 /* EventCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD02CD6462300CAB613 /* EventCard.swift */; };
+		F21CFCD52CD6462400CAB613 /* ActiveCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD02CD6462300CAB613 /* ActiveCard.swift */; };
 		F21CFCD62CD6462400CAB613 /* ModuleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD12CD6462300CAB613 /* ModuleCard.swift */; };
 		F21CFCD72CD6462400CAB613 /* ProductCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD22CD6462300CAB613 /* ProductCard.swift */; };
 		F21CFCD82CD6462400CAB613 /* TitleBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD32CD6462300CAB613 /* TitleBar.swift */; };
@@ -46,6 +46,14 @@
 		F27C657D2CB16F1B0074B608 /* ApptuneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F27C657C2CB16F1B0074B608 /* ApptuneApp.swift */; };
 		F27C65862CB16F1C0074B608 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F27C65852CB16F1C0074B608 /* Assets.xcassets */; };
 		F27C658A2CB16F1C0074B608 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F27C65892CB16F1C0074B608 /* Preview Assets.xcassets */; };
+		F288297C2CF20D37002D012A /* Product+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F288297B2CF20D37002D012A /* Product+Service.swift */; };
+		F288297E2CF20EDD002D012A /* Active+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F288297D2CF20EDD002D012A /* Active+Service.swift */; };
+		F28829802CF21328002D012A /* Active+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F288297F2CF21328002D012A /* Active+API.swift */; };
+		F28829822CF2EB13002D012A /* ActivityTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28829812CF2EB13002D012A /* ActivityTemplate.swift */; };
+		F28829842CF2EB3D002D012A /* ActivityTemplates+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28829832CF2EB3D002D012A /* ActivityTemplates+Sheet.swift */; };
+		F28829862CF2FEB0002D012A /* Tag+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28829852CF2FEB0002D012A /* Tag+Component.swift */; };
+		F28829882CF30053002D012A /* Tag+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28829872CF30053002D012A /* Tag+Service.swift */; };
+		F288298A2CF309F5002D012A /* Image+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28829892CF309F5002D012A /* Image+Sheet.swift */; };
 		F299FE592CC94D2F0009C956 /* MD5+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = F299FE582CC94D2F0009C956 /* MD5+Util.swift */; };
 		F2A0D5FB2CC360EA00536C58 /* ScalingHeaderScrollView in Frameworks */ = {isa = PBXBuildFile; productRef = F2A0D5FA2CC360EA00536C58 /* ScalingHeaderScrollView */; };
 		F2A0D5FE2CC3862700536C58 /* UserDefault+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A0D5FD2CC3862700536C58 /* UserDefault+Util.swift */; };
@@ -79,7 +87,6 @@
 		F2B26A002CB6D764008C46B8 /* GudieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269FF2CB6D764008C46B8 /* GudieView.swift */; };
 		F2D6AE222CD929A600896DD9 /* ProductViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D6AE212CD929A500896DD9 /* ProductViewModel.swift */; };
 		F2D6AE242CD92C4800896DD9 /* Empty+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D6AE232CD92C4800896DD9 /* Empty+Component.swift */; };
-		F2D9250C2CCD0D6B0044B3BA /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = F2D9250B2CCD0D6B0044B3BA /* Inject */; };
 		F2F4C6D52CE100E1003F20A5 /* ImagePicker+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F4C6D42CE100E1003F20A5 /* ImagePicker+Component.swift */; };
 		F2FAEAF92CDFB643007BD6D8 /* ProductDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FAEAF82CDFB643007BD6D8 /* ProductDetailView.swift */; };
 		F2FAEAFB2CE04C03007BD6D8 /* Message+Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FAEAFA2CE04C03007BD6D8 /* Message+Modal.swift */; };
@@ -89,7 +96,7 @@
 /* Begin PBXFileReference section */
 		F20D194A2CD78269006296D0 /* SheetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
 		F20D194D2CD783F5006296D0 /* AppStoreSearch+Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppStoreSearch+Sheet.swift"; sourceTree = "<group>"; };
-		F21CFCD02CD6462300CAB613 /* EventCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCard.swift; sourceTree = "<group>"; };
+		F21CFCD02CD6462300CAB613 /* ActiveCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveCard.swift; sourceTree = "<group>"; };
 		F21CFCD12CD6462300CAB613 /* ModuleCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleCard.swift; sourceTree = "<group>"; };
 		F21CFCD22CD6462300CAB613 /* ProductCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCard.swift; sourceTree = "<group>"; };
 		F21CFCD32CD6462300CAB613 /* TitleBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleBar.swift; sourceTree = "<group>"; };
@@ -127,6 +134,14 @@
 		F27C65852CB16F1C0074B608 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F27C65872CB16F1C0074B608 /* Apptune.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Apptune.entitlements; sourceTree = "<group>"; };
 		F27C65892CB16F1C0074B608 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F288297B2CF20D37002D012A /* Product+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Product+Service.swift"; sourceTree = "<group>"; };
+		F288297D2CF20EDD002D012A /* Active+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Active+Service.swift"; sourceTree = "<group>"; };
+		F288297F2CF21328002D012A /* Active+API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Active+API.swift"; sourceTree = "<group>"; };
+		F28829812CF2EB13002D012A /* ActivityTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityTemplate.swift; sourceTree = "<group>"; };
+		F28829832CF2EB3D002D012A /* ActivityTemplates+Sheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ActivityTemplates+Sheet.swift"; sourceTree = "<group>"; };
+		F28829852CF2FEB0002D012A /* Tag+Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+Component.swift"; sourceTree = "<group>"; };
+		F28829872CF30053002D012A /* Tag+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+Service.swift"; sourceTree = "<group>"; };
+		F28829892CF309F5002D012A /* Image+Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Sheet.swift"; sourceTree = "<group>"; };
 		F299FE582CC94D2F0009C956 /* MD5+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MD5+Util.swift"; sourceTree = "<group>"; };
 		F2A0D5FD2CC3862700536C58 /* UserDefault+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefault+Util.swift"; sourceTree = "<group>"; };
 		F2A0D6012CC386DF00536C58 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
@@ -168,7 +183,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F2D9250C2CCD0D6B0044B3BA /* Inject in Frameworks */,
 				F2AE42852CB97162009E72C3 /* Kingfisher in Frameworks */,
 				F2B269722CB57233001230B4 /* SwiftDate in Frameworks */,
 				F26F15AD2CC6A92B00848715 /* SwiftyJSON in Frameworks */,
@@ -182,7 +196,9 @@
 		F20D194C2CD783D8006296D0 /* Sheet */ = {
 			isa = PBXGroup;
 			children = (
+				F28829832CF2EB3D002D012A /* ActivityTemplates+Sheet.swift */,
 				F20D194D2CD783F5006296D0 /* AppStoreSearch+Sheet.swift */,
+				F28829892CF309F5002D012A /* Image+Sheet.swift */,
 			);
 			path = Sheet;
 			sourceTree = "<group>";
@@ -190,7 +206,7 @@
 		F21CFCD42CD6462300CAB613 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				F21CFCD02CD6462300CAB613 /* EventCard.swift */,
+				F21CFCD02CD6462300CAB613 /* ActiveCard.swift */,
 				F21CFCD12CD6462300CAB613 /* ModuleCard.swift */,
 				F21CFCD22CD6462300CAB613 /* ProductCard.swift */,
 				F21CFCD32CD6462300CAB613 /* TitleBar.swift */,
@@ -202,6 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				F21CFD0B2CD7245700CAB613 /* PublishActivityViewModel.swift */,
+				F28829812CF2EB13002D012A /* ActivityTemplate.swift */,
 				F2D6AE212CD929A500896DD9 /* ProductViewModel.swift */,
 				F21CFD112CD7247300CAB613 /* PublishProductViewModel.swift */,
 				F21CFCD92CD6463A00CAB613 /* ProductTab.swift */,
@@ -311,6 +328,9 @@
 			isa = PBXGroup;
 			children = (
 				F26F159C2CC538CE00848715 /* User+Service.swift */,
+				F288297D2CF20EDD002D012A /* Active+Service.swift */,
+				F28829872CF30053002D012A /* Tag+Service.swift */,
+				F288297B2CF20D37002D012A /* Product+Service.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -320,6 +340,7 @@
 			children = (
 				F26F15A22CC69D6E00848715 /* User+API.swift */,
 				F21CFD132CD75F9C00CAB613 /* Product+API.swift */,
+				F288297F2CF21328002D012A /* Active+API.swift */,
 				F2FC0F402CCAA49400CF8ACE /* Base+API.swift */,
 				F21CFCF32CD64E7100CAB613 /* File+API.swift */,
 			);
@@ -441,6 +462,7 @@
 				F2B269FA2CB6D671008C46B8 /* TabBar+Component.swift */,
 				F2AE427F2CB96DFF009E72C3 /* TextColor+Component.swift */,
 				F2AE42812CB97118009E72C3 /* Image+Componet.swift */,
+				F28829852CF2FEB0002D012A /* Tag+Component.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -474,7 +496,6 @@
 				F2AE42842CB97162009E72C3 /* Kingfisher */,
 				F2A0D5FA2CC360EA00536C58 /* ScalingHeaderScrollView */,
 				F26F15AC2CC6A92B00848715 /* SwiftyJSON */,
-				F2D9250B2CCD0D6B0044B3BA /* Inject */,
 			);
 			productName = Apptune;
 			productReference = F27C65792CB16F1B0074B608 /* Apptune.app */;
@@ -509,7 +530,6 @@
 				F2AE42832CB97162009E72C3 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				F2A0D5F92CC360EA00536C58 /* XCRemoteSwiftPackageReference "ScalingHeaderScrollView" */,
 				F26F15AB2CC6A92B00848715 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
-				F2D9250A2CCD0D6B0044B3BA /* XCRemoteSwiftPackageReference "Inject" */,
 			);
 			productRefGroup = F27C657A2CB16F1B0074B608 /* Products */;
 			projectDirPath = "";
@@ -539,6 +559,7 @@
 			files = (
 				F27A94832CC00AEC002A2BEA /* ProductView.swift in Sources */,
 				F2D6AE242CD92C4800896DD9 /* Empty+Component.swift in Sources */,
+				F288297E2CF20EDD002D012A /* Active+Service.swift in Sources */,
 				F21CFCDD2CD6463A00CAB613 /* ProductTab.swift in Sources */,
 				F2A0D60C2CC3A28D00536C58 /* Version+Modal.swift in Sources */,
 				F2A0D6042CC3887800536C58 /* Toast+Component.swift in Sources */,
@@ -558,15 +579,18 @@
 				F20D194E2CD783F5006296D0 /* AppStoreSearch+Sheet.swift in Sources */,
 				F26F159D2CC538CE00848715 /* User+Service.swift in Sources */,
 				F21CFD072CD691BB00CAB613 /* CoinShopViewModel.swift in Sources */,
+				F28829802CF21328002D012A /* Active+API.swift in Sources */,
 				F21CFCD72CD6462400CAB613 /* ProductCard.swift in Sources */,
 				F2B2697A2CB578DD001230B4 /* Color+Extension.swift in Sources */,
 				F2A0D60E2CC40AAA00536C58 /* Agreement+Modal.swift in Sources */,
 				F21CFCFB2CD6911600CAB613 /* CoinShopView.swift in Sources */,
+				F288298A2CF309F5002D012A /* Image+Sheet.swift in Sources */,
 				F23F8F732CBD5AD5005546EE /* Font+Extension.swift in Sources */,
 				F21CFCD82CD6462400CAB613 /* TitleBar.swift in Sources */,
 				F2B2697D2CB57B80001230B4 /* Radio+Component.swift in Sources */,
 				F26F15A32CC69D6E00848715 /* User+API.swift in Sources */,
 				F2F4C6D52CE100E1003F20A5 /* ImagePicker+Component.swift in Sources */,
+				F28829862CF2FEB0002D012A /* Tag+Component.swift in Sources */,
 				F22377E32CC6AC0200F780AE /* Network+Util.swift in Sources */,
 				F2B269F92CB6C6AA008C46B8 /* SFSymbol+Component.swift in Sources */,
 				F2A0D6102CC49FD800536C58 /* Toast+Modal.swift in Sources */,
@@ -575,6 +599,7 @@
 				F2AE42802CB96DFF009E72C3 /* TextColor+Component.swift in Sources */,
 				F21CFD1A2CD7778D00CAB613 /* RouterManager.swift in Sources */,
 				F23F8F792CBEB2BA005546EE /* UserView.swift in Sources */,
+				F28829882CF30053002D012A /* Tag+Service.swift in Sources */,
 				F2B269FB2CB6D671008C46B8 /* TabBar+Component.swift in Sources */,
 				F2FAEAF92CDFB643007BD6D8 /* ProductDetailView.swift in Sources */,
 				F2B26A002CB6D764008C46B8 /* GudieView.swift in Sources */,
@@ -584,22 +609,25 @@
 				F2B269F72CB6C58C008C46B8 /* Text+Extension.swift in Sources */,
 				F26F15982CC513C300848715 /* Confirm+Modal.swift in Sources */,
 				F2B269772CB574B0001230B4 /* LoginView.swift in Sources */,
+				F288297C2CF20D37002D012A /* Product+Service.swift in Sources */,
 				F2A0D6142CC4D37000536C58 /* UserAccountView.swift in Sources */,
 				F21CFD092CD691C000CAB613 /* CoinTasksViewModel.swift in Sources */,
 				F2A0D6022CC386DF00536C58 /* String+Extension.swift in Sources */,
 				F23F8F7B2CBEBC87005546EE /* AppState.swift in Sources */,
 				F26F159A2CC5370900848715 /* EmailLoginView.swift in Sources */,
-				F21CFCD52CD6462400CAB613 /* EventCard.swift in Sources */,
+				F21CFCD52CD6462400CAB613 /* ActiveCard.swift in Sources */,
 				F2B269752CB57260001230B4 /* ScreenManage.swift in Sources */,
 				F2D6AE222CD929A600896DD9 /* ProductViewModel.swift in Sources */,
 				F21CFCFC2CD6911600CAB613 /* CoinTasksView.swift in Sources */,
 				F21CFD102CD7246A00CAB613 /* PublishProductView.swift in Sources */,
 				F2A0D6082CC3958100536C58 /* Router+Extension.swift in Sources */,
 				F2A0D6122CC4AFB200536C58 /* Const+Util.swift in Sources */,
+				F28829822CF2EB13002D012A /* ActivityTemplate.swift in Sources */,
 				F2B2697F2CB58055001230B4 /* Button+Modify.swift in Sources */,
 				F21CFD1B2CD7778D00CAB613 /* RouterDestination.swift in Sources */,
 				F21CFD0E2CD7245700CAB613 /* PublishActivityViewModel.swift in Sources */,
 				F22377E12CC6ABBB00F780AE /* UrlSession+Extension.swift in Sources */,
+				F28829842CF2EB3D002D012A /* ActivityTemplates+Sheet.swift in Sources */,
 				F237E5A02CCE6BFB00CC1074 /* AboutAuthorView.swift in Sources */,
 				F2B269F52CB6C2C5008C46B8 /* ActiveHomeView.swift in Sources */,
 				F2AE42872CB97814009E72C3 /* View+Extension.swift in Sources */,
@@ -871,14 +899,6 @@
 				minimumVersion = 7.0.0;
 			};
 		};
-		F2D9250A2CCD0D6B0044B3BA /* XCRemoteSwiftPackageReference "Inject" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/krzysztofzablocki/Inject.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.5.2;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -901,11 +921,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F2B269702CB57232001230B4 /* XCRemoteSwiftPackageReference "SwiftDate" */;
 			productName = SwiftDate;
-		};
-		F2D9250B2CCD0D6B0044B3BA /* Inject */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F2D9250A2CCD0D6B0044B3BA /* XCRemoteSwiftPackageReference "Inject" */;
-			productName = Inject;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

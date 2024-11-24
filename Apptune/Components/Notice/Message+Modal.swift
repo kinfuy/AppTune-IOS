@@ -11,12 +11,34 @@ enum MessagePosition {
   case top
   case center
   case bottom
+
+  var padding: Edge.Set {
+    switch self {
+    case .top:
+      return .top
+    case .center:
+      return []
+    case .bottom:
+      return .bottom
+    }
+  }
 }
 
 enum MessageAlignment {
   case left
   case center
   case right
+
+  var alignment: Alignment {
+    switch self {
+    case .left:
+      return .leading
+    case .center:
+      return .center
+    case .right:
+      return .trailing
+    }
+  }
 }
 
 enum MessageTheme: Equatable {

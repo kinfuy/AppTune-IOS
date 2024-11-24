@@ -120,7 +120,7 @@ struct PublishProductView: View {
                           ))
                       }) {
                         Label("从 App Store 导入", systemImage: "magnifyingglass")
-                          .foregroundColor(.theme)
+                              .foregroundColor(.black)
                       }
                       Spacer()
                   }
@@ -136,9 +136,9 @@ struct PublishProductView: View {
         }
       Spacer()
       VStack {
-        Text("发布")
+        Text("发布产品")
           .loadingButton(loading: viewModel.isLoading)
-          .primaryButton()
+          .buttonStyle(.black)
           .frame(height: 42)
           .onTapGesture {
             if viewModel.isLoading {
@@ -153,7 +153,6 @@ struct PublishProductView: View {
               await viewModel.publishProduct()
             }
           }
-          .primaryButton()
           .frame(height: 38)
       }.padding()
     }
@@ -185,11 +184,12 @@ struct PublishProductView: View {
 }
 
 #Preview {
-  PublishProductView()
-    .environmentObject(Router())
-    .environmentObject(NoticeManager())
-    .environmentObject(SheetManager())
-
+    NavigationStack{
+        PublishProductView()
+          .environmentObject(Router())
+          .environmentObject(NoticeManager())
+          .environmentObject(SheetManager())
+    }
 }
 
 

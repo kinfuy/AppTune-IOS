@@ -3,6 +3,10 @@ import SwiftUI
 struct NoticeConfig {
   var maskHiden: Bool
   var mask: Bool
+  var blockInteraction: Bool
+
+  static let transparent = NoticeConfig(maskHiden: false, mask: false, blockInteraction: false)
+  static let blocking = NoticeConfig(maskHiden: true, mask: true, blockInteraction: true)
 }
 
 struct Toast {
@@ -61,15 +65,11 @@ enum NoticeDestiantion {
   var config: NoticeConfig {
     switch self {
     case .version:
-      NoticeConfig(maskHiden: false, mask: true)
-    case .toast:
-      NoticeConfig(maskHiden: false, mask: false)
-    case .loading:
-      NoticeConfig(maskHiden: true, mask: false)
-    case .message:
-      NoticeConfig(maskHiden: false, mask: false)
-    default:
-      NoticeConfig(maskHiden: true, mask: true)
+      NoticeConfig(maskHiden: false, mask: true, blockInteraction: true)
+    case .toast, .loading, .message:
+      NoticeConfig.transparent
+    case .agreement, .confirm:
+      NoticeConfig.blocking
     }
   }
 
@@ -193,16 +193,19 @@ class NoticeManager: ObservableObject {
   @ViewBuilder
   func buildNoticeView(notice: NoticeDestiantion) -> some View {
     ZStack {
-      VStack {}
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .ignoresSafeArea(.all)
-        .background(notice.config.mask ? .black.opacity(0.58) : .clear)
-        .onTapGesture {
-          if notice.config.maskHiden {
-            self.closeNotice(id: notice.id)
+      // 遮罩层
+      if notice.config.mask {
+        Color.black.opacity(0.58)
+          .frame(maxWidth: .infinity, maxHeight: .infinity)
+          .ignoresSafeArea(.all)
+          .onTapGesture {
+            if notice.config.maskHiden {
+              self.closeNotice(id: notice.id)
+            }
           }
-        }
+      }
 
+      // Notice 内容
       switch notice {
       case .version:
         Version_Modal()
@@ -244,7 +247,8 @@ class NoticeManager: ObservableObject {
         )
       }
     }
-    .background(.black.opacity(0.01))
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+    // 只在需要阻止交互的情况下阻止
+    .allowsHitTesting(notice.config.blockInteraction)
   }
 }

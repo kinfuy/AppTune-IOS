@@ -1,0 +1,65 @@
+//
+//  Active+API.swift
+//  Apptune
+//
+//  Created by 杨杨杨 on 2024/11/23.
+//
+
+import SwiftUI
+
+struct ActiveInfo: Codable, Identifiable {
+    let id: Int
+    let title: String
+    let description: String
+    let cover: String
+    let smallCover: String
+    let startAt: Date
+    let endAt: Date
+    let joinCount: Int
+    let likeCount: Int
+    let status: Int
+    let createTime: TimeInterval
+}
+    
+class ActiveAPI {
+    static let shared = ActiveAPI()
+    private let apiManager = APIManager.shared
+    
+    
+    func getSelfActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<ActiveInfo> {
+      let urlString = "\(BASR_SERVE_URL)/active/myList?page=\(page)&pageSize=\(pageSize)"
+
+      let request = try apiManager.createRequest(
+        url: urlString,
+        method: "GET",
+        body: nil
+      )
+
+      return try await apiManager.session.data(for: request)
+    }
+
+    func getJoinedActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<ActiveInfo> {
+      let urlString = "\(BASR_SERVE_URL)/active/joinList?page=\(page)&pageSize=\(pageSize)"
+
+      let request = try apiManager.createRequest(
+        url: urlString,
+        method: "GET",
+        body: nil
+      )
+
+      return try await apiManager.session.data(for: request)
+    }
+
+    func getActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<ActiveInfo> {
+      let urlString = "\(BASR_SERVE_URL)/active/list?page=\(page)&pageSize=\(pageSize)"
+
+      let request = try apiManager.createRequest(
+        url: urlString,
+        method: "GET",
+        body: nil
+      )
+
+      return try await apiManager.session.data(for: request)
+    }
+}
+

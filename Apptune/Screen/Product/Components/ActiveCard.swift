@@ -1,10 +1,10 @@
 import SwiftUI
 
-struct EventCard: View {
+struct ActiveCard: View {
   let title: String
   let date: String
   let joined: Int
-  let status: String
+  let status: Int
   let cover: String
   let organizer: String
 
@@ -25,7 +25,7 @@ struct EventCard: View {
               )
           )
 
-        Text(status)
+        Text(status.description)
           .font(.system(size: 12))
           .padding(.horizontal, 8)
           .padding(.vertical, 4)
