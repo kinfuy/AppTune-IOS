@@ -265,12 +265,7 @@ struct UserView: View {
                 }
             } else {
                 Task{
-                    do {
-                        try await userService.refreshUserInfo()
-                    }
-                    catch {
-                        notice.openNotice(open: .toast(error.localizedDescription))
-                    }
+                    try await userService.refreshUserInfo()
                 }
             }
            

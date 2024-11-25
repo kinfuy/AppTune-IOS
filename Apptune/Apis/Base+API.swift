@@ -15,7 +15,12 @@ struct TokenInfo: Decodable {
 class APIManager {
   static let shared = APIManager()
 
-  let session = URLSession(configuration: .default)
+  let session: URLSession = {
+    let config = URLSessionConfiguration.default
+    config.timeoutIntervalForRequest = 15
+    config.timeoutIntervalForResource = 60
+    return URLSession(configuration: config)
+  }()
 
   func getToken() -> String? {
     let token = UserService.shared.auth.accessToken
