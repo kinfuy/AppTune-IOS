@@ -176,4 +176,13 @@ class ActiveService: ObservableObject {
             }
         }
     }
+
+    @MainActor
+    func review(id: String, status: Int) async {
+        do {
+            try await ActiveAPI.shared.auditActive(id: id, status: status)
+        } catch {
+            print(error)
+        }
+    }
 }

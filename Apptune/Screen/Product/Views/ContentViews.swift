@@ -40,7 +40,8 @@ struct MyProductsView: View {
             stars: 0,
             category: product.category,
             logo: product.icon,
-            developer: product.developer ?? ""
+            developer: product.developer ?? "",
+            status: product.status ?? 1
           )
         }
 

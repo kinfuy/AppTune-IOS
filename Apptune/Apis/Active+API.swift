@@ -77,4 +77,20 @@ class ActiveAPI {
 
     return try await apiManager.session.data(for: request)
   }
+
+  /**
+   * 审核活动
+   * @param id 活动ID
+   * @param status 状态
+   */
+  func auditActive(id: String, status: Int) async throws  {
+    let urlString = "\(BASR_SERVE_URL)/active/audit"
+
+    let request = try apiManager.createRequest(
+      url: urlString,
+      method: "POST",
+      body: ["id": id, "status": status]
+    )
+    let _ = try await apiManager.session.data(for: request)
+  }
 }
