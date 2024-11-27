@@ -39,9 +39,9 @@ struct UserView: View {
                                 }
                             }
                         HStack {
-                            Text("社区创始人")
-                                .font(.system(size: 12))
-                                .colorTag(.theme)
+//                            Text("社区创始人")
+//                                .font(.system(size: 12))
+//                                .colorTag(.theme)
                         }
                         HStack(spacing: 32) {
                             VStack(alignment: .leading) {

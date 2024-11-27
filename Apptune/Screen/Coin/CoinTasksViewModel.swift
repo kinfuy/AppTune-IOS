@@ -31,24 +31,11 @@ class CoinTasksViewModel: ObservableObject {
     // TODO: 从服务器获取任务列表
     // 示例数据
     dailyTasks = [
-      CoinTask(
-        id: "1", title: "每日签到", coin: 10, icon: "checkmark.circle.fill", isCompleted: false,
-        type: .daily),
-      CoinTask(
-        id: "2", title: "浏览文章", coin: 5, icon: "doc.text.fill", isCompleted: false, type: .daily),
-      CoinTask(
-        id: "3", title: "分享内容", coin: 8, icon: "square.and.arrow.up", isCompleted: false,
-        type: .daily),
+        
     ]
 
     permanentTasks = [
-      CoinTask(
-        id: "4", title: "完善个人资料", coin: 20, icon: "person.fill", isCompleted: false,
-        type: .permanent),
-      CoinTask(
-        id: "5", title: "绑定手机号", coin: 30, icon: "phone.fill", isCompleted: false, type: .permanent),
-      CoinTask(
-        id: "6", title: "首次分享", coin: 50, icon: "gift.fill", isCompleted: false, type: .permanent),
+
     ]
   }
 

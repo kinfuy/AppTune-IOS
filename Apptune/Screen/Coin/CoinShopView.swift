@@ -142,6 +142,10 @@ struct CoinShopView: View {
         .cornerRadius(20)
         .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 4)
         .padding(.horizontal)
+          
+          if viewModel.items.isEmpty {
+              EmptyView(text: "敬请期待", image: "nodata", size: 200)
+          }
 
         // 商品列表
         LazyVGrid(columns: columns, spacing: 16) {
