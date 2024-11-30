@@ -2,50 +2,83 @@ import Foundation
 
 @MainActor
 final class PublishActivityViewModel: ObservableObject {
-    @Published var selectedProductId: String?
-    // 基本信息
-    @Published var activityName: String = ""
-    @Published var activityDescription: String = ""
+  @Published var selectedProductId: String?
+  // 基本信息
+  @Published var activityName: String = ""
+  @Published var activityDescription: String = ""
+  @Published var cover: String?
+  @Published var tags: [TagEntity] = []
 
-    // 时间设置
-    @Published var startTime: Date = Date()
-    @Published var endTime: Date = Date().addingTimeInterval(7 * 24 * 3600) // 默认一周后
+  // 时间设置
+  @Published var startTime: Date = Date()
+  @Published var endTime: Date = Date().addingTimeInterval(7 * 24 * 3600)
 
-    // 状态
-    @Published var isLoading: Bool = false
-    @Published var errorMessage: String?
+  // 状态
+  @Published var isLoading: Bool = false
+  @Published var createdActivity: ActiveInfo?
 
-    // 表单验证
-    var isValid: Bool {
-        !activityName.isEmpty && !activityDescription.isEmpty && startTime < endTime
-            && startTime >= Date()
+  // 移除 isValid 属性,改用 checkValid 函数
+  func checkValid() -> Toast? {
+    if selectedProductId == nil || selectedProductId?.isEmpty == true {
+      return Toast(msg: "请选择产品")
     }
 
-    func publishActivity() async throws {
-        guard isValid else {
-            errorMessage = "请填写完整的活动信息"
-            return
-        }
-
-        isLoading = true
+    if activityName.isEmpty {
+      return Toast(msg: "请输入活动标题")
     }
 
-    // 重置表单
-    func reset() {
-        activityName = ""
-        activityDescription = ""
-        startTime = Date()
-        endTime = Date().addingTimeInterval(7 * 24 * 3600)
-        errorMessage = nil
+    if activityDescription.isEmpty {
+      return Toast(msg: "请输入活动描述")
     }
 
-    // 从模板初始化
-    func initFromTemplate(_ template: ActivityTemplate) {
-        activityName = template.name
-        activityDescription = template.description
-
-        // 设置开始和结束时间
-        startTime = Date()
-        endTime = Calendar.current.date(byAdding: .hour, value: template.duration, to: startTime) ?? Date()
+    if startTime >= endTime {
+      return Toast(msg: "结束时间必须晚于开始时间")
     }
+
+    return nil
+  }
+
+  func publishActivity() async {
+    isLoading = true
+    defer { isLoading = false }
+
+    do {
+      let params = ActiveCreateParams(
+        productId: selectedProductId ?? "",
+        title: activityName,
+        description: activityDescription,
+        cover: cover,
+        startTime: startTime,
+        endTime: endTime,
+        tags: tags.map { TagEntity(name: $0.name, color: $0.color) }
+      )
+
+      createdActivity = try await ActiveAPI.shared.createActive(params)
+      reset()
+    } catch {
+        print(error.localizedDescription)
+    }
+  }
+
+  // 重置表单
+  func reset() {
+    selectedProductId = nil
+    activityName = ""
+    activityDescription = ""
+    cover = nil
+    tags = []
+    startTime = Date()
+    endTime = Date().addingTimeInterval(7 * 24 * 3600)
+    createdActivity = nil
+  }
+
+  // 从模板初始化表单
+  func initFromTemplate(_ template: ActiveTemplateInfo) {
+    activityName = template.title
+    activityDescription = template.description ?? ""
+    cover = template.cover
+    tags = template.tags
+    startTime = template.startTime
+    endTime = template.endTime
+  }
 }

@@ -5,10 +5,13 @@ import SwiftUI
 struct ImgLoader: View {
   private let url: String
   private let placeholder: String = "empty"
+  private let contentMode: SwiftUI.ContentMode
+  @State private var imageRatio: CGFloat = 1.0
 
   // MARK: - Init
-  init(_ img: String) {
+  init(_ img: String, contentMode: SwiftUI.ContentMode = .fill) {
     self.url = img
+    self.contentMode = contentMode
   }
 
   // MARK: - Body
@@ -23,6 +26,7 @@ struct ImgLoader: View {
         localImage
       }
     }
+    .aspectRatio(imageRatio, contentMode: contentMode)
   }
 
   // MARK: - Private Methods
@@ -50,6 +54,7 @@ struct ImgLoader: View {
   private var localImage: some View {
     Image(url)
       .resizable()
+      .aspectRatio(contentMode: contentMode)
   }
 
   private func kfImage(_ urlString: String) -> some View {
@@ -58,6 +63,10 @@ struct ImgLoader: View {
         Image(placeholder)
           .resizable()
           .loading(true, size: 1)
+      }
+      .onSuccess { result in
+        let size = result.image.size
+        imageRatio = size.width / size.height
       }
       .resizable()
       .loadDiskFileSynchronously()

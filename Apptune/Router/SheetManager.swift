@@ -12,7 +12,7 @@ enum SheetType: Identifiable {
   )
 
   case activityTemplates(
-    onSelect: ((ActivityTemplate) -> Void)? = nil,
+    onSelect: ((ActiveTemplateInfo) -> Void)? = nil,
     onCancel: (() -> Void)? = nil
   )
 

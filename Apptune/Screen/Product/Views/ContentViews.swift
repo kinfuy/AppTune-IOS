@@ -13,17 +13,20 @@ struct JoinedActiveView: View {
         ForEach(acticeService.joinedActives) { ac in
           ActiveCard(
             title: ac.title,
-            date: ac.startAt.description,
-            joined: 56,
+            description: ac.description,
+            startAt: ac.startAt,
+            endAt: ac.endAt,
+            joinCount: ac.joinCount,
             status: ac.status,
             cover: ac.cover,
-            organizer: ac.smallCover
+            productName: ac.productName,
+            productLogo: ac.productLogo
           )
         }
       }
       .padding(.horizontal)
     }
-   
+
   }
 }
 
@@ -67,11 +70,14 @@ struct MyActicesView: View {
           ForEach(acticeService.selfActives) { ac in
             ActiveCard(
               title: ac.title,
-              date: ac.startAt.description,
-              joined: 56,
+              description: ac.description,
+              startAt: ac.startAt,
+              endAt: ac.endAt,
+              joinCount: ac.joinCount,
               status: ac.status,
               cover: ac.cover,
-              organizer: ac.smallCover
+              productName: ac.productName,
+              productLogo: ac.productLogo
             )
           }
         }

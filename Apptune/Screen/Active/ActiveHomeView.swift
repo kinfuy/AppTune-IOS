@@ -27,67 +27,6 @@ let gradientSurface = LinearGradient(
   endPoint: .bottomTrailing
 )
 
-struct ActiveCardView: View {
-  var body: some View {
-    VStack {
-      HStack(alignment: .top) {
-        Image("dog")
-          .resizable()
-          .frame(width: 100, height: 100)
-          .clipShape(.rect(cornerRadius: 8))
-        VStack(alignment: .leading, spacing: 8) {
-          HStack(alignment: .top) {
-            Text("Suka数字卡片,全新版本内测开启中")
-          }
-          HStack {
-            Text("进行中")
-              .font(.system(size: 14))
-              .colorTag(.theme)
-            Text("条件")
-              .font(.system(size: 14))
-              .colorTag(.red)
-            Text("积分奖励")
-              .font(.system(size: 14))
-              .colorTag(.orange)
-          }
-          Spacer()
-        }
-      }
-      HStack {
-        Text("“遇见数字，发现有趣”，本次内测带来了全新的产品碎片卡片，期待大家的参与1")
-          .font(.system(size: 14))
-          .foregroundColor(.gray)
-      }
-
-      HStack {
-        HStack {
-          Image("logo")
-            .resizable()
-            .frame(width: 24, height: 24)
-            .background(.theme.opacity(0.2))
-            .clipShape( /*@START_MENU_TOKEN@*/Circle() /*@END_MENU_TOKEN@*/)
-          Text("Suka数字卡片")
-            .font(.system(size: 14))
-            .foregroundColor(.theme)
-        }
-        Spacer()
-        Text("立即参与")
-          .font(.system(size: 14))
-          .foregroundColor(.white)
-          .padding(.vertical, 8)
-          .padding(.horizontal, 16)
-          .background(.black)
-          .cornerRadius(16)
-      }
-      .padding(.top, 4)
-    }
-    .padding(12)
-    .background(.white)
-    .cornerRadius(16)
-    .frame(maxHeight: 240)
-  }
-}
-
 struct TopActiveCardView: View {
   var body: some View {
     VStack {
@@ -289,8 +228,17 @@ struct ActiveHomeView: View {
         .padding(.horizontal)
         ScrollView {
           Group {
-            ActiveCardView()
-              .onTapGesture {
+            ActiveCard(
+              title: "Suka数字卡片,全新版本内测开启中",
+              description: "遇见数字，发现有趣，本次内测带来了全新的产品碎片卡片，期待大家的参与",
+              startAt: Date(),
+              endAt: Date().addingTimeInterval(30 * 24 * 60 * 60),
+              joinCount: 42,
+              status: 1,
+              cover: "dog",
+              productName: "Suka数字卡片",
+              productLogo: "logo",
+              onTap: {
                 notice.openNotice(
                   open: .toast(
                     Toast(
@@ -299,21 +247,10 @@ struct ActiveHomeView: View {
                   )
                 )
               }
-              .padding(.bottom, 16)
-            ActiveCardView()
-              .padding(.bottom, 16)
-            ActiveCardView()
-              .padding(.bottom, 16)
-            ActiveCardView()
-              .padding(.bottom, 16)
-            ActiveCardView()
-              .padding(.bottom, 16)
-            ActiveCardView()
-              .padding(.bottom, 16)
-            ActiveCardView()
-              .padding(.bottom, 16)
-            ActiveCardView()
-              .padding(.bottom, 16)
+            )
+            .padding(.bottom, 16)
+
+            // ... 可以继续添加更多 ActiveCard ...
           }
           .padding(.horizontal)
         }

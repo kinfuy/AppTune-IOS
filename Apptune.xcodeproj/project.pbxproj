@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		F20D194B2CD78269006296D0 /* SheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20D194A2CD78269006296D0 /* SheetManager.swift */; };
 		F20D194E2CD783F5006296D0 /* AppStoreSearch+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20D194D2CD783F5006296D0 /* AppStoreSearch+Sheet.swift */; };
-		F21CFCD52CD6462400CAB613 /* ActiveCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD02CD6462300CAB613 /* ActiveCard.swift */; };
+		F21CFCD52CD6462400CAB613 /* ActiveCard+Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD02CD6462300CAB613 /* ActiveCard+Components.swift */; };
 		F21CFCD62CD6462400CAB613 /* ModuleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD12CD6462300CAB613 /* ModuleCard.swift */; };
 		F21CFCD72CD6462400CAB613 /* ProductCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD22CD6462300CAB613 /* ProductCard.swift */; };
 		F21CFCD82CD6462400CAB613 /* TitleBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD32CD6462300CAB613 /* TitleBar.swift */; };
@@ -98,7 +98,7 @@
 /* Begin PBXFileReference section */
 		F20D194A2CD78269006296D0 /* SheetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
 		F20D194D2CD783F5006296D0 /* AppStoreSearch+Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppStoreSearch+Sheet.swift"; sourceTree = "<group>"; };
-		F21CFCD02CD6462300CAB613 /* ActiveCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveCard.swift; sourceTree = "<group>"; };
+		F21CFCD02CD6462300CAB613 /* ActiveCard+Components.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ActiveCard+Components.swift"; sourceTree = "<group>"; };
 		F21CFCD12CD6462300CAB613 /* ModuleCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleCard.swift; sourceTree = "<group>"; };
 		F21CFCD22CD6462300CAB613 /* ProductCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCard.swift; sourceTree = "<group>"; };
 		F21CFCD32CD6462300CAB613 /* TitleBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleBar.swift; sourceTree = "<group>"; };
@@ -210,7 +210,6 @@
 		F21CFCD42CD6462300CAB613 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				F21CFCD02CD6462300CAB613 /* ActiveCard.swift */,
 				F21CFCD12CD6462300CAB613 /* ModuleCard.swift */,
 				F21CFCD22CD6462300CAB613 /* ProductCard.swift */,
 				F21CFCD32CD6462300CAB613 /* TitleBar.swift */,
@@ -465,6 +464,7 @@
 				F2A0D6032CC3887800536C58 /* Toast+Component.swift */,
 				F2AE42882CB97917009E72C3 /* CornerRadius+Component.swift */,
 				F2B269F82CB6C6AA008C46B8 /* SFSymbol+Component.swift */,
+				F21CFCD02CD6462300CAB613 /* ActiveCard+Components.swift */,
 				F2B269FA2CB6D671008C46B8 /* TabBar+Component.swift */,
 				F2AE427F2CB96DFF009E72C3 /* TextColor+Component.swift */,
 				F2AE42812CB97118009E72C3 /* Image+Componet.swift */,
@@ -623,7 +623,7 @@
 				F2A0D6022CC386DF00536C58 /* String+Extension.swift in Sources */,
 				F23F8F7B2CBEBC87005546EE /* AppState.swift in Sources */,
 				F26F159A2CC5370900848715 /* EmailLoginView.swift in Sources */,
-				F21CFCD52CD6462400CAB613 /* ActiveCard.swift in Sources */,
+				F21CFCD52CD6462400CAB613 /* ActiveCard+Components.swift in Sources */,
 				F2B269752CB57260001230B4 /* ScreenManage.swift in Sources */,
 				F2D6AE222CD929A600896DD9 /* ProductViewModel.swift in Sources */,
 				F21CFCFC2CD6911600CAB613 /* CoinTasksView.swift in Sources */,

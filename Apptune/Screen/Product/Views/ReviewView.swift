@@ -285,25 +285,3 @@ struct ActivityReviewCard: View {
     .padding()
     .background(Color.gray.opacity(0.1))
 }
-
-#Preview("活动审核卡片") {
-    ActivityReviewCard(
-        activity: ActiveInfo(
-            id: "1",
-            title: "精彩活动",
-            description: "这是一个有趣的活动描述，包含了很多详细信息，可能会很长很长很长",
-            cover: "https://picsum.photos/800/400",
-            smallCover: "https://picsum.photos/400/200",
-            startAt: Date(),
-            endAt: Date().addingTimeInterval(3600 * 24),
-            joinCount: 42,
-            likeCount: 88,
-            status: 2,
-            createTime: Date()
-        )
-    ) { _ in
-        // 预览用空操作
-    }
-    .padding()
-    .background(Color.gray.opacity(0.1))
-}
