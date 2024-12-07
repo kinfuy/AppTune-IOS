@@ -5,7 +5,7 @@ struct ActiveCard: View {
   let title: String
   let description: String
   let startAt: Date
-  let endAt: Date
+  let endAt: Date?
   let joinCount: Int
   let status: Int  // 活动状态
   let cover: String
@@ -17,7 +17,7 @@ struct ActiveCard: View {
   private var dateRangeText: String {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy-MM-dd"
-    return "\(formatter.string(from: startAt)) ~ \(formatter.string(from: endAt))"
+    return "\(formatter.string(from: startAt))"
   }
 
   // 获取状态文本
@@ -91,7 +91,7 @@ struct ActiveCard: View {
         Spacer()
 
         // 参与人数
-        Text("已有 \(joinCount) 人参与")
+          Text("已有 \(String(describing: joinCount)) 人参与")
           .font(.system(size: 12))
           .foregroundColor(.gray)
 

@@ -12,21 +12,29 @@ struct TagEntity: Codable {
   let color: Color
 }
 
+enum RewardType: String, Codable {
+  case custom = "custom"
+  case coin = "coin"
+  case promocode = "promocode"
+}
+
 struct ActiveInfo: Codable, Identifiable {
   let id: String
   let title: String
   let description: String
   let cover: String
   let startAt: Date
-  let endAt: Date
-  let joinCount: Int
-  let likeCount: Int
+  let endAt: Date?  // 结束时间
+  let limit: Int?  // 人数限制
+  let rewardType: RewardType  // 奖励类型
+  let joinCount: Int?
+  let likeCount: Int?
   let status: Int
   let createTime: Date
   let productId: String
   let productName: String
   let productLogo: String
-  let images:[String]
+  let images: [String]
   let tags: [TagEntity]
 }
 
@@ -39,20 +47,24 @@ struct ActiveTemplateInfo: Codable, Identifiable {
   let endTime: Date
   let status: Int
   let createTime: Date
-  let images:[String]
+  let images: [String]
   let tags: [TagEntity]
 }
 
-// 活动创建参数结构体
-struct ActiveCreateParams: Codable {
+// 添加创建活动的参数模型
+struct CreateActiveParams: Codable {
   let productId: String
   let title: String
   let description: String
-  let cover: String?
   let startTime: Date
   let endTime: Date
-  let images:[String]
+  let images: [String]
   let tags: [TagEntity]
+  let isAutoEnd: Bool
+  // 可选参数
+  let cover: String?
+  let maxParticipants: Int?
+  let reward: String?
 }
 
 class ActiveAPI {
@@ -157,27 +169,16 @@ class ActiveAPI {
   }
 
   // 添加创建活动的方法
-  func createActive(_ params: ActiveCreateParams) async throws -> ActiveInfo {
+  func createActive(_ params: ActiveInfo) async throws -> ActiveInfo {
     let urlString = "\(BASR_SERVE_URL)/active/create"
 
-    // 将参数转换为字典形式
-    var body: [String: Any] = [
-      "productId": params.productId,
-      "title": params.title,
-      "description": params.description,
-      "startTime": params.startTime,
-      "endTime": params.endTime,
-    ]
-
-    // 如果有封面图,添加到参数中
-    if let cover = params.cover {
-      body["cover"] = cover
-    }
+    // 直接转换参数，不需要处理异常
+    let body = params.asDictionary()
 
     let request = try apiManager.createRequest(
       url: urlString,
       method: "POST",
-      body: body  // 使用字典形式传参
+      body: body
     )
 
     return try await apiManager.session.data(for: request)

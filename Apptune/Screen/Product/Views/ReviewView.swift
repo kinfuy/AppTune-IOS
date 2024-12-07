@@ -203,7 +203,7 @@ struct ActivityReviewCard: View {
 
                 HStack(spacing: 4) {
                     Image(systemName: "person.2")
-                    Text("\(activity.joinCount)")
+                    Text("\(String(describing: activity.joinCount))")
                 }
                 .font(.caption)
                 .foregroundColor(.gray)
@@ -222,10 +222,13 @@ struct ActivityReviewCard: View {
                 Label(activity.startAt.formatted(.dateTime), systemImage: "calendar")
                     .font(.caption)
                     .foregroundColor(.gray)
+                if let end = activity.endAt {
+                    Label(end.formatted(.dateTime), systemImage: "arrow.right")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
 
-                Label(activity.endAt.formatted(.dateTime), systemImage: "arrow.right")
-                    .font(.caption)
-                    .foregroundColor(.gray)
+               
             }
 
             Divider()

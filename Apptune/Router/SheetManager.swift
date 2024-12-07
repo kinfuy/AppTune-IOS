@@ -16,10 +16,22 @@ enum SheetType: Identifiable {
     onCancel: (() -> Void)? = nil
   )
 
+  case activityPreview(
+    product: ProductInfo?,
+    title: String,
+    description: String,
+    images: [String],
+    limit: Int?,
+    endAt: Date?,
+    isAutoEnd: Bool,
+    publishMode: PublishMode
+  )
+
   var id: String {
     switch self {
     case .appStoreSearch: return "appStoreSearch"
     case .activityTemplates: return "activityTemplates"
+    case .activityPreview: return "activityPreview"
     }
   }
 
@@ -35,9 +47,14 @@ enum SheetType: Identifiable {
         fullScreen: false,
         dismissible: true
       )
+    case .activityPreview:
+      return SheetConfig(
+        fullScreen: false,
+        dismissible: true
+      )
     }
   }
-  
+
   // 获取关闭回调
   var onClose: (() -> Void)? {
     switch self {
@@ -45,6 +62,8 @@ enum SheetType: Identifiable {
       return onCancel
     case .activityTemplates(_, let onCancel):
       return onCancel
+    case .activityPreview(_, _, _, _, _, _, _, _):
+      return nil
     }
   }
 }
@@ -53,7 +72,7 @@ struct SheetItem: Identifiable {
   let id = UUID()
   let type: SheetType
   let config: SheetConfig
-  
+
   // 关闭时自动触发回调
   func handleClose() {
     type.onClose?()
@@ -107,7 +126,13 @@ class SheetManager: ObservableObject {
         case .appStoreSearch(let onSubmit, let onCancel):
           AppStoreSearchSheet(onSubmit: onSubmit, onCancel: onCancel)
         case .activityTemplates(let onSelect, let onCancel):
-            ActivityTemplatesSheet(onSelect: onSelect, onCancel: onCancel)
+          ActivityTemplatesSheet(onSelect: onSelect, onCancel: onCancel)
+        case .activityPreview(
+          let product, let title, let description, let images, let limit, let endAt, let isAutoEnd,
+          let publishMode):
+          ActivityPreviewSheet(
+            product: product, title: title, description: description, images: images, limit: limit,
+            endAt: endAt, isAutoEnd: isAutoEnd, publishMode: publishMode)
         }
 
         if NoticeManager.shared.isNotice && SheetManager.shared.isPresented {
