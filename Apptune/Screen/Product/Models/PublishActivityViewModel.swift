@@ -8,6 +8,7 @@ final class PublishActivityViewModel: ObservableObject {
   @Published var activityDescription: String = ""
   @Published var cover: String?
   @Published var tags: [TagEntity] = []
+  @Published var images:[String] = []
 
   // 时间设置
   @Published var startTime: Date = Date()
@@ -50,6 +51,7 @@ final class PublishActivityViewModel: ObservableObject {
         cover: cover,
         startTime: startTime,
         endTime: endTime,
+        images: images,
         tags: tags.map { TagEntity(name: $0.name, color: $0.color) }
       )
 
@@ -78,6 +80,7 @@ final class PublishActivityViewModel: ObservableObject {
     activityDescription = template.description ?? ""
     cover = template.cover
     tags = template.tags
+    images = template.images
     startTime = template.startTime
     endTime = template.endTime
   }

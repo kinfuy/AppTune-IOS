@@ -44,7 +44,7 @@ extension URLSession {
   }
 
   @discardableResult
-  func data<T: Decodable>(for urlRequest: URLRequest, retrying: Bool = false, loading: Bool = true)
+  func data<T: Decodable>(for urlRequest: URLRequest, retrying: Bool = false, loading: Bool = false)
     async throws -> T
   {
     var loadId: String?

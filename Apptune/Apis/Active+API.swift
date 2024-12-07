@@ -17,7 +17,6 @@ struct ActiveInfo: Codable, Identifiable {
   let title: String
   let description: String
   let cover: String
-  let smallCover: String
   let startAt: Date
   let endAt: Date
   let joinCount: Int
@@ -27,6 +26,7 @@ struct ActiveInfo: Codable, Identifiable {
   let productId: String
   let productName: String
   let productLogo: String
+  let images:[String]
   let tags: [TagEntity]
 }
 
@@ -39,6 +39,7 @@ struct ActiveTemplateInfo: Codable, Identifiable {
   let endTime: Date
   let status: Int
   let createTime: Date
+  let images:[String]
   let tags: [TagEntity]
 }
 
@@ -50,6 +51,7 @@ struct ActiveCreateParams: Codable {
   let cover: String?
   let startTime: Date
   let endTime: Date
+  let images:[String]
   let tags: [TagEntity]
 }
 
