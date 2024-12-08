@@ -140,7 +140,7 @@ extension URLSession {
         }
       } catch {
         await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "数据解析失败")))
-        throw APIError.systemError(message: "数据解析失败")
+        throw APIError.systemError(message: "数据解析失败\(urlRequest.url!)")
       }
 
       if loadId != "" {

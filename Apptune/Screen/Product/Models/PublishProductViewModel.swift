@@ -10,7 +10,7 @@ class PublishProductViewModel: ObservableObject {
   @Published var price: String = ""
   @Published var iconUrl: String = ""
   @Published var link: String = ""
-  @Published var category: String = ""
+  @Published var category: Catalog = .effect
   @Published var appId: String = ""
   @Published var developer: String = ""
   @Published var bundleId: String = ""
@@ -93,7 +93,7 @@ class PublishProductViewModel: ObservableObject {
     self.productDescription = app.description
     self.iconUrl = app.iconUrl
     self.link = app.appStoreUrl
-    self.category = app.category
+    self.category = .effect
     self.price = String(app.price)
     self.appId = app.appId
     self.developer = app.developer

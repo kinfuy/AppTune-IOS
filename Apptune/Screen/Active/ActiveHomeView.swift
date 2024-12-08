@@ -5,10 +5,11 @@
 //  Created by 杨杨杨 on 2024/10/9.
 //
 
+import Foundation
 import ScalingHeaderScrollView
 import SwiftUI
 
-enum Catalog: String, CaseIterable {
+enum Catalog: String, CaseIterable, Codable {
   case all = "all"
   case effect = "effect"
   case tool = "tool"
@@ -19,6 +20,12 @@ enum Catalog: String, CaseIterable {
   case money = "money"
   case game = "game"
   case news = "news"
+
+  init(from decoder: Decoder) throws {
+    let container = try decoder.singleValueContainer()
+    let rawValue = try container.decode(String.self)
+    self = Catalog(rawValue: rawValue) ?? .effect  // 如果找不到匹配值，默认为 effect
+  }
 
   var label: String {
     switch self {

@@ -5,16 +5,6 @@ struct ReviewView: View {
   @EnvironmentObject var activeService: ActiveService
   @EnvironmentObject var userService: UserService
 
-  @MainActor
-  func load() async {
-    await productService.refreshAll()
-    await activeService.refreshAll()
-    if userService.isAdmin {
-      await productService.loadPendingProductReviews()
-      await activeService.loadPendingActiveReviews()
-    }
-  }
-
   var body: some View {
     ScrollView {
       LazyVStack(spacing: 20) {
@@ -36,7 +26,6 @@ struct ReviewView: View {
             ForEach(activeService.pendingActiveReviews) { activity in
               ActivityReviewCard(activity: activity) { status in
                 await activeService.review(id: activity.id, status: status)
-                await load()
               }
             }
           }
@@ -60,7 +49,6 @@ struct ReviewView: View {
             ForEach(productService.pendingProductReviews) { product in
               ProductReviewCard(product: product) { status in
                 await productService.review(id: product.id, status: status)
-                await load()
               }
             }
           }
@@ -129,7 +117,7 @@ struct ProductReviewCard: View {
 
       // 分类和时间
       HStack {
-        Label(product.category, systemImage: "tag")
+          Label(product.category.label, systemImage: "tag")
           .font(.caption)
           .foregroundColor(.gray)
 
@@ -250,7 +238,7 @@ struct ActivityReviewCard: View {
       description: "这是一个非常棒的产品描述，可能会很长很长很长很长很长",
       icon: "https://picsum.photos/200",
       link: "https://www.apple.com",
-      category: "生活方式",
+      category: .life,
       price: 99,
       createTime: Date(),
       status: 1,

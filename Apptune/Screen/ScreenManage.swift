@@ -7,6 +7,7 @@ struct ScreenManage: View {
   @StateObject var userService = UserService.shared
   @StateObject var sheet = SheetManager.shared
   @StateObject var productService = ProductService()
+  @StateObject var promotionService = PromotionService()
   @StateObject var activeService = ActiveService()
   @StateObject var tagService = TagService()
 
@@ -39,6 +40,7 @@ struct ScreenManage: View {
               .environmentObject(sheet)
               .environmentObject(userService)
               .environmentObject(productService)
+              .environmentObject(promotionService)
               .environmentObject(activeService)
               .environmentObject(tagService)
               .onAppear {
@@ -57,6 +59,7 @@ struct ScreenManage: View {
         .environmentObject(userService)
         .environmentObject(sheet)
         .environmentObject(productService)
+        .environmentObject(promotionService)
         .environmentObject(activeService)
         .environmentObject(tagService)
         .opacity(launchViewAlpha == 1 ? 0 : 1)
@@ -77,6 +80,7 @@ struct ScreenManage: View {
             .environmentObject(userService)
             .environmentObject(sheet)
             .environmentObject(productService)
+            .environmentObject(promotionService)
             .environmentObject(activeService)
             .environmentObject(tagService)
         }
@@ -93,21 +97,23 @@ struct ScreenManage: View {
             .environmentObject(userService)
             .environmentObject(sheet)
             .environmentObject(productService)
+            .environmentObject(promotionService)
             .environmentObject(tagService)
         }
 
         // 只在非 sheet 状态下显示 notice
         if notice.isNotice && !sheet.isPresented {
-            NoticeManager.shared.buildNoticeView(notice: notice.currentNotice!)
-                .environmentObject(appState)
-                .environmentObject(router)
-                .environmentObject(notice)
-                .environmentObject(userService)
-                .environmentObject(sheet)
-                .environmentObject(productService)
-                .environmentObject(tagService)
-                .ignoresSafeArea()
-                .transition(.opacity)
+          NoticeManager.shared.buildNoticeView(notice: notice.currentNotice!)
+            .environmentObject(appState)
+            .environmentObject(router)
+            .environmentObject(notice)
+            .environmentObject(userService)
+            .environmentObject(sheet)
+            .environmentObject(productService)
+            .environmentObject(promotionService)
+            .environmentObject(tagService)
+            .ignoresSafeArea()
+            .transition(.opacity)
         }
 
         // 启动页

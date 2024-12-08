@@ -4,7 +4,7 @@ struct ProductCard: View {
     let title: String
     let description: String
     let stars: Int
-    let category: String
+    let category: Catalog
     let logo: String
     let developer: String
     let status: Int
@@ -44,7 +44,7 @@ struct ProductCard: View {
 
                 Spacer()
 
-                Text(category)
+                Text(category.label)
                     .font(.system(size: 12))
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
@@ -80,5 +80,5 @@ struct ProductCard: View {
 }
 
 #Preview {
-    ProductCard(title: "suka", description: "测试文案", stars: 11, category: "测试", logo: "user", developer: "杨杨杨", status: 2)
+    ProductCard(title: "suka", description: "测试文案", stars: 11, category: .effect, logo: "user", developer: "杨杨杨", status: 2)
 }
