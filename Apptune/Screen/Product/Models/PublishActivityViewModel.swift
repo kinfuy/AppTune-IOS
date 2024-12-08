@@ -20,11 +20,20 @@ final class PublishActivityViewModel: ObservableObject {
 
   // 高级配置
   @Published var limit: Int?  // 人数限制
-  @Published var reward: RewardType = .custom  // 奖励说明
-  @Published var isAutoEnd: Bool = true  // 是否自动结束
+  @Published var reward: RewardType = .selfManaged  // 奖励说明
+  @Published var isAutoEnd: Bool = false {
+    didSet {
+      if isAutoEnd && endAt == nil {
+        endAt = Calendar.current.date(byAdding: .hour, value: 24, to: Date())
+      }
+    }
+  }
 
   // 模板配置
   @Published var isTemplate: Bool = true  // 是否存为模板
+
+  @Published var selectedRewardType: RewardType = .selfManaged
+  @Published var pointsAmount: Int = 0
 
   // 移除 isValid 属性,改用 checkValid 函数
   func checkValid() -> Toast? {
@@ -87,8 +96,8 @@ final class PublishActivityViewModel: ObservableObject {
     endAt = nil
     createdActivity = nil
     limit = nil
-    reward = .custom
-    isAutoEnd = true
+    reward = .selfManaged
+    isAutoEnd = false
   }
 
   // 从模板初始化表单
@@ -98,8 +107,8 @@ final class PublishActivityViewModel: ObservableObject {
     cover = template.cover
     tags = template.tags
     images = template.images
-    reward = RewardType(rawValue: template.rewardType.rawValue) ?? .custom
+    reward = template.rewardType
     limit = template.limit
-    isAutoEnd = true
+    isAutoEnd = false
   }
 }

@@ -12,10 +12,10 @@ struct TagEntity: Codable {
   let color: Color
 }
 
-enum RewardType: String, Codable {
-  case custom = "custom"
-  case coin = "coin"
-  case promocode = "promocode"
+enum RewardType: String, Codable, CaseIterable {
+  case selfManaged = "custom"
+  case points = "coin"
+  case promoCode = "promocode"
 }
 
 struct ActiveInfo: Codable, Identifiable {

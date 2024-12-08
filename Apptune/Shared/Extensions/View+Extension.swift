@@ -48,7 +48,19 @@ extension View {
 
   // 添加点击收起键盘的功能
   func dismissKeyboardOnTap() -> some View {
-    self.modifier(DismissKeyboardOnTap())
+    self.overlay(
+      Color.clear
+        .contentShape(Rectangle())
+        .onTapGesture {
+          UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil,
+            from: nil,
+            for: nil
+          )
+        }
+        .allowsHitTesting(false)
+    )
   }
 }
 
@@ -57,11 +69,7 @@ struct DismissKeyboardOnTap: ViewModifier {
   func body(content: Content) -> some View {
     content
       .onTapGesture {
-        UIApplication.shared.sendAction(
-          #selector(UIResponder.resignFirstResponder),
-          to: nil,
-          from: nil,
-          for: nil)
+        UIApplication.shared.dismissKeyboard()
       }
   }
 }

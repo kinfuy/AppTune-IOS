@@ -92,8 +92,14 @@ struct PublishProductView: View {
                         Text("分组")
                             .foregroundColor(.gray)
                         Spacer()
-                       
-                    }
+                        Picker(
+                            "", selection: $viewModel.category,
+                          content: {
+                              ForEach(Catalog.allCases.filter({$0 != .all}), id: \.rawValue) { p in
+                              Text(p.label)
+                                    .tag(p.rawValue)
+                            }
+                          })                    }
                     .frame(height: 36)
                 }
                 .padding()

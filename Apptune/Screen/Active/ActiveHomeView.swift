@@ -9,16 +9,31 @@ import ScalingHeaderScrollView
 import SwiftUI
 
 enum Catalog: String, CaseIterable {
-  case all = "全部"
-  case effect = "效率"
-  case tool = "工具"
-  case life = "生活"
-  case video = "影视"
-  case weather = "天气"
-  case picture = "图形与设计"
-  case money = "财务"
-  case game = "游戏"
-  case news = "新闻"
+  case all = "all"
+  case effect = "effect"
+  case tool = "tool"
+  case life = "life"
+  case video = "video"
+  case weather = "weather"
+  case picture = "picture"
+  case money = "money"
+  case game = "game"
+  case news = "news"
+
+  var label: String {
+    switch self {
+    case .all: return "全部"
+    case .effect: return "效率"
+    case .tool: return "工具"
+    case .life: return "生活"
+    case .video: return "影视"
+    case .weather: return "天气"
+    case .picture: return "图形与设计"
+    case .money: return "财务"
+    case .game: return "游戏"
+    case .news: return "新闻"
+    }
+  }
 }
 
 let gradientSurface = LinearGradient(
@@ -95,7 +110,7 @@ struct ActiveHomeView: View {
           HStack {
             ForEach(Catalog.allCases, id: \.rawValue) { c in
               ViewThatFits(content: {
-                Text(c.rawValue)
+                Text(c.label)
                   .font(.system(size: 20))
                   .fontWeight(.bold)
                   .conditionalModifier(
@@ -260,13 +275,13 @@ struct ActiveHomeView: View {
       }
       .onAppear {
         Task {
-          await activeService.loadAllActives(refresh:true)
+          await activeService.loadAllActives(refresh: true)
         }
       }
     }
     .pullToRefresh(isLoading: $isLoading) {
       Task {
-        await activeService.loadAllActives(refresh:true)
+        await activeService.loadAllActives(refresh: true)
         isLoading = false
       }
 

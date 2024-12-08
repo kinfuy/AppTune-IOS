@@ -231,14 +231,19 @@ struct PublishActivityView: View {
           }) {
             VStack(spacing: 8) {
               Text(mode == .quick ? "快捷" : "专业")
-                .font(.headline)
-                .foregroundColor(publishMode == mode ? .black : .gray)
+                .font(.system(size: 16))
+                .foregroundColor(publishMode == mode ? .black : Color(hex: "#999999"))
+                .frame(height: 38)
+              // 添加底部指示条
+              Rectangle()
+                .fill(publishMode == mode ? Color.black : Color.clear)
+                .frame(height: 2)
+                .padding(.horizontal, 8)
             }
           }
           .frame(maxWidth: .infinity)
         }
       }
-      .padding(.vertical, 8)
       .background(Color.white)
       .padding(.horizontal)
       .padding(.top)
@@ -263,7 +268,7 @@ struct PublishActivityView: View {
           if publishMode == .pro {
             Group {
               // 奖励说明
-              rewardCard
+              rewardCardView
 
               // 高级配置
               advancedConfigCard
@@ -285,9 +290,10 @@ struct PublishActivityView: View {
           Toggle("", isOn: $viewModel.isTemplate)
             .labelsHidden()
             .tint(.black)
+            .scaleEffect(0.8, anchor: .trailing)
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .padding(.vertical, 8)
         .background(Color.white)
         .cornerRadius(8)
 
@@ -353,6 +359,7 @@ struct PublishActivityView: View {
       .padding()
       .background(Color(hex: "#f4f4f4"))
     }
+    .dismissKeyboardOnTap()
   }
 
   // 基础信息卡片
@@ -431,26 +438,52 @@ struct PublishActivityView: View {
     .cornerRadius(12)
     .shadow(color: .gray.opacity(0.05), radius: 8)
     .padding(.horizontal)
+    .contentShape(Rectangle())
   }
 
   // 奖励说明卡片
-  private var rewardCard: some View {
-    VStack(alignment: .leading, spacing: 8) {
-      HStack {
-        Text("活动奖励")
-          .font(.subheadline)
-          .foregroundColor(Color(hex: "#666666"))
-        Spacer()
-      }
+  private var rewardCardView: some View {
+    VStack(alignment: .leading, spacing: 12) {
+      Text("奖励设置")
+        .font(.headline)
 
-      // 这里可以添加奖励配置的具体内容
+      Picker("奖励类型", selection: $viewModel.reward) {
+        Text("自行管理").tag(RewardType.selfManaged)
+        Text("促销码").tag(RewardType.promoCode)
+        Text("积分奖励").tag(RewardType.points)
+      }
+      .pickerStyle(.segmented)
+
+      // 根据选择的奖励类型显示不同的内容
+      switch viewModel.reward {
+      case .selfManaged:
+        Text("任务奖励将由发布者自行管理")
+              .font(.subheadline)
+              .foregroundColor(Color(hex: "#666666"))
+      case .promoCode:
+        HStack {
+          Text("管理促销码")
+                .font(.subheadline)
+                .foregroundColor(Color(hex: "#666666"))
+          Spacer()
+          Image(systemName: "chevron.right")
+        }
+        .onTapGesture {
+          // TODO: 导航到促销码管理页面
+        }
+      case .points:
+        VStack {
+          Spacer()
+          EmptyView(text: "敬请期待",image: "nodata",size: 40)
+          Spacer()
+        }
+        .frame(maxWidth: .infinity)
+      }
     }
-    .frame(maxWidth: .infinity)
     .padding()
-    .background(Color.white)
-    .cornerRadius(12)
-    .shadow(color: .gray.opacity(0.05), radius: 8)
-    .padding(.horizontal)
+    .background(Color(.systemBackground))
+    .cornerRadius(10)
+    .shadow(radius: 1)
   }
 
   // 高级配置卡片
@@ -464,24 +497,62 @@ struct PublishActivityView: View {
       VStack(alignment: .leading, spacing: 16) {
         // 人数限制
         VStack(alignment: .leading, spacing: 8) {
-          Text("参与人数限制")
+          Text("参与限制")
             .font(.subheadline)
-            .foregroundColor(Color(hex: "#666666"))
+            .foregroundColor(Color(hex: "#333333"))
 
-          TextField("不限制人数", value: $viewModel.limit, format: .number)
-            .keyboardType(.numberPad)
+          HStack {
+            Text("人数")
+              .font(.subheadline)
+              .foregroundColor(Color(hex: "#666666"))
+            Spacer()
+            TextField("输入限制参与人数", value: $viewModel.limit, format: .number)
+              .keyboardType(.numberPad)
+              .multilineTextAlignment(.trailing)
+              .frame(width: 200)
+          }
         }
 
         // 结束时间设置
         VStack(alignment: .leading, spacing: 8) {
+          Text("时间限制")
+            .font(.subheadline)
+            .foregroundColor(Color(hex: "#333333"))
+          DatePicker(
+            selection: $viewModel.startAt,
+            in: Date()...,
+            displayedComponents: [.date, .hourAndMinute]
+          ) {
+            Text("开始")
+              .font(.subheadline)
+              .foregroundColor(Color(hex: "#666666"))
+          }
+          HStack {
+            Text("有效期")
+              .font(.subheadline)
+              .foregroundColor(Color(hex: "#666666"))
+            Spacer()
+            Picker(
+              "", selection: $viewModel.isAutoEnd,
+              content: {
+                Text("永久").tag(false)
+                Text("自定义").tag(true)
+              }
+            )
+            .pickerStyle(.segmented)
+            .frame(width: 190)
+            .allowsHitTesting(true)
+          }
           if viewModel.isAutoEnd {
             DatePicker(
-              "结束时间",
               selection: $viewModel.endAt ?? Date(),
               in: Date()...,
               displayedComponents: [.date, .hourAndMinute]
-            )
-            .datePickerStyle(.compact)
+            ) {
+              Text("结束")
+                .font(.subheadline)
+                .foregroundColor(Color(hex: "#666666"))
+            }
           }
         }
       }
@@ -503,24 +574,23 @@ struct CustomTextField: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
       if isMultiline {
-        TextEditor(text: $text)
-          .frame(height: 180)
-          .padding(8)
-          .cornerRadius(8)
-          .overlay(
-            VStack {
-              HStack {
-                if text.isEmpty {
-                  Text(placeholder)
-                    .foregroundColor(.gray)
-                }
-                Spacer()
-              }
-              Spacer()
-            }
-          )
+        ZStack(alignment: .topLeading) {
+          TextEditor(text: $text)
+            .frame(height: 180)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .cornerRadius(8)
+          if text.isEmpty {
+            Text(placeholder)
+              .foregroundColor(Color(hex: "#999999"))
+              .padding(.horizontal, 12)
+              .padding(.vertical, 14)
+          }
+        }
       } else {
         TextField(placeholder, text: $text)
+          .padding(.horizontal, 12)
+          .padding(.vertical, 10)
           .cornerRadius(8)
       }
     }
