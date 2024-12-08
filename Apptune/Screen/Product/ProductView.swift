@@ -204,7 +204,7 @@ struct ProductView: View {
         text: "新增",
         action: {
           Tap.shared.play(.light)
-          // TODO: 添加创建促销码的逻辑
+          router.navigate(to: .createPromotion)
         }
       )
     default:

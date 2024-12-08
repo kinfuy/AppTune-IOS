@@ -17,26 +17,13 @@ struct PromotionInfo: Codable {
 // 促销码相关的服务类
 class PromotionService: ObservableObject {
   static let shared = PromotionService()
-  @Published var promotions: [PromotionInfo] = []
+  @Published var promotions: [PromotionCode] = []
 
   @Published var isLoading = false
 
   // 新增计算属性：按产品分组的促销码
   var groupedPromotions: [String: [PromotionCode]] {
-    var grouped: [String: [PromotionCode]] = [:]
-
-    for promotion in promotions {
-      // 如果该产品已经存在，将新的促销码添加到现有数组中
-      if var existingCodes = grouped[promotion.productId] {
-        existingCodes.append(contentsOf: promotion.codes)
-        grouped[promotion.productId] = existingCodes
-      } else {
-        // 如果该产品不存在，创建新的数组
-        grouped[promotion.productId] = promotion.codes
-      }
-    }
-
-    return grouped
+      Dictionary(grouping: promotions) { $0.productId }
   }
 
   // 加载用户的所有促销码
@@ -47,7 +34,7 @@ class PromotionService: ObservableObject {
 
     do {
       let response = try await PromotionAPI.shared.getUserPromotions()
-      promotions = response.items
+      self.promotions = response.items
       isLoading = false
     } catch {
       isLoading = false

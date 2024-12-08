@@ -87,7 +87,6 @@
 		F2B269FD2CB6D725008C46B8 /* LanchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269FC2CB6D725008C46B8 /* LanchView.swift */; };
 		F2B26A002CB6D764008C46B8 /* GudieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269FF2CB6D764008C46B8 /* GudieView.swift */; };
 		F2B34CCF2CF35EE1009023B8 /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B34CCE2CF35EE1009023B8 /* ReviewView.swift */; };
-		F2D6AE222CD929A600896DD9 /* ProductViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D6AE212CD929A500896DD9 /* ProductViewModel.swift */; };
 		F2D6AE242CD92C4800896DD9 /* Empty+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D6AE232CD92C4800896DD9 /* Empty+Component.swift */; };
 		F2EEE39D2D048AF600D7777C /* Codeable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE39C2D048AF600D7777C /* Codeable+Extension.swift */; };
 		F2EEE39F2D04909B00D7777C /* Bindding+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE39E2D04909B00D7777C /* Bindding+Extension.swift */; };
@@ -95,6 +94,9 @@
 		F2EEE3A32D05A9B800D7777C /* PromotionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE3A22D05A9B800D7777C /* PromotionView.swift */; };
 		F2EEE3A52D05BB4B00D7777C /* Promotion+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE3A42D05BB4B00D7777C /* Promotion+API.swift */; };
 		F2EEE3A72D05BD0700D7777C /* Promotion+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE3A62D05BD0700D7777C /* Promotion+Service.swift */; };
+		F2EEE3AB2D05DE5000D7777C /* CreatePromotionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE3AA2D05DE5000D7777C /* CreatePromotionView.swift */; };
+		F2EEE3AD2D05DE8500D7777C /* CreatePromotionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE3AC2D05DE8500D7777C /* CreatePromotionModel.swift */; };
+		F2EEE3AF2D05E65800D7777C /* PromoCodeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE3AE2D05E65800D7777C /* PromoCodeList.swift */; };
 		F2F4C6D52CE100E1003F20A5 /* ImagePicker+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F4C6D42CE100E1003F20A5 /* ImagePicker+Component.swift */; };
 		F2FAEAFB2CE04C03007BD6D8 /* Message+Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FAEAFA2CE04C03007BD6D8 /* Message+Modal.swift */; };
 		F2FC0F412CCAA49400CF8ACE /* Base+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FC0F402CCAA49400CF8ACE /* Base+API.swift */; };
@@ -179,7 +181,6 @@
 		F2B269FC2CB6D725008C46B8 /* LanchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanchView.swift; sourceTree = "<group>"; };
 		F2B269FF2CB6D764008C46B8 /* GudieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GudieView.swift; sourceTree = "<group>"; };
 		F2B34CCE2CF35EE1009023B8 /* ReviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
-		F2D6AE212CD929A500896DD9 /* ProductViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductViewModel.swift; sourceTree = "<group>"; };
 		F2D6AE232CD92C4800896DD9 /* Empty+Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Empty+Component.swift"; sourceTree = "<group>"; };
 		F2EEE39C2D048AF600D7777C /* Codeable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codeable+Extension.swift"; sourceTree = "<group>"; };
 		F2EEE39E2D04909B00D7777C /* Bindding+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bindding+Extension.swift"; sourceTree = "<group>"; };
@@ -187,6 +188,9 @@
 		F2EEE3A22D05A9B800D7777C /* PromotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromotionView.swift; sourceTree = "<group>"; };
 		F2EEE3A42D05BB4B00D7777C /* Promotion+API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promotion+API.swift"; sourceTree = "<group>"; };
 		F2EEE3A62D05BD0700D7777C /* Promotion+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promotion+Service.swift"; sourceTree = "<group>"; };
+		F2EEE3AA2D05DE5000D7777C /* CreatePromotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePromotionView.swift; sourceTree = "<group>"; };
+		F2EEE3AC2D05DE8500D7777C /* CreatePromotionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePromotionModel.swift; sourceTree = "<group>"; };
+		F2EEE3AE2D05E65800D7777C /* PromoCodeList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromoCodeList.swift; sourceTree = "<group>"; };
 		F2F4C6D42CE100E1003F20A5 /* ImagePicker+Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImagePicker+Component.swift"; sourceTree = "<group>"; };
 		F2FAEAFA2CE04C03007BD6D8 /* Message+Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Message+Modal.swift"; sourceTree = "<group>"; };
 		F2FC0F402CCAA49400CF8ACE /* Base+API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Base+API.swift"; sourceTree = "<group>"; };
@@ -223,6 +227,7 @@
 			children = (
 				F21CFCD12CD6462300CAB613 /* ModuleCard.swift */,
 				F21CFCD22CD6462300CAB613 /* ProductCard.swift */,
+				F2EEE3AE2D05E65800D7777C /* PromoCodeList.swift */,
 				F21CFCD32CD6462300CAB613 /* TitleBar.swift */,
 			);
 			path = Components;
@@ -233,7 +238,7 @@
 			children = (
 				F21CFD0B2CD7245700CAB613 /* PublishActivityViewModel.swift */,
 				F28829812CF2EB13002D012A /* ActivityTemplate.swift */,
-				F2D6AE212CD929A500896DD9 /* ProductViewModel.swift */,
+				F2EEE3AC2D05DE8500D7777C /* CreatePromotionModel.swift */,
 				F21CFD112CD7247300CAB613 /* PublishProductViewModel.swift */,
 				F21CFCD92CD6463A00CAB613 /* ProductTab.swift */,
 				F21CFCF12CD647C300CAB613 /* ScrollPreference.swift */,
@@ -245,6 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				F21CFD0F2CD7246A00CAB613 /* PublishProductView.swift */,
+				F2EEE3AA2D05DE5000D7777C /* CreatePromotionView.swift */,
 				F21CFD0A2CD7245700CAB613 /* PublishActivityView.swift */,
 				F2EEE3A22D05A9B800D7777C /* PromotionView.swift */,
 				F2B34CCE2CF35EE1009023B8 /* ReviewView.swift */,
@@ -582,6 +588,7 @@
 				F2D6AE242CD92C4800896DD9 /* Empty+Component.swift in Sources */,
 				F288297E2CF20EDD002D012A /* Active+Service.swift in Sources */,
 				F21CFCDD2CD6463A00CAB613 /* ProductTab.swift in Sources */,
+				F2EEE3AB2D05DE5000D7777C /* CreatePromotionView.swift in Sources */,
 				F2A0D60C2CC3A28D00536C58 /* Version+Modal.swift in Sources */,
 				F2A0D6042CC3887800536C58 /* Toast+Component.swift in Sources */,
 				F20D194B2CD78269006296D0 /* SheetManager.swift in Sources */,
@@ -626,6 +633,7 @@
 				F21CFD1A2CD7778D00CAB613 /* RouterManager.swift in Sources */,
 				F23F8F792CBEB2BA005546EE /* UserView.swift in Sources */,
 				F28829882CF30053002D012A /* Tag+Service.swift in Sources */,
+				F2EEE3AF2D05E65800D7777C /* PromoCodeList.swift in Sources */,
 				F2B269FB2CB6D671008C46B8 /* TabBar+Component.swift in Sources */,
 				F288298C2CF32228002D012A /* Tag+API.swift in Sources */,
 				F2B26A002CB6D764008C46B8 /* GudieView.swift in Sources */,
@@ -643,7 +651,6 @@
 				F26F159A2CC5370900848715 /* EmailLoginView.swift in Sources */,
 				F21CFCD52CD6462400CAB613 /* ActiveCard+Components.swift in Sources */,
 				F2B269752CB57260001230B4 /* ScreenManage.swift in Sources */,
-				F2D6AE222CD929A600896DD9 /* ProductViewModel.swift in Sources */,
 				F21CFCFC2CD6911600CAB613 /* CoinTasksView.swift in Sources */,
 				F21CFD102CD7246A00CAB613 /* PublishProductView.swift in Sources */,
 				F2A0D6082CC3958100536C58 /* Router+Extension.swift in Sources */,
@@ -651,6 +658,7 @@
 				F28829822CF2EB13002D012A /* ActivityTemplate.swift in Sources */,
 				F2EEE3A52D05BB4B00D7777C /* Promotion+API.swift in Sources */,
 				F2B2697F2CB58055001230B4 /* Button+Modify.swift in Sources */,
+				F2EEE3AD2D05DE8500D7777C /* CreatePromotionModel.swift in Sources */,
 				F21CFD1B2CD7778D00CAB613 /* RouterDestination.swift in Sources */,
 				F21CFD0E2CD7245700CAB613 /* PublishActivityViewModel.swift in Sources */,
 				F22377E12CC6ABBB00F780AE /* UrlSession+Extension.swift in Sources */,

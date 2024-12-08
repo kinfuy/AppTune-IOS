@@ -63,12 +63,12 @@ extension URLSession {
 
       let (data, response) = try await self.data(for: urlRequest)
 
-      if let jsonString = String(data: data, encoding: .utf8) {
-        print("🌍 API Response Raw Data:")
-        print("URL: \(urlRequest.url?.absoluteString ?? "")")
-        print("Method: \(urlRequest.httpMethod ?? "")")
-        print("Response: \(jsonString)")
-      }
+//      if let jsonString = String(data: data, encoding: .utf8) {
+//        print("🌍 API Response Raw Data:")
+//        print("URL: \(urlRequest.url?.absoluteString ?? "")")
+//        print("Method: \(urlRequest.httpMethod ?? "")")
+//        print("Response: \(jsonString)")
+//      }
 
       guard let response = response as? HTTPURLResponse else {
         await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "无效的请求")))
@@ -133,7 +133,6 @@ extension URLSession {
             decoder.dateDecodingStrategy = .millisecondsSince1970
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             responseObject = try decoder.decode(T.self, from: jsonData)
-            print("sss222s", responseObject)
           } else {
             throw APIError.systemError(message: "JSON 序列化失败")
           }

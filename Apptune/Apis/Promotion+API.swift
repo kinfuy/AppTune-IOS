@@ -11,10 +11,16 @@ struct PromotionCode: Codable {
   let id: String
   let group: String  // 组
   let code: String  // 促销码
-  let productId: String?  // 产品ID
-  let productName: String?  // 产品名称
-  let isUsed: Bool
-  let createTime: Date  // 创建时间
+  let productId: String  // 产品ID
+  let productName: String  // 产品名称
+  let usedUserId: String?  // 使用用户ID
+  let usedTime: Date?  // 使用时间
+  let createdAt: Date  // 创建时间
+  let updatedAt: Date  // 更新时间
+
+  var isUsed: Bool {
+    return usedUserId != nil && usedTime != nil
+  }
 }
 
 class PromotionAPI {
@@ -23,7 +29,7 @@ class PromotionAPI {
 
   // 获取用户所有促销码
   func getUserPromotions() async throws -> ListResponse<
-    PromotionInfo
+    PromotionCode
   > {
     let urlString = "\(BASR_SERVE_URL)/promotion/list"
 

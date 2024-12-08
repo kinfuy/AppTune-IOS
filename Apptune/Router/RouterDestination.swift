@@ -12,6 +12,7 @@ enum GeneralRouterDestination {
   case coinShop  // 积分商店
   case publishProduct  // 发布产品
   case publishActivity  // 发布活动
+  case createPromotion  // 创建促销码
 
   static func isWhiteListRoute(to: GeneralRouterDestination) -> Bool {
     let authRoutes: [GeneralRouterDestination] = [.login, .emailLogin]
@@ -20,7 +21,7 @@ enum GeneralRouterDestination {
 }
 
 enum SheetDestination: Hashable {
-    
+
 }
 
 enum FullScreenDestination: Hashable {
@@ -30,27 +31,29 @@ enum FullScreenDestination: Hashable {
 extension GeneralRouterDestination {
   @ViewBuilder
   func buildView() -> some View {
-      switch self {
-      case .login:
-          LoginView()
-      case .setting:
-          UserSettingView()
-      case .accountSetting:
-          UserAccountView()
-      case .emailLogin:
-          EmailLoginView()
-      case .aboutAuthor:
-          AboutAuthorView()
-      case .userProfile:
-          UserProfileView()
-      case .coinTasks:
-          CoinTasksView()
-      case .coinShop:
-          CoinShopView()
-      case .publishProduct:
-          PublishProductView()
-      case .publishActivity:
-          PublishActivityView()
-      }
+    switch self {
+    case .login:
+      LoginView()
+    case .setting:
+      UserSettingView()
+    case .accountSetting:
+      UserAccountView()
+    case .emailLogin:
+      EmailLoginView()
+    case .aboutAuthor:
+      AboutAuthorView()
+    case .userProfile:
+      UserProfileView()
+    case .coinTasks:
+      CoinTasksView()
+    case .coinShop:
+      CoinShopView()
+    case .publishProduct:
+      PublishProductView()
+    case .publishActivity:
+      PublishActivityView()
+    case .createPromotion:
+      CreatePromotionView()
+    }
   }
 }
