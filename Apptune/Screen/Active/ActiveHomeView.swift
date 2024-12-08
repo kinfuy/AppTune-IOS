@@ -80,6 +80,7 @@ struct ActiveHomeView: View {
   @EnvironmentObject var router: Router
   @EnvironmentObject var notice: NoticeManager
   @State var current: Catalog = .all
+  @EnvironmentObject var activeService: ActiveService
 
   @State private var isLoading: Bool = false
   @State var progress: CGFloat = 0
@@ -227,17 +228,18 @@ struct ActiveHomeView: View {
         }
         .padding(.horizontal)
         ScrollView {
-          Group {
+          ForEach(activeService.allActives) { active in
             ActiveCard(
-              title: "Suka数字卡片,全新版本内测开启中",
-              description: "遇见数字，发现有趣，本次内测带来了全新的产品碎片卡片，期待大家的参与",
-              startAt: Date(),
-              endAt: Date().addingTimeInterval(30 * 24 * 60 * 60),
-              joinCount: 42,
-              status: 1,
-              cover: "dog",
-              productName: "Suka数字卡片",
-              productLogo: "logo",
+              title: active.title,
+              description: active.description,
+              startAt: active.startAt,
+              endAt: active.endAt,
+              joinCount: active.joinCount ?? 0,
+              status: active.status,
+              cover: active.cover,
+              productName: active.productName,
+              productLogo: active.productLogo,
+              canOperate: true,
               onTap: {
                 notice.openNotice(
                   open: .toast(
@@ -249,15 +251,25 @@ struct ActiveHomeView: View {
               }
             )
             .padding(.bottom, 16)
-
-            // ... 可以继续添加更多 ActiveCard ...
           }
           .padding(.horizontal)
+        }
+        if activeService.allActives.isEmpty {
+          EmptyView(text: "还没有人发布活动", image: "empty")
+        }
+      }
+      .onAppear {
+        Task {
+          await activeService.loadAllActives(refresh:true)
         }
       }
     }
     .pullToRefresh(isLoading: $isLoading) {
-      isLoading = false
+      Task {
+        await activeService.loadAllActives(refresh:true)
+        isLoading = false
+      }
+
     }
     .height(min: minHeight, max: maxHeight)
     .collapseProgress($progress)
@@ -271,4 +283,5 @@ struct ActiveHomeView: View {
 
 #Preview {
   ActiveHomeView()
+    .environmentObject(ActiveService())
 }

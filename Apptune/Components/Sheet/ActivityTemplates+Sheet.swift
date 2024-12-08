@@ -111,14 +111,6 @@ struct ActiveTemplateCard: View {
           }
         }
       }
-
-      // 时间信息
-      HStack(spacing: 16) {
-        Label(template.startTime.formatted(.dateTime), systemImage: "calendar")
-        Label(template.endTime.formatted(.dateTime), systemImage: "calendar")
-      }
-      .font(.system(size: 12))
-      .foregroundColor(.gray)
     }
     .padding()
     .background(Color.white)

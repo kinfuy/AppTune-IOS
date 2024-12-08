@@ -9,6 +9,7 @@ enum PublishMode {
 struct PublishActivityView: View {
   @StateObject private var viewModel = PublishActivityViewModel()
   @EnvironmentObject private var router: Router
+  @EnvironmentObject var notice: NoticeManager
   @EnvironmentObject private var producttService: ProductService
   @EnvironmentObject private var sheet: SheetManager
 
@@ -19,6 +20,18 @@ struct PublishActivityView: View {
 
   // 添加模式状态
   @State private var publishMode: PublishMode = .quick
+
+  // 上传图片
+  private func uploadImage(_ image: UIImage) async -> String? {
+    guard let imageData = image.jpegData(compressionQuality: 0.6) else { return nil }
+    do {
+      let url = try await FileAPI.shared.uploadAvatar(imageData)
+      return url
+    } catch {
+      notice.openNotice(open: .toast("图片上传失败"))
+      return nil
+    }
+  }
 
   var body: some View {
     Group {
@@ -129,7 +142,7 @@ struct PublishActivityView: View {
       // 图标部分
       VStack(spacing: 16) {
         ImgLoader("empty")
-          .frame(width: /*@START_MENU_TOKEN@*/ 100 /*@END_MENU_TOKEN@*/, height: 100)
+          .frame(width: 100, height: 100)
       }
 
       // 文字说明部分
@@ -260,64 +273,85 @@ struct PublishActivityView: View {
         .padding(.top)
       }
 
-      // 底部按钮
-      HStack(spacing: 12) {
-        // 上一步按钮
-        Button(action: {
-          step = .selectProduct
-        }) {
-          Image(systemName: "chevron.left")
-            .frame(width: 42, height: 42)
-            .background(Color.white)
-            .foregroundColor(.gray)
-        }
+      VStack(spacing: 16) {
+        // 存为模板开关
+        HStack(spacing: 12) {
+          Text("存为模板")
+            .font(.system(size: 15))
+            .foregroundColor(Color(hex: "#666666"))
 
-        // 预览按钮
-        Button(action: {
-          sheet.show(
-            .activityPreview(
-              product: selectedProduct,
-              title: viewModel.title,
-              description: viewModel.description,
-              images: viewModel.images,
-              limit: viewModel.limit,
-              endAt: viewModel.endAt,
-              isAutoEnd: viewModel.isAutoEnd,
-              publishMode: publishMode
-            ))
-        }) {
-          Image(systemName: "eye")
-            .frame(width: 42, height: 42)
-            .background(Color.white)
-            .foregroundColor(.gray)
-            .cornerRadius(8)
-        }
+          Spacer()
 
-        // 发布按钮
-        Button(action: {
-          if viewModel.isLoading { return }
-          if let error = viewModel.checkValid() {
-            NoticeManager.shared.openNotice(open: .toast(error))
-            return
-          }
-          Task {
-            await viewModel.publishActivity()
-            router.back()
-            NoticeManager.shared.openNotice(
-              open: .toast(Toast(msg: "活动发布成功"))
-            )
-          }
-        }) {
-          Text("发布活动")
-            .frame(maxWidth: .infinity)
-            .frame(height: 42)
-            .background(Color.black)
-            .foregroundColor(.white)
-            .cornerRadius(8)
+          Toggle("", isOn: $viewModel.isTemplate)
+            .labelsHidden()
+            .tint(.black)
         }
-        .disabled(viewModel.isLoading)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(Color.white)
+        .cornerRadius(8)
+
+        // 底部按钮组
+        HStack(spacing: 12) {
+          // 上一步按钮
+          Button(action: {
+            step = .selectProduct
+          }) {
+            Image(systemName: "chevron.left")
+              .frame(width: 42, height: 42)
+              .background(Color.white)
+              .foregroundColor(.gray)
+              .cornerRadius(8)
+          }
+
+          // 预览按钮
+          Button(action: {
+            sheet.show(
+              .activityPreview(
+                product: selectedProduct,
+                title: viewModel.title,
+                description: viewModel.description,
+                images: viewModel.images,
+                limit: viewModel.limit,
+                endAt: viewModel.endAt,
+                isAutoEnd: viewModel.isAutoEnd,
+                publishMode: publishMode
+              ))
+          }) {
+            Image(systemName: "eye")
+              .frame(width: 42, height: 42)
+              .background(Color.white)
+              .foregroundColor(.gray)
+              .cornerRadius(8)
+          }
+
+          // 发布按钮
+          Button(action: {
+            if viewModel.isLoading { return }
+            if let error = viewModel.checkValid() {
+              NoticeManager.shared.openNotice(open: .toast(error))
+              return
+            }
+            Task {
+              await viewModel.publishActivity()
+              NoticeManager.shared.openNotice(
+                open: .toast(Toast(msg: "活动发布成功"))
+              )
+              router.back()
+            }
+          }) {
+            Text("发布活动")
+              .frame(maxWidth: .infinity)
+              .frame(height: 42)
+              .background(Color.black)
+              .foregroundColor(.white)
+              .cornerRadius(8)
+          }
+          .disabled(viewModel.isLoading)
+        }
       }
       .padding()
+      .background(Color(hex: "#f4f4f4"))
     }
   }
 
@@ -336,7 +370,16 @@ struct PublishActivityView: View {
         ScrollView(.horizontal, showsIndicators: false) {
           HStack(spacing: 16) {
             // 上传按钮
-            Button(action: {}) {
+            Button(action: {
+              sheet.show(
+                .imagePicker(onSelect: { image in
+                  Task {
+                    if let url = await uploadImage(image) {
+                      viewModel.images.append(url)
+                    }
+                  }
+                }))
+            }) {
               Rectangle()
                 .fill(Color(hex: "#f4f4f4"))
                 .frame(width: 100, height: 100)
@@ -359,12 +402,13 @@ struct PublishActivityView: View {
                   .cornerRadius(8)
                   .overlay(
                     Button(action: {
-                      // 删除图片
+                      viewModel.images.removeAll { $0 == image }
                     }) {
-                      Image(systemName: "xmark")
+                      SFSymbol.close
+                        .font(.system(size: 12))
                         .padding(4)
                         .background(.black.opacity(0.7))
-                        .clipShape(Circle())
+                        .cornerRadius(4)
                         .foregroundColor(.white)
                     }
                     .padding(4),

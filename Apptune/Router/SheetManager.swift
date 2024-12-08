@@ -27,11 +27,17 @@ enum SheetType: Identifiable {
     publishMode: PublishMode
   )
 
+  case imagePicker(
+    onSelect: ((UIImage) -> Void)? = nil,
+    onCancel: (() -> Void)? = nil
+  )
+
   var id: String {
     switch self {
     case .appStoreSearch: return "appStoreSearch"
     case .activityTemplates: return "activityTemplates"
     case .activityPreview: return "activityPreview"
+    case .imagePicker: return "imagePicker"
     }
   }
 
@@ -43,6 +49,11 @@ enum SheetType: Identifiable {
         dismissible: true
       )
     case .activityTemplates:
+      return SheetConfig(
+        fullScreen: false,
+        dismissible: true
+      )
+    case .imagePicker:
       return SheetConfig(
         fullScreen: false,
         dismissible: true
@@ -61,6 +72,8 @@ enum SheetType: Identifiable {
     case .appStoreSearch(_, let onCancel):
       return onCancel
     case .activityTemplates(_, let onCancel):
+      return onCancel
+    case .imagePicker(_, let onCancel):
       return onCancel
     case .activityPreview(_, _, _, _, _, _, _, _):
       return nil
@@ -133,6 +146,8 @@ class SheetManager: ObservableObject {
           ActivityPreviewSheet(
             product: product, title: title, description: description, images: images, limit: limit,
             endAt: endAt, isAutoEnd: isAutoEnd, publishMode: publishMode)
+        case .imagePicker(onSelect: let onSelect, onCancel: let onCancel):
+            ImageSheet(onSelect: onSelect, onCancel: onCancel)
         }
 
         if NoticeManager.shared.isNotice && SheetManager.shared.isPresented {

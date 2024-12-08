@@ -36,7 +36,7 @@ struct ProductView: View {
                 tab: ProductTab.joinedEvents,
                 icon: "person.2.fill",
                 color: Color.orange,
-                count: activeService.totalSelfActive
+                count: activeService.totalJoinedActive
             ),
             (
                 tab: ProductTab.myProducts,
@@ -58,7 +58,7 @@ struct ProductView: View {
                     tab: ProductTab.review,
                     icon: "checkmark.seal.fill",
                     color: Color.blue,
-                    count: productService.pendingProductReviews.count
+                    count: productService.pendingProductReviews.count + activeService.pendingActiveReviews.count
                 )
             )
         }

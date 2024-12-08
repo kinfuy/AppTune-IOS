@@ -20,12 +20,15 @@ final class PublishActivityViewModel: ObservableObject {
 
   // 高级配置
   @Published var limit: Int?  // 人数限制
-    @Published var reward: RewardType = .custom  // 奖励说明
+  @Published var reward: RewardType = .custom  // 奖励说明
   @Published var isAutoEnd: Bool = true  // 是否自动结束
+
+  // 模板配置
+  @Published var isTemplate: Bool = true  // 是否存为模板
 
   // 移除 isValid 属性,改用 checkValid 函数
   func checkValid() -> Toast? {
-      if product == nil {
+    if product == nil {
       return Toast(msg: "请选择产品")
     }
 
@@ -36,15 +39,6 @@ final class PublishActivityViewModel: ObservableObject {
     if description.isEmpty {
       return Toast(msg: "请输入活动描述")
     }
-
-    if startAt >= endAt ?? startAt {
-      return Toast(msg: "结束时间必须晚于开始时间")
-    }
-
-    if let max = limit, max <= 0 {
-      return Toast(msg: "参与人数限制必须大于0")
-    }
-
     return nil
   }
 
@@ -57,7 +51,7 @@ final class PublishActivityViewModel: ObservableObject {
         id: "",
         title: title,
         description: description,
-        cover: cover ?? "",
+        cover: cover ?? images.first ?? "",
         startAt: startAt,
         endAt: endAt,
         limit: limit,
@@ -67,13 +61,15 @@ final class PublishActivityViewModel: ObservableObject {
         status: 0,
         createTime: Date(),
         productId: product!.id,
-        productName: "",
-        productLogo: "",
+        productName: product!.name,
+        productLogo: product!.icon,
         images: images,
-        tags: tags
+        tags: tags,
+        link: nil,
+        reward: nil
       )
 
-      createdActivity = try await ActiveAPI.shared.createActive(params)
+      createdActivity = try await ActiveAPI.shared.createActive(params, isTemplate)
       reset()
     } catch {
       print(error.localizedDescription)
@@ -102,8 +98,8 @@ final class PublishActivityViewModel: ObservableObject {
     cover = template.cover
     tags = template.tags
     images = template.images
+    reward = RewardType(rawValue: template.rewardType.rawValue) ?? .custom
+    limit = template.limit
     isAutoEnd = true
-    startAt = template.startTime
-    endAt = template.endTime
   }
 }

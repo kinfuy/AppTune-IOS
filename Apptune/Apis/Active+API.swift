@@ -36,6 +36,8 @@ struct ActiveInfo: Codable, Identifiable {
   let productLogo: String
   let images: [String]
   let tags: [TagEntity]
+  let link: String?
+  let reward: String?
 }
 
 struct ActiveTemplateInfo: Codable, Identifiable {
@@ -43,8 +45,10 @@ struct ActiveTemplateInfo: Codable, Identifiable {
   let title: String
   let description: String?
   let cover: String?
-  let startTime: Date
-  let endTime: Date
+  let limit: Int?
+  let rewardType: RewardType
+  let reward: String?
+  let link: String?
   let status: Int
   let createTime: Date
   let images: [String]
@@ -169,11 +173,14 @@ class ActiveAPI {
   }
 
   // 添加创建活动的方法
-  func createActive(_ params: ActiveInfo) async throws -> ActiveInfo {
+  func createActive(_ params: ActiveInfo, _ saveTemplate: Bool = false) async throws -> ActiveInfo {
     let urlString = "\(BASR_SERVE_URL)/active/create"
 
     // 直接转换参数，不需要处理异常
-    let body = params.asDictionary()
+    var body = params.asDictionary()
+    if saveTemplate {
+      body["saveTemplate"] = true
+    }
 
     let request = try apiManager.createRequest(
       url: urlString,
