@@ -77,7 +77,7 @@ struct ProductView: View {
         tab: ProductTab.promotion,
         icon: "tag.fill",
         color: Color.indigo,
-        count: 0,
+        count: promotionService.promotions.count,
         roles: ["developer", "admin"]
       ),
       (

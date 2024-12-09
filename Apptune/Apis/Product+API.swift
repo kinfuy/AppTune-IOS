@@ -35,7 +35,7 @@ struct ProductInfo: Codable, Identifiable {
   let name: String
   let description: String
   let icon: String
-  let link: String
+  let link: String?
   let category: Catalog
   let price: Int?
   let createTime: Date

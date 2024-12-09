@@ -72,4 +72,20 @@ class PromotionAPI {
 
     let _ = try await apiManager.session.data(for: request)
   }
+
+  // 添加新方法
+  func checkPromoCodes(_ codes: [String], productId: String) async throws -> [String] {
+    let body: [String: Any] = [
+      "codes": codes,
+      "productId": productId,
+    ]
+
+    let request = try apiManager.createRequest(
+      url: "\(BASR_SERVE_URL)/promotion/check-codes",
+      method: "POST",
+      body: body
+    )
+
+    return try await apiManager.session.data(for: request)
+  }
 }

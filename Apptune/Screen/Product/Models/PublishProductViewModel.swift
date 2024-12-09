@@ -29,7 +29,7 @@ class PublishProductViewModel: ObservableObject {
   }
 
   var isValid: Bool {
-    !productName.isEmpty && !productDescription.isEmpty && !link.isEmpty && !iconUrl.isEmpty
+    !productName.isEmpty && !productDescription.isEmpty  && !iconUrl.isEmpty
   }
 
   var hasAppStoreInfo: Bool {

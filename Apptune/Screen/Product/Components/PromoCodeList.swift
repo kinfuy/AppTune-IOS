@@ -2,48 +2,36 @@ import SwiftUI
 
 struct PromoCodeList: View {
   let codes: [String]
+  let duplicateCodes: Set<String>
   let onRemove: (String) -> Void
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
-      // 总计显示
-      HStack {
-        Text("已添加优惠码")
-          .font(.system(size: 14))
-          .foregroundColor(.gray)
-        Text("\(codes.count)")
-          .font(.system(size: 14, weight: .medium))
-          .foregroundColor(.blue)
-        Text("个")
-          .font(.system(size: 14))
-          .foregroundColor(.gray)
-        Spacer()
-      }
-      .padding(.horizontal, 16)
+      ForEach(codes, id: \.self) { code in
+        HStack {
+          Text(code)
+            .foregroundColor(duplicateCodes.contains(code) ? .red : .primary)
 
-      // 优惠码列表
-      ScrollView {
-        LazyVStack(spacing: 8) {
-          ForEach(codes, id: \.self) { code in
-            HStack {
-              Text(code)
-                .font(.system(size: 14))
-              Spacer()
-              Button(action: { onRemove(code) }) {
-                Image(systemName: "xmark.circle.fill")
-                  .foregroundColor(.gray)
-              }
-            }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-            .background(Color.gray.opacity(0.1))
-            .cornerRadius(15)
+          Spacer()
+
+          if duplicateCodes.contains(code) {
+            Text("已存在")
+              .font(.caption)
+              .foregroundColor(.red)
           }
+
+          Button(action: {
+             onRemove(code)
+          }) {
+            Image(systemName: "xmark.circle.fill")
+              .foregroundColor(.gray)
+              .frame(width: 44, height: 44)
+              .contentShape(Rectangle())
+          }
+          .buttonStyle(PlainButtonStyle())
         }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 16)
+        .padding(.vertical, 4)
       }
-      .frame(maxHeight: 200)
     }
   }
 }

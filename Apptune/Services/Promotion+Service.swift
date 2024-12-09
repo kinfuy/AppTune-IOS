@@ -23,7 +23,7 @@ class PromotionService: ObservableObject {
 
   // 新增计算属性：按产品分组的促销码
   var groupedPromotions: [String: [PromotionCode]] {
-      Dictionary(grouping: promotions) { $0.productId }
+    Dictionary(grouping: promotions) { $0.productId }
   }
 
   // 加载用户的所有促销码
@@ -65,4 +65,5 @@ class PromotionService: ObservableObject {
       print(error)
     }
   }
+
 }
