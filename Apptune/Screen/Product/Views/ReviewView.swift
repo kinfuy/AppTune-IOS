@@ -85,13 +85,7 @@ struct ProductReviewCard: View {
         VStack(alignment: .leading, spacing: 12) {
             // 标题和图标
             HStack(spacing: 12) {
-                AsyncImage(url: URL(string: product.icon)) { image in
-                    image
-                        .resizable()
-                        .scaledToFill()
-                } placeholder: {
-                    Color.gray.opacity(0.1)
-                }
+                ImgLoader(product.icon)
                 .frame(width: 40, height: 40)
                 .cornerRadius(8)
 

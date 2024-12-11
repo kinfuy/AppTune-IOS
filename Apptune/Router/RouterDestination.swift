@@ -1,7 +1,7 @@
 import SwiftUI
 
 // MARK: - 页面路由定义
-enum GeneralRouterDestination {
+enum GeneralRouterDestination: Hashable {
   case login  // 登录
   case setting  // 设置
   case accountSetting  // 账号设置
@@ -13,10 +13,15 @@ enum GeneralRouterDestination {
   case publishProduct  // 发布产品
   case publishActivity  // 发布活动
   case createPromotion  // 创建促销码
+  case activeDetail(active: ActiveInfo)  // 活动详情
 
   static func isWhiteListRoute(to: GeneralRouterDestination) -> Bool {
-    let authRoutes: [GeneralRouterDestination] = [.login, .emailLogin]
-    return authRoutes.contains(where: { $0 == to })
+    switch to {
+    case .login, .emailLogin:
+      return true
+    default:
+      return false
+    }
   }
 }
 
@@ -54,6 +59,8 @@ extension GeneralRouterDestination {
       PublishActivityView()
     case .createPromotion:
       CreatePromotionView()
+    case .activeDetail(let active):
+      ActiveDetailView(active: active)
     }
   }
 }

@@ -13,6 +13,7 @@ struct PromotionCode: Codable {
   let code: String  // 促销码
   let productId: String  // 产品ID
   let productName: String  // 产品名称
+  let productLogo: String  // 产品logo
   let usedUserId: String?  // 使用用户ID
   let usedTime: Date?  // 使用时间
   let createdAt: Date  // 创建时间

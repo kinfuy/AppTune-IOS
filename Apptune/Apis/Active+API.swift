@@ -18,7 +18,7 @@ enum RewardType: String, Codable, CaseIterable {
   case promoCode = "promocode"
 }
 
-struct ActiveInfo: Codable, Identifiable {
+struct ActiveInfo: Codable, Identifiable, Hashable {
   let id: String
   let title: String
   let description: String
@@ -38,6 +38,15 @@ struct ActiveInfo: Codable, Identifiable {
   let tags: [TagEntity]
   let link: String?
   let reward: String?
+
+  // 实现 Hashable
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(id)  // 只需要使用 id 作为唯一标识即可
+  }
+
+  static func == (lhs: ActiveInfo, rhs: ActiveInfo) -> Bool {
+    lhs.id == rhs.id  // 同样只需要比较 id
+  }
 }
 
 struct ActiveTemplateInfo: Codable, Identifiable {

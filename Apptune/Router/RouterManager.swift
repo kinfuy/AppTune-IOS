@@ -44,10 +44,6 @@ class Router: ObservableObject {
       return
     }
 
-    if let lastPath = paths.last, lastPath == destination {
-      return
-    }
-
     path.append(destination)
     paths.append(destination)
   }
@@ -76,6 +72,7 @@ class Router: ObservableObject {
 
     path.removeLast(numberOfScreen)
     paths.removeLast(numberOfScreen)
+    syncNavigationState()
   }
 
   func handleSwipeBack() {
@@ -98,4 +95,17 @@ class Router: ObservableObject {
       }
     }
   }
+
+  func syncNavigationState() {
+    while paths.count > path.count {
+      paths.removeLast()
+    }
+  }
+
+  #if DEBUG
+    func printNavigationState() {
+      print("当前导航路径数量: \(path.count)")
+      print("当前路由堆栈: \(paths)")
+    }
+  #endif
 }

@@ -250,7 +250,7 @@ struct ActiveHomeView: View {
         }
         .padding(.horizontal)
         ScrollView {
-          ForEach(activeService.allActives) { active in
+          ForEach(activeService.allActives, id: \.id) { active in
             ActiveCard(
               title: active.title,
               description: active.description,
@@ -260,19 +260,15 @@ struct ActiveHomeView: View {
               status: active.status,
               cover: active.cover,
               productName: active.productName,
-              productLogo: active.productLogo,
-              canOperate: true,
-              onTap: {
-                notice.openNotice(
-                  open: .toast(
-                    Toast(
-                      msg: "敬请期待\(Date().description)"
-                    )
-                  )
-                )
-              }
+              productLogo: active.productLogo
             )
             .padding(.bottom, 16)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                withAnimation {
+                  router.navigate(to: .activeDetail(active: active))
+                }
+            }
           }
           .padding(.horizontal)
         }

@@ -11,8 +11,6 @@ struct ActiveCard: View {
     let cover: String
     let productName: String // 产品名称作为组织者
     let productLogo: String // 产品logo作为组织者头像
-    var canOperate:Bool = false
-    var onTap: (() -> Void)? = nil
     
   
 
@@ -97,25 +95,12 @@ struct ActiveCard: View {
                 Text("已有 \(String(describing: joinCount)) 人参与")
                     .font(.system(size: 12))
                     .foregroundColor(.gray)
-
-                if canOperate { // 仅进行中状态显示参与按钮
-                    Text("立即参与")
-                        .font(.system(size: 14))
-                        .foregroundColor(.white)
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 16)
-                        .background(.black)
-                        .cornerRadius(16)
-                }
             }
         }
         .padding(12)
         .background(Color.white)
         .cornerRadius(16)
         .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
-        .onTapGesture {
-            onTap?()
-        }
     }
 }
 
@@ -131,10 +116,7 @@ struct ActiveCard: View {
             status: 1,
             cover: "app",
             productName: "Suka",
-            productLogo: "logo",
-            onTap: {
-                print("Card tapped")
-            }
+            productLogo: "logo"
         )
 
         // 已结束活动预览

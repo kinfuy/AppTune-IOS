@@ -44,13 +44,22 @@ struct ScreenManage: View {
               .environmentObject(activeService)
               .environmentObject(tagService)
               .onAppear {
-                let auth = router.checkAuth(to: route)
-                if !auth {
-                  DispatchQueue.main.async {
-                    router.navigate(to: .login)
+                Task {
+                  try? await Task.sleep(nanoseconds: 100_000_000)
+                  if !router.checkAuth(to: route) {
+                    await MainActor.run {
+                      withAnimation(.easeInOut) {
+                        router.navigate(to: .login)
+                      }
+                    }
                   }
                 }
               }
+              .transition(
+                .asymmetric(
+                  insertion: .move(edge: .trailing),
+                  removal: .move(edge: .leading)
+                ))
           }
         }
         .environmentObject(appState)
