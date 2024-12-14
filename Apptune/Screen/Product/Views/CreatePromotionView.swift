@@ -54,7 +54,7 @@ struct CreatePromotionView: View {
                         height: 80,
                         padding: 0
                     )
-                    .onChange(of: promoCodes) { _, newValue in
+                    .onChange(of: promoCodes) { newValue in
                         viewModel.addPromoCodes(
                             newValue.components(separatedBy: .newlines)
                         )

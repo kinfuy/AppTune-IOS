@@ -26,7 +26,6 @@ struct JoinedActiveView: View {
       }
       .padding(.horizontal)
     }
-
   }
 }
 
@@ -60,6 +59,8 @@ struct MyProductsView: View {
 
 struct MyActicesView: View {
   @EnvironmentObject private var acticeService: ActiveService
+  @EnvironmentObject var router: Router
+
   var body: some View {
     ScrollView {
       LazyVStack(spacing: 16) {
@@ -79,6 +80,9 @@ struct MyActicesView: View {
               productName: ac.productName,
               productLogo: ac.productLogo
             )
+            .onTapGesture {
+              router.navigate(to: .activeDetail(active: ac))
+            }
           }
         }
       }

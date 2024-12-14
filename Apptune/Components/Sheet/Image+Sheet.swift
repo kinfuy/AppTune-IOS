@@ -15,7 +15,7 @@ struct ImageSheet: View {
   var body: some View {
     VStack {
       ImagePicker(image: $selectedImage)
-        .onChange(of: selectedImage) { _, newItem in
+        .onChange(of: selectedImage) { newItem in
           if let image = newItem {
             onSelect?(image)
           }

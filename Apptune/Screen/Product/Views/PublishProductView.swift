@@ -5,6 +5,7 @@ struct PublishProductView: View {
     @EnvironmentObject private var router: Router
     @EnvironmentObject private var notice: NoticeManager
     @EnvironmentObject private var sheet: SheetManager
+    @EnvironmentObject private var productService:ProductService
     @State private var showImagePicker = false
 
     var EditView: some View {
@@ -154,6 +155,7 @@ struct PublishProductView: View {
                         Tap.shared.play(.light)
                         Task {
                             await viewModel.publishProduct()
+                            await productService.loadPendingProductReviews()
                         }
                     }
                     .frame(height: 38)

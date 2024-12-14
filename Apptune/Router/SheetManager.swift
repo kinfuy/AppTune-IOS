@@ -17,14 +17,7 @@ enum SheetType: Identifiable {
   )
 
   case activityPreview(
-    product: ProductInfo?,
-    title: String,
-    description: String,
-    images: [String],
-    limit: Int?,
-    endAt: Date?,
-    isAutoEnd: Bool,
-    publishMode: PublishMode
+    active: ActiveInfo
   )
 
   case imagePicker(
@@ -32,51 +25,62 @@ enum SheetType: Identifiable {
     onCancel: (() -> Void)? = nil
   )
 
+  case imageShare(
+    shareImage: UIImage,
+    title: String,
+    onSave: (() -> Void)? = nil
+  )
+
+  case activeShare(active: ActiveInfo)
+
   var id: String {
     switch self {
     case .appStoreSearch: return "appStoreSearch"
     case .activityTemplates: return "activityTemplates"
     case .activityPreview: return "activityPreview"
     case .imagePicker: return "imagePicker"
+    case .activeShare: return "activeShare"
+    case .imageShare: return "imageShare"
     }
   }
 
   func config() -> SheetConfig {
     switch self {
-    case .appStoreSearch:
-      return SheetConfig(
-        fullScreen: false,
-        dismissible: true
-      )
-    case .activityTemplates:
-      return SheetConfig(
-        fullScreen: false,
-        dismissible: true
-      )
-    case .imagePicker:
-      return SheetConfig(
-        fullScreen: false,
-        dismissible: true
-      )
-    case .activityPreview:
-      return SheetConfig(
-        fullScreen: false,
-        dismissible: true
-      )
+    case .imageShare:
+      return SheetConfig(fullScreen: false, dismissible: true)
+    default:
+      return SheetConfig(fullScreen: false, dismissible: true)
     }
   }
 
   // 获取关闭回调
   var onClose: (() -> Void)? {
     switch self {
-    case .appStoreSearch(_, let onCancel):
+    case let .appStoreSearch(_, onCancel):
       return onCancel
-    case .activityTemplates(_, let onCancel):
+    case let .activityTemplates(_, onCancel):
       return onCancel
-    case .imagePicker(_, let onCancel):
+    case let .imagePicker(_, onCancel):
       return onCancel
-    case .activityPreview(_, _, _, _, _, _, _, _):
+    default:
       return nil
+    }
+  }
+
+  var view: AnyView {
+    switch self {
+    case .appStoreSearch(let onSubmit, let onCancel):
+      return AnyView(AppStoreSearchSheet(onSubmit: onSubmit, onCancel: onCancel))
+    case .activityTemplates(let onSelect, let onCancel):
+      return AnyView(ActivityTemplatesSheet(onSelect: onSelect, onCancel: onCancel))
+    case let .activityPreview(active):
+      return AnyView(ActivityPreviewSheet(active: active))
+    case .imagePicker(let onSelect, let onCancel):
+      return AnyView(ImageSheet(onSelect: onSelect, onCancel: onCancel))
+    case let .activeShare(active):
+      return AnyView(ActiveShareView(active: active))
+    case let .imageShare(shareImage, title, onSave):
+      return AnyView(ImageShareSheet(shareImage: shareImage, title: title, onSave: onSave))
     }
   }
 }
@@ -110,47 +114,54 @@ class SheetManager: ObservableObject {
     sheetStack.last?.config
   }
 
+  // 判断当前显示的 sheet 是否是全屏
+  var hasFullScreenSheet: Bool {
+    sheetStack.last?.config.fullScreen == true
+  }
+
+  // 判断当前显示的 sheet 是否是非全屏
+  var hasNormalSheet: Bool {
+    sheetStack.last?.config.fullScreen == false
+  }
+
+  var dismissible: Bool {
+    sheetStack.last?.config.dismissible == false
+  }
+
   func show(_ sheet: SheetType) {
     let config = sheet.config()
     let sheetItem = SheetItem(type: sheet, config: config)
-    sheetStack.append(sheetItem)
+
+    withAnimation {
+      sheetStack.append(sheetItem)
+    }
   }
 
   func close() {
     if let lastSheet = sheetStack.last {
       lastSheet.handleClose()
-      sheetStack.removeLast()
+      withAnimation {
+        sheetStack.removeLast()
+      }
     }
   }
 
   func closeAll() {
-    // 从后往前依次关闭
-    sheetStack.reversed().forEach { sheet in
+    for sheet in sheetStack.reversed() {
       sheet.handleClose()
     }
-    sheetStack.removeAll()
+    withAnimation {
+      sheetStack.removeAll()
+    }
   }
 
   @ViewBuilder
   func buildSheetView() -> some View {
     if let sheet = presentedSheet {
       ZStack {
-        switch sheet {
-        case .appStoreSearch(let onSubmit, let onCancel):
-          AppStoreSearchSheet(onSubmit: onSubmit, onCancel: onCancel)
-        case .activityTemplates(let onSelect, let onCancel):
-          ActivityTemplatesSheet(onSelect: onSelect, onCancel: onCancel)
-        case .activityPreview(
-          let product, let title, let description, let images, let limit, let endAt, let isAutoEnd,
-          let publishMode):
-          ActivityPreviewSheet(
-            product: product, title: title, description: description, images: images, limit: limit,
-            endAt: endAt, isAutoEnd: isAutoEnd, publishMode: publishMode)
-        case .imagePicker(onSelect: let onSelect, onCancel: let onCancel):
-            ImageSheet(onSelect: onSelect, onCancel: onCancel)
-        }
+        sheet.view
 
-        if NoticeManager.shared.isNotice && SheetManager.shared.isPresented {
+        if NoticeManager.shared.isNotice && isPresented {
           NoticeManager.shared.buildNoticeView(notice: NoticeManager.shared.currentNotice!)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.black.opacity(0.01))

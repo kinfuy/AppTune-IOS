@@ -35,7 +35,7 @@ struct ToastView: View {
         .padding()
         .opacity(isShowAnimation ? 1 : 0)
         .edgesIgnoringSafeArea(.all)
-        .onChange(of: isShowAnimation){
+        .onChange(of: isShowAnimation){ _ in
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 withAnimation(.easeIn(duration: 0.8), {
                     self.isShow = false

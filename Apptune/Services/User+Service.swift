@@ -8,6 +8,7 @@ import SwiftUI
 
 // 基本用户信息
 struct UserProfile {
+  var id:String
   var email: String
   var role: String
   var name: String
@@ -61,6 +62,7 @@ class UserService: ObservableObject {
   init() {
     // 初始化默认值
     profile = UserProfile(
+      id:"",
       email: "",
       role: "",
       name: "--",
@@ -100,6 +102,7 @@ class UserService: ObservableObject {
     isLogin = true
     updateProfile(
       UserProfile(
+        id:response.id,
         email: response.email,
         role: response.role,
         name: response.name,
@@ -155,6 +158,7 @@ class UserService: ObservableObject {
         guard let self = self else { return }
         self.updateProfile(
           UserProfile(
+            id:info.id,
             email: info.email,
             role: info.role,
             name: info.name,
@@ -180,6 +184,7 @@ class UserService: ObservableObject {
   private func clearAll() {
     // 清除用户资料
     profile = UserProfile(
+        id:"",
       email: "",
       role: "",
       name: "--",

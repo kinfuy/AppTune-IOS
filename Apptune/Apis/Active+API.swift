@@ -38,6 +38,7 @@ struct ActiveInfo: Codable, Identifiable, Hashable {
   let tags: [TagEntity]
   let link: String?
   let reward: String?
+  let userId: String
 
   // 实现 Hashable
   func hash(into hasher: inout Hasher) {

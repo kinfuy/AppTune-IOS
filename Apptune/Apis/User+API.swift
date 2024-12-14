@@ -7,6 +7,7 @@
 import Foundation
 
 struct UserResponse: Decodable {
+    var id:String
     var email: String
     var role: String
     var name: String
@@ -49,6 +50,7 @@ class UserAPI {
 
             await UserService.shared.updateProfile(
                 UserProfile(
+                    id:response.id,
                     email: response.email,
                     role: response.role,
                     name: response.name,
@@ -96,6 +98,7 @@ class UserAPI {
             
             await UserService.shared.updateProfile(
                 UserProfile(
+                    id: response.id,
                     email: response.email,
                     role: response.role,
                     name: response.name,
@@ -130,6 +133,7 @@ class UserAPI {
 
         await UserService.shared.updateProfile(
             UserProfile(
+                id:response.id,
                 email: response.email,
                 role: response.role,
                 name: response.name,
