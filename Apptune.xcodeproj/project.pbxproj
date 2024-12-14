@@ -49,7 +49,6 @@
 		F288297C2CF20D37002D012A /* Product+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F288297B2CF20D37002D012A /* Product+Service.swift */; };
 		F288297E2CF20EDD002D012A /* Active+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F288297D2CF20EDD002D012A /* Active+Service.swift */; };
 		F28829802CF21328002D012A /* Active+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F288297F2CF21328002D012A /* Active+API.swift */; };
-		F28829822CF2EB13002D012A /* ActivityTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28829812CF2EB13002D012A /* ActivityTemplate.swift */; };
 		F28829842CF2EB3D002D012A /* ActivityTemplates+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28829832CF2EB3D002D012A /* ActivityTemplates+Sheet.swift */; };
 		F28829862CF2FEB0002D012A /* Tag+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28829852CF2FEB0002D012A /* Tag+Component.swift */; };
 		F28829882CF30053002D012A /* Tag+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28829872CF30053002D012A /* Tag+Service.swift */; };
@@ -100,6 +99,7 @@
 		F2EEE3B12D088E2500D7777C /* ActiveDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE3B02D088E2500D7777C /* ActiveDetailView.swift */; };
 		F2EEE3B32D0B2F9900D7777C /* ActiveShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE3B22D0B2F9900D7777C /* ActiveShareView.swift */; };
 		F2EEE3B92D0D5B1400D7777C /* ImageSave+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE3B82D0D5B1400D7777C /* ImageSave+Sheet.swift */; };
+		F2EEE3BD2D0D874C00D7777C /* View+Modify.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE3BC2D0D874C00D7777C /* View+Modify.swift */; };
 		F2F4C6D52CE100E1003F20A5 /* ImagePicker+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F4C6D42CE100E1003F20A5 /* ImagePicker+Component.swift */; };
 		F2FAEAFB2CE04C03007BD6D8 /* Message+Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FAEAFA2CE04C03007BD6D8 /* Message+Modal.swift */; };
 		F2FC0F412CCAA49400CF8ACE /* Base+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FC0F402CCAA49400CF8ACE /* Base+API.swift */; };
@@ -149,7 +149,6 @@
 		F288297B2CF20D37002D012A /* Product+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Product+Service.swift"; sourceTree = "<group>"; };
 		F288297D2CF20EDD002D012A /* Active+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Active+Service.swift"; sourceTree = "<group>"; };
 		F288297F2CF21328002D012A /* Active+API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Active+API.swift"; sourceTree = "<group>"; };
-		F28829812CF2EB13002D012A /* ActivityTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityTemplate.swift; sourceTree = "<group>"; };
 		F28829832CF2EB3D002D012A /* ActivityTemplates+Sheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ActivityTemplates+Sheet.swift"; sourceTree = "<group>"; };
 		F28829852CF2FEB0002D012A /* Tag+Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+Component.swift"; sourceTree = "<group>"; };
 		F28829872CF30053002D012A /* Tag+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+Service.swift"; sourceTree = "<group>"; };
@@ -197,6 +196,7 @@
 		F2EEE3B02D088E2500D7777C /* ActiveDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveDetailView.swift; sourceTree = "<group>"; };
 		F2EEE3B22D0B2F9900D7777C /* ActiveShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveShareView.swift; sourceTree = "<group>"; };
 		F2EEE3B82D0D5B1400D7777C /* ImageSave+Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageSave+Sheet.swift"; sourceTree = "<group>"; };
+		F2EEE3BC2D0D874C00D7777C /* View+Modify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Modify.swift"; sourceTree = "<group>"; };
 		F2F4C6D42CE100E1003F20A5 /* ImagePicker+Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImagePicker+Component.swift"; sourceTree = "<group>"; };
 		F2FAEAFA2CE04C03007BD6D8 /* Message+Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Message+Modal.swift"; sourceTree = "<group>"; };
 		F2FC0F402CCAA49400CF8ACE /* Base+API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Base+API.swift"; sourceTree = "<group>"; };
@@ -244,7 +244,6 @@
 			isa = PBXGroup;
 			children = (
 				F21CFD0B2CD7245700CAB613 /* PublishActivityViewModel.swift */,
-				F28829812CF2EB13002D012A /* ActivityTemplate.swift */,
 				F2EEE3AC2D05DE8500D7777C /* CreatePromotionModel.swift */,
 				F21CFD112CD7247300CAB613 /* PublishProductViewModel.swift */,
 				F21CFCD92CD6463A00CAB613 /* ProductTab.swift */,
@@ -320,6 +319,7 @@
 			isa = PBXGroup;
 			children = (
 				F2B2697E2CB58055001230B4 /* Button+Modify.swift */,
+				F2EEE3BC2D0D874C00D7777C /* View+Modify.swift */,
 			);
 			path = Modify;
 			sourceTree = "<group>";
@@ -667,9 +667,9 @@
 				F21CFD102CD7246A00CAB613 /* PublishProductView.swift in Sources */,
 				F2A0D6082CC3958100536C58 /* Router+Extension.swift in Sources */,
 				F2A0D6122CC4AFB200536C58 /* Const+Util.swift in Sources */,
-				F28829822CF2EB13002D012A /* ActivityTemplate.swift in Sources */,
 				F2EEE3A52D05BB4B00D7777C /* Promotion+API.swift in Sources */,
 				F2B2697F2CB58055001230B4 /* Button+Modify.swift in Sources */,
+				F2EEE3BD2D0D874C00D7777C /* View+Modify.swift in Sources */,
 				F2EEE3AD2D05DE8500D7777C /* CreatePromotionModel.swift in Sources */,
 				F21CFD1B2CD7778D00CAB613 /* RouterDestination.swift in Sources */,
 				F21CFD0E2CD7245700CAB613 /* PublishActivityViewModel.swift in Sources */,

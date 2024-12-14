@@ -16,12 +16,14 @@ struct ActiveShareView: View {
     @State private var isGeneratingSnapshot = false
     @EnvironmentObject var notice: NoticeManager
     @EnvironmentObject var sheet: SheetManager
+    @State private var showFullContent = false
+    @State private var waterfull = true
 
     // 预览比例选项
     enum PreviewRatio: String, CaseIterable {
-        case portrait = "竖屏 4:5"
-        case square = "方形 1:1"
-        case landscape = "横屏 16:9"
+        case portrait = "4:5"
+        case square = "1:1"
+        case landscape = "16:9"
 
         var ratio: CGFloat {
             switch self {
@@ -43,7 +45,7 @@ struct ActiveShareView: View {
                 .frame(width: UIScreen.main.bounds.width)
         )
 
-        // 设置固定尺寸
+        // 固定尺寸
         renderer.proposedSize = ProposedViewSize(
             width: UIScreen.main.bounds.width,
             height: nil // 高度自适应
@@ -64,11 +66,14 @@ struct ActiveShareView: View {
                     Task {
                         let shareImage = await generateSnapshot()
                         isGeneratingSnapshot = false
-                        sheet.show(.imageShare(shareImage: shareImage, title: active.title, onSave: {
-                            withAnimation(.spring) {
-                                sheet.close()
-                            }
-                        }))
+                        sheet.show(
+                            .imageShare(
+                                shareImage: shareImage, title: active.title,
+                                onSave: {
+                                    withAnimation(.spring) {
+                                        sheet.close()
+                                    }
+                                }))
                     }
                 }
             ),
@@ -91,8 +96,12 @@ struct ActiveShareView: View {
             PreviewCard(
                 active: active,
                 content: getShareContent(),
-                ratio: selectedRatio.ratio
+                ratio: selectedRatio.ratio,
+                showFullContent: showFullContent
             )
+            .if(waterfull, transform: { view in
+                view.createdBy(nil)
+            })
             .background(
                 RoundedRectangle(cornerRadius: 16)
                     .fill(Color.white)
@@ -105,22 +114,61 @@ struct ActiveShareView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 24) {
-                HStack {
-                    Text("预览效果")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(.primary)
+                VStack(spacing: 20) {
+                    HStack {
+                        Text("预览效果")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(.primary)
 
-                    Spacer()
-
-                    Picker("比例", selection: $selectedRatio) {
-                        ForEach(PreviewRatio.allCases, id: \.self) { ratio in
-                            Text(ratio.rawValue).tag(ratio)
-                        }
+                        Spacer()
                     }
-                    .pickerStyle(.menu)
-                    .font(.system(size: 14))
+                    .padding(.horizontal)
+
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            ConfigItemContainer {
+                                HStack(spacing: 8) {
+                                    PreviewConfigItem(icon: "rectangle.3.group", title: "比例")
+                                    Picker("", selection: $selectedRatio) {
+                                        ForEach(PreviewRatio.allCases, id: \.self) { ratio in
+                                            Text(ratio.rawValue)
+                                                .tag(ratio)
+                                                .font(.system(size: 14))
+                                        }
+                                    }
+                                    .pickerStyle(.menu)
+                                    .font(.system(size: 14))
+                                    .tint(.black.opacity(0.6))
+                                }
+                                .frame(minWidth: 110)
+                            }
+
+                            ConfigItemContainer {
+                                HStack(spacing: 8) {
+                                    PreviewConfigItem(icon: "text.alignleft", title: "全文展示")
+                                    Toggle("", isOn: $showFullContent)
+                                        .labelsHidden()
+                                        .tint(.black)
+                                        .scaleEffect(0.75)
+                                }
+                                .frame(minWidth: 85)
+                            }
+
+                            ConfigItemContainer {
+                                HStack(spacing: 8) {
+                                    PreviewConfigItem(icon: "text.badge.checkmark", title: "水印")
+                                    Toggle("", isOn: $waterfull)
+                                        .labelsHidden()
+                                        .tint(.black)
+                                        .scaleEffect(0.75)
+                                }
+                                .frame(minWidth: 85)
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                    .padding(.vertical, 4)
                 }
-                .padding(.horizontal)
 
                 ScrollView {
                     shareView()
@@ -132,11 +180,6 @@ struct ActiveShareView: View {
 
             // 固定在底部的分享选项
             VStack(spacing: 16) {
-                Text("分享方式")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(.primary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
                 HStack(spacing: 32) {
                     ForEach(shareOptions, id: \.title) { option in
                         ShareOptionButton(
@@ -146,6 +189,7 @@ struct ActiveShareView: View {
                         )
                     }
                 }
+                .frame(maxWidth: .infinity)
             }
             .padding()
             .background(Color.white)
@@ -200,9 +244,11 @@ struct PreviewCard: View {
     var active: ActiveInfo
     var content: String
     var ratio: CGFloat
+    var showFullContent: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
+            // 图片区域保持固定比例
             GeometryReader { geo in
                 ImgLoader(active.cover)
                     .aspectRatio(contentMode: .fill)
@@ -215,16 +261,58 @@ struct PreviewCard: View {
             }
             .aspectRatio(ratio, contentMode: .fit)
 
-            Text(active.title)
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(.primary)
+            // 标题和描述区域
+            VStack(alignment: .leading, spacing: 12) {
+                Text(active.title)
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(.primary)
+                    .lineLimit(1)
 
-            Text(content)
-                .font(.system(size: 16))
-                .foregroundColor(.primary)
-                .lineSpacing(4)
+                Text(content)
+                    .font(.system(size: 16))
+                    .foregroundColor(.primary)
+                    .lineSpacing(4)
+                    .lineLimit(showFullContent ? nil : 4)
+                    .multilineTextAlignment(.leading)
+            }
         }
         .padding(16)
+    }
+}
+
+// 更新 PreviewConfigItem 结构体
+private struct PreviewConfigItem: View {
+    let icon: String
+    let title: String
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Image(systemName: icon)
+                .font(.system(size: 13))
+            Text(title)
+                .font(.system(size: 14))
+        }
+        .foregroundColor(.black.opacity(0.6))
+    }
+}
+
+// 添加新的配置项容器组件
+private struct ConfigItemContainer: View {
+    let content: AnyView
+
+    init<Content: View>(@ViewBuilder content: () -> Content) {
+        self.content = AnyView(content())
+    }
+
+    var body: some View {
+        content
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.white)
+                    .shadow(color: .black.opacity(0.03), radius: 8, x: 0, y: 2)
+            )
     }
 }
 
@@ -262,5 +350,6 @@ struct PreviewCard: View {
                     userId: "1"
                 )
             )
+            .environmentObject(SheetManager())
         }
 }
