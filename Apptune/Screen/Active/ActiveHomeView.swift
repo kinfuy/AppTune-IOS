@@ -50,45 +50,32 @@ let gradientSurface = LinearGradient(
 )
 
 struct TopActiveCardView: View {
+  var active: ActiveInfo
   var body: some View {
     VStack {
       VStack(alignment: .leading, spacing: 8) {
-        Text("新人奖励")
-          .foregroundColor(.theme.opacity(0.68))
-          .font(.system(size: 14))
-          .fontWeight(.bold)
+          if let tag = active.recommendTag {
+              Text(tag)
+                .foregroundColor(.theme.opacity(0.68))
+                .font(.system(size: 14))
+                .fontWeight(.bold)
+          }
+       
         HStack {
-          Text("七日积分好礼")
+            Text(active.title)
             .font(.system(size: 20))
             .fontWeight(.bold)
           Spacer()
         }
-        Text("新用户专属任务")
-          .foregroundColor(.gray)
+          if let desc = active.recommendDesc {
+              Text(desc)
+                .foregroundColor(.gray)
+          }
+        
       }
       .padding(.top, 16)
-      HStack {
-        VStack {
-          HStack {
-            Text("抢")
-              .font(.system(size: 24))
-            Text("“鲜”")
-              .foregroundColor(.theme)
-              .font(.system(size: 28))
-              .fontWeight(.bold)
-          }
-          HStack {
-            Spacer()
-            Text("一步")
-              .font(.system(size: 24))
-          }
-        }
-        HStack {
-          Spacer()
-          ImgLoader("app")
-            .frame(width: 120, height: 80)
-        }
-      }
+        ImgLoader(active.cover, contentMode: .fill )
+            .frame(maxHeight: 100)
       .padding(.vertical)
       .padding(.horizontal, 12)
       .background(.white)
@@ -207,39 +194,46 @@ struct ActiveHomeView: View {
     } content: {
       GroupView
         .padding(.horizontal)
-      VStack {
-        GeometryReader { geometry in
-          HStack(spacing: spacing) {
-            ForEach(0..<5) { _ in
-              TopActiveCardView()
-                .frame(width: cardWidth)
+      if activeService.topActives.count > 0 {
+        VStack {
+          GeometryReader { geometry in
+            HStack(spacing: spacing) {
+              ForEach(activeService.topActives, id: \.id) { active in
+                TopActiveCardView(active: active)
+                  .frame(width: cardWidth)
+                  .onTapGesture {
+                    withAnimation {
+                      router.navigate(to: .activeDetail(active: active))
+                    }
+                  }
+              }
+            }
+            .frame(width: geometry.size.width, alignment: .leading)
+            .offset(x: offset)
+            .gesture(
+              DragGesture()
+                .onChanged { value in
+                  offset = -CGFloat(currentIndex) * (cardWidth + spacing) + value.translation.width
+                }
+                .onEnded { value in
+                  let threshold = cardWidth / 3
+                  if -value.predictedEndTranslation.width > threshold {
+                    currentIndex = min(currentIndex + 1, 5 - 1)
+                  } else if value.predictedEndTranslation.width > threshold {
+                    currentIndex = max(currentIndex - 1, 0)
+                  }
+                  withAnimation {
+                    offset = -CGFloat(currentIndex) * (cardWidth + spacing) + 24
+                  }
+                }
+            )
+            .onAppear {
+              offset = -CGFloat(currentIndex) * (cardWidth + spacing) + 24
             }
           }
-          .frame(width: geometry.size.width, alignment: .leading)
-          .offset(x: offset)
-          .gesture(
-            DragGesture()
-              .onChanged { value in
-                offset = -CGFloat(currentIndex) * (cardWidth + spacing) + value.translation.width
-              }
-              .onEnded { value in
-                let threshold = cardWidth / 3
-                if -value.predictedEndTranslation.width > threshold {
-                  currentIndex = min(currentIndex + 1, 5 - 1)
-                } else if value.predictedEndTranslation.width > threshold {
-                  currentIndex = max(currentIndex - 1, 0)
-                }
-                withAnimation {
-                  offset = -CGFloat(currentIndex) * (cardWidth + spacing) + 24
-                }
-              }
-          )
-          .onAppear {
-            offset = -CGFloat(currentIndex) * (cardWidth + spacing) + 24
-          }
         }
+        .frame(height: 240)
       }
-      .frame(height: 240)
 
       VStack {
         HStack {
@@ -265,9 +259,9 @@ struct ActiveHomeView: View {
             .padding(.bottom, 16)
             .contentShape(Rectangle())
             .onTapGesture {
-                withAnimation {
-                  router.navigate(to: .activeDetail(active: active))
-                }
+              withAnimation {
+                router.navigate(to: .activeDetail(active: active))
+              }
             }
           }
           .padding(.horizontal)
@@ -279,12 +273,14 @@ struct ActiveHomeView: View {
       .onAppear {
         Task {
           await activeService.loadAllActives(refresh: true)
+          await activeService.loadTopActives(refresh: true)
         }
       }
     }
     .pullToRefresh(isLoading: $isLoading) {
       Task {
         await activeService.loadAllActives(refresh: true)
+        await activeService.loadTopActives(refresh: true)
         isLoading = false
       }
 

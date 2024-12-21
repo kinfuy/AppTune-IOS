@@ -347,7 +347,10 @@ private struct ConfigItemContainer: View {
                     ],
                     link: nil,
                     reward: "1000积分",
-                    userId: "1"
+                    userId: "1",
+                    isTop: false,
+                    recommendTag: nil,
+                    recommendDesc: nil
                 )
             )
             .environmentObject(SheetManager())

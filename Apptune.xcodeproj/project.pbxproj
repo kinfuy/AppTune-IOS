@@ -46,6 +46,9 @@
 		F27C657D2CB16F1B0074B608 /* ApptuneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F27C657C2CB16F1B0074B608 /* ApptuneApp.swift */; };
 		F27C65862CB16F1C0074B608 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F27C65852CB16F1C0074B608 /* Assets.xcassets */; };
 		F27C658A2CB16F1C0074B608 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F27C65892CB16F1C0074B608 /* Preview Assets.xcassets */; };
+		F283B0452D0DD4370051FBF1 /* ImageClip+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F283B0442D0DD4370051FBF1 /* ImageClip+Component.swift */; };
+		F283B04B2D0E80170051FBF1 /* Mantis in Frameworks */ = {isa = PBXBuildFile; productRef = F283B04A2D0E80170051FBF1 /* Mantis */; };
+		F283B04D2D0EBC900051FBF1 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F283B04C2D0EBC8F0051FBF1 /* Localizable.xcstrings */; };
 		F288297C2CF20D37002D012A /* Product+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F288297B2CF20D37002D012A /* Product+Service.swift */; };
 		F288297E2CF20EDD002D012A /* Active+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F288297D2CF20EDD002D012A /* Active+Service.swift */; };
 		F28829802CF21328002D012A /* Active+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F288297F2CF21328002D012A /* Active+API.swift */; };
@@ -146,6 +149,8 @@
 		F27C65852CB16F1C0074B608 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F27C65872CB16F1C0074B608 /* Apptune.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Apptune.entitlements; sourceTree = "<group>"; };
 		F27C65892CB16F1C0074B608 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F283B0442D0DD4370051FBF1 /* ImageClip+Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ImageClip+Component.swift"; sourceTree = "<group>"; };
+		F283B04C2D0EBC8F0051FBF1 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		F288297B2CF20D37002D012A /* Product+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Product+Service.swift"; sourceTree = "<group>"; };
 		F288297D2CF20EDD002D012A /* Active+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Active+Service.swift"; sourceTree = "<group>"; };
 		F288297F2CF21328002D012A /* Active+API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Active+API.swift"; sourceTree = "<group>"; };
@@ -207,6 +212,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F283B04B2D0E80170051FBF1 /* Mantis in Frameworks */,
 				F2AE42852CB97162009E72C3 /* Kingfisher in Frameworks */,
 				F2B269722CB57233001230B4 /* SwiftDate in Frameworks */,
 				F26F15AD2CC6A92B00848715 /* SwiftyJSON in Frameworks */,
@@ -420,6 +426,7 @@
 				F27C65852CB16F1C0074B608 /* Assets.xcassets */,
 				F27C65872CB16F1C0074B608 /* Apptune.entitlements */,
 				F27C65882CB16F1C0074B608 /* Preview Content */,
+				F283B04C2D0EBC8F0051FBF1 /* Localizable.xcstrings */,
 			);
 			path = Apptune;
 			sourceTree = "<group>";
@@ -488,6 +495,7 @@
 				F2A0D60A2CC3A27400536C58 /* Notice */,
 				F2B2697C2CB57B80001230B4 /* Radio+Component.swift */,
 				F2D6AE232CD92C4800896DD9 /* Empty+Component.swift */,
+				F283B0442D0DD4370051FBF1 /* ImageClip+Component.swift */,
 				F2F4C6D42CE100E1003F20A5 /* ImagePicker+Component.swift */,
 				F2A0D6032CC3887800536C58 /* Toast+Component.swift */,
 				F2AE42882CB97917009E72C3 /* CornerRadius+Component.swift */,
@@ -532,6 +540,7 @@
 				F2AE42842CB97162009E72C3 /* Kingfisher */,
 				F2A0D5FA2CC360EA00536C58 /* ScalingHeaderScrollView */,
 				F26F15AC2CC6A92B00848715 /* SwiftyJSON */,
+				F283B04A2D0E80170051FBF1 /* Mantis */,
 			);
 			productName = Apptune;
 			productReference = F27C65792CB16F1B0074B608 /* Apptune.app */;
@@ -554,11 +563,12 @@
 			};
 			buildConfigurationList = F27C65742CB16F1B0074B608 /* Build configuration list for PBXProject "Apptune" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = "zh-Hans";
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = F27C65702CB16F1B0074B608;
 			packageReferences = (
@@ -566,6 +576,7 @@
 				F2AE42832CB97162009E72C3 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				F2A0D5F92CC360EA00536C58 /* XCRemoteSwiftPackageReference "ScalingHeaderScrollView" */,
 				F26F15AB2CC6A92B00848715 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				F283B0492D0E80170051FBF1 /* XCRemoteSwiftPackageReference "Mantis" */,
 			);
 			productRefGroup = F27C657A2CB16F1B0074B608 /* Products */;
 			projectDirPath = "";
@@ -583,6 +594,7 @@
 			files = (
 				F27C658A2CB16F1C0074B608 /* Preview Assets.xcassets in Resources */,
 				F27C65862CB16F1C0074B608 /* Assets.xcassets in Resources */,
+				F283B04D2D0EBC900051FBF1 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -673,6 +685,7 @@
 				F2EEE3AD2D05DE8500D7777C /* CreatePromotionModel.swift in Sources */,
 				F21CFD1B2CD7778D00CAB613 /* RouterDestination.swift in Sources */,
 				F21CFD0E2CD7245700CAB613 /* PublishActivityViewModel.swift in Sources */,
+				F283B0452D0DD4370051FBF1 /* ImageClip+Component.swift in Sources */,
 				F22377E12CC6ABBB00F780AE /* UrlSession+Extension.swift in Sources */,
 				F28829842CF2EB3D002D012A /* ActivityTemplates+Sheet.swift in Sources */,
 				F237E5A02CCE6BFB00CC1074 /* AboutAuthorView.swift in Sources */,
@@ -929,6 +942,14 @@
 				minimumVersion = 5.0.2;
 			};
 		};
+		F283B0492D0E80170051FBF1 /* XCRemoteSwiftPackageReference "Mantis" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/guoyingtao/Mantis";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.7.5;
+			};
+		};
 		F2A0D5F92CC360EA00536C58 /* XCRemoteSwiftPackageReference "ScalingHeaderScrollView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/exyte/ScalingHeaderScrollView";
@@ -960,6 +981,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F26F15AB2CC6A92B00848715 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		F283B04A2D0E80170051FBF1 /* Mantis */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F283B0492D0E80170051FBF1 /* XCRemoteSwiftPackageReference "Mantis" */;
+			productName = Mantis;
 		};
 		F2A0D5FA2CC360EA00536C58 /* ScalingHeaderScrollView */ = {
 			isa = XCSwiftPackageProductDependency;

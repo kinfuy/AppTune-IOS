@@ -5,46 +5,41 @@
 //  Created by 杨杨杨 on 2024/10/27.
 //
 
-import PhotosUI
 import SwiftUI
 
 struct UserProfileView: View {
     @EnvironmentObject var router: Router
     @EnvironmentObject var notice: NoticeManager
     @EnvironmentObject var userService: UserService
-    @State private var selectedItem: PhotosPickerItem?
+    @EnvironmentObject private var sheet: SheetManager
     @State private var name: String = ""
 
     var body: some View {
         ScrollView {
             VStack(spacing: 32) {
-                // 头像部分
-                PhotosPicker(selection: $selectedItem, matching: .images) {
-                    VStack(spacing: 12) {
-                        ImgLoader(userService.profile.avatar)
-                            .frame(width: 100, height: 100)
-                            .clipShape(.circle)
-                            .overlay(
-                                Circle()
-                                    .stroke(Color.gray.opacity(0.1), lineWidth: 1)
-                            )
-                            .shadow(color: .black.opacity(0.05), radius: 8, y: 4)
+                VStack(spacing: 12) {
+                    ImgLoader(userService.profile.avatar)
+                        .frame(width: 100, height: 100)
+                        .clipShape(.circle)
+                        .overlay(
+                            Circle()
+                                .stroke(Color.gray.opacity(0.1), lineWidth: 1)
+                        )
+                        .shadow(color: .black.opacity(0.05), radius: 8, y: 4)
 
-                        Text("点击更换头像")
-                            .font(.system(size: 14))
-                            .foregroundColor(.gray)
-                    }
-                    .padding(.top, 20)
+                    Text("点击更换头像")
+                        .font(.system(size: 14))
+                        .foregroundColor(.gray)
                 }
-                .onChange(of: selectedItem) { newItem in
-                    Task {
-                        if let data = try? await newItem?.loadTransferable(type: Data.self),
-                           let image = UIImage(data: data) {
+                .padding(.top, 20)
+                .onTapGesture {
+                    sheet.show(.imagePicker(onSelect: { image in
+                        Task{
                             if let url = await uploadImage(image) {
                                 await updateUserInfo(["avatar": url])
                             }
                         }
-                    }
+                    }, onCancel: {}))
                 }
 
                 // 个人信息表单
@@ -166,4 +161,5 @@ struct FormField: View {
     UserProfileView()
         .environmentObject(Router())
         .environmentObject(UserService())
+        .environmentObject(SheetManager())
 }

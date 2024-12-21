@@ -73,12 +73,12 @@ struct ActiveDetailView: View {
                         }
                     }
 
-                    if let joinCount = active.joinCount {
+                    if let limit = active.limit  {
                         HStack(spacing: 6) {
-                            Image(systemName: "person.2")
+                            Image(systemName: "person")
                                 .font(.system(size: 14))
                                 .foregroundColor(.blue)
-                            Text("\(joinCount)人参与")
+                            Text("\(limit) 人数限制")
                                 .font(.system(size: 14))
                                 .foregroundColor(.secondary)
                         }
@@ -222,8 +222,12 @@ struct ActiveDetailView: View {
             ],
             link: nil,
             reward: "1000积分",
-            userId: "1"
+            userId: "1",
+            isTop: false,
+            recommendTag: nil,
+            recommendDesc: nil
         )
     )
     .environmentObject(ActiveService())
+    .environmentObject(UserService())
 }

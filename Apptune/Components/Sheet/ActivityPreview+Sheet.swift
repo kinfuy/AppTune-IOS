@@ -38,7 +38,7 @@ struct ActivityPreviewSheet: View {
               Text(active.productName)
                 .font(.system(size: 15, weight: .medium))
                 .foregroundColor(.primary)
-                Spacer()
+              Spacer()
             }
 
             VStack(alignment: .leading, spacing: 10) {
@@ -119,8 +119,8 @@ struct RewardContentView: View {
           .foregroundColor(.secondary)
 
         if let reward = reward {
-          Text(rewardType.formatReward(reward))
-            .font(.system(size: 20, weight: .bold))
+          Text(reward)
+            .font(.system(size: 16, weight: .bold))
             .foregroundColor(rewardType.themeColor)
         }
       }
@@ -162,18 +162,7 @@ extension RewardType {
     case .promoCode:
       return "完成活动可获得兑换码"
     case .selfManaged:
-      return "请悉知该活动奖励由发布者自行管理"
-    }
-  }
-
-  func formatReward(_ reward: String) -> String {
-    switch self {
-    case .points:
-      return "\(reward) 积分"
-    case .promoCode:
-      return "兑换码"
-    case .selfManaged:
-      return reward
+      return "请悉知该活动奖励由发布者自行管理 发放"
     }
   }
 }
@@ -215,7 +204,10 @@ extension RewardType {
       ],
       link: nil,
       reward: "1000",
-      userId: ""
+      userId: "",
+      isTop: false,
+      recommendTag: nil,
+      recommendDesc: nil
     )
   )
 }

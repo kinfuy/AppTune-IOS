@@ -50,6 +50,7 @@ enum SFSymbol: String, Codable {
   case loading = "arrow.triangle.2.circlepath"
   case task = "star.circle"
   case shop = "cart.circle"
+  case message = "message"
 }
 
 extension SFSymbol: View {

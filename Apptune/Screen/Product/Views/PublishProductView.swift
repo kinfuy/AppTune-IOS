@@ -6,7 +6,6 @@ struct PublishProductView: View {
     @EnvironmentObject private var notice: NoticeManager
     @EnvironmentObject private var sheet: SheetManager
     @EnvironmentObject private var productService:ProductService
-    @State private var showImagePicker = false
 
     var EditView: some View {
         VStack {
@@ -31,7 +30,10 @@ struct PublishProductView: View {
                             }
                         }
                         .onTapGesture {
-                            showImagePicker = true
+                            sheet.show(
+                                .imagePicker(onSelect: { image in
+                                    viewModel.selectedImage = image
+                                }))
                         }
                     }
                     .padding(.bottom, 16)
@@ -182,9 +184,6 @@ struct PublishProductView: View {
                 }
             }
         )
-        .sheet(isPresented: $showImagePicker) {
-            ImagePicker(image: $viewModel.selectedImage)
-        }
     }
 }
 

@@ -36,12 +36,41 @@ class Router: ObservableObject {
   }
 
   func navigate(to destination: GeneralRouterDestination) {
+    print("navigate to \(destination)")
+    print("paths: \(paths)")
+    print("path: \(path)")
+    print("currentTab: \(currentTab)")
+
+    // 登录页面的特殊处理
+    if destination == .login {
+      // 直接清空导航堆栈并设置登录页面
+      path = NavigationPath()
+      paths = []
+      currentTab = .home
+      // 登录页面只在 path 中显示，不记录在 paths 中
+      path.append(destination)
+      return
+    }
+
+    // 检查是否是重复导航
+    if let lastDestination = paths.last, lastDestination == destination {
+      print("防止重复导航到相同页面：\(destination)")
+      return
+    }
+
+    // 权限检查
     if !checkAuth(to: destination) {
       path = NavigationPath()
       paths = []
       currentTab = .home
+      // 同样，登录页面只在 path 中显示
       path.append(GeneralRouterDestination.login)
       return
+    }
+
+    // 如果当前显示的是登录页面，直接清空导航堆栈
+    if path.count == 1 && paths.isEmpty {
+      path = NavigationPath()
     }
 
     path.append(destination)
@@ -83,7 +112,8 @@ class Router: ObservableObject {
       } else {
         path = NavigationPath()
         paths = []
-        navigate(to: .login)
+        // 登录页面只在 path 中显示
+        path.append(GeneralRouterDestination.login)
       }
     } else if paths.count == 1 {
       if checkAuth(tab: currentTab) {
@@ -91,7 +121,8 @@ class Router: ObservableObject {
       } else {
         path = NavigationPath()
         paths = []
-        navigate(to: .login)
+        // 登录页面只在 path 中显示
+        path.append(GeneralRouterDestination.login)
       }
     }
   }

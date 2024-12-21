@@ -15,9 +15,7 @@ struct ScreenManage: View {
   @State private var showGuide = false
 
   var body: some View {
-    // 最外层包装一个 ZStack，用于显示通知
     ZStack {
-      // 主要内容包括 sheet
       ZStack {
         NavigationStack(path: $router.path) {
           ZStack {
@@ -43,18 +41,6 @@ struct ScreenManage: View {
               .environmentObject(promotionService)
               .environmentObject(activeService)
               .environmentObject(tagService)
-              .onAppear {
-                Task {
-                  try? await Task.sleep(nanoseconds: 100_000_000)
-                  if !router.checkAuth(to: route) {
-                    await MainActor.run {
-                      withAnimation(.easeInOut) {
-                        router.navigate(to: .login)
-                      }
-                    }
-                  }
-                }
-              }
               .transition(
                 .asymmetric(
                   insertion: .move(edge: .trailing),
@@ -110,7 +96,6 @@ struct ScreenManage: View {
             .environmentObject(tagService)
         }
 
-        // 只在非 sheet 状态下显示 notice
         if notice.isNotice && !sheet.isPresented {
           NoticeManager.shared.buildNoticeView(notice: notice.currentNotice!)
             .environmentObject(appState)

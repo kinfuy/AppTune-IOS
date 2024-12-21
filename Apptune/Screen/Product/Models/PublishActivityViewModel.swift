@@ -75,7 +75,10 @@ final class PublishActivityViewModel: ObservableObject {
       tags: tags,
       link: nil,
       reward: nil,
-      userId: ""
+      userId: "",
+      isTop: false,
+      recommendTag: nil,
+      recommendDesc: nil
     )
   }
 

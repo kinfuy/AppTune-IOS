@@ -24,7 +24,6 @@ struct CreatedByWatermarkModifier: ViewModifier {
         ImgLoader(logo)
           .frame(width: 16, height: 16)
           .cornerRadius(all: 4)
-          .shadow(radius: 1)
 
         Text("Apptune")
           .font(.system(size: 13, weight: .medium))

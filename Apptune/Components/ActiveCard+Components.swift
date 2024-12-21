@@ -92,9 +92,9 @@ struct ActiveCard: View {
                 Spacer()
 
                 // 参与人数
-                Text("已有 \(String(describing: joinCount)) 人参与")
-                    .font(.system(size: 12))
-                    .foregroundColor(.gray)
+//                Text("已有 \(String(describing: joinCount)) 人参与")
+//                    .font(.system(size: 12))
+//                    .foregroundColor(.gray)
             }
         }
         .padding(12)

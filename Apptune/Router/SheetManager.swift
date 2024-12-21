@@ -46,6 +46,8 @@ enum SheetType: Identifiable {
 
   func config() -> SheetConfig {
     switch self {
+    case .imagePicker:
+        return SheetConfig(fullScreen: true, dismissible: true)
     case .imageShare:
       return SheetConfig(fullScreen: false, dismissible: true)
     default:
@@ -140,9 +142,7 @@ class SheetManager: ObservableObject {
   func close() {
     if let lastSheet = sheetStack.last {
       lastSheet.handleClose()
-      withAnimation {
-        sheetStack.removeLast()
-      }
+      sheetStack.removeLast()
     }
   }
 

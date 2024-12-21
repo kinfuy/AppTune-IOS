@@ -3,7 +3,7 @@ import SwiftUI
 // 添加 ImagePicker 视图
 struct ImagePicker: UIViewControllerRepresentable {
   @Binding var image: UIImage?
-  @Environment(\.presentationMode) var presentationMode
+  var onDismiss: (() -> Void)?  // 添加关闭回调
 
   func makeUIViewController(context: Context) -> UIImagePickerController {
     let picker = UIImagePickerController()
@@ -32,7 +32,11 @@ struct ImagePicker: UIViewControllerRepresentable {
       if let image = info[.originalImage] as? UIImage {
         parent.image = image
       }
-      parent.presentationMode.wrappedValue.dismiss()
+      parent.onDismiss?()
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+      parent.onDismiss?()
     }
   }
 }

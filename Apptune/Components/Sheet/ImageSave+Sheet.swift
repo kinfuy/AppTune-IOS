@@ -78,13 +78,14 @@ struct ImageShareSheet: View {
           }
         }
       }
-      Spacer()
+      .padding(.horizontal)
       // 预览图片卡片
       Image(uiImage: shareImage)
         .resizable()
         .aspectRatio(contentMode: .fit)
+        .frame(maxHeight: .infinity)
+        .clipped()
         .padding(.horizontal)
-        .frame(maxWidth: .infinity)
 
       Spacer()
 
@@ -100,8 +101,9 @@ struct ImageShareSheet: View {
           .frame(height: 32)
         }
       }
+      .padding(.horizontal)
     }
-    .padding()
+    .padding(.vertical)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Color(hex: "#f4f4f4"))
   }

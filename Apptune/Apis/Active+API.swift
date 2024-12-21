@@ -39,6 +39,9 @@ struct ActiveInfo: Codable, Identifiable, Hashable {
   let link: String?
   let reward: String?
   let userId: String
+  let isTop: Bool?
+  let recommendTag: String?
+  let recommendDesc: String?
 
   // 实现 Hashable
   func hash(into hasher: inout Hasher) {
@@ -128,6 +131,18 @@ class ActiveAPI {
 
   func getActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<ActiveInfo> {
     let urlString = "\(BASR_SERVE_URL)/active/list?page=\(page)&pageSize=\(pageSize)"
+
+    let request = try apiManager.createRequest(
+      url: urlString,
+      method: "GET",
+      body: nil
+    )
+
+    return try await apiManager.session.data(for: request)
+  }
+
+  func getTopActiveList(page: Int = 1, pageSize: Int = 5) async throws -> ListResponse<ActiveInfo> {
+    let urlString = "\(BASR_SERVE_URL)/active/tops?page=\(page)&pageSize=\(pageSize)"
 
     let request = try apiManager.createRequest(
       url: urlString,

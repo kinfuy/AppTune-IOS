@@ -1,5 +1,5 @@
 {
-  "originHash" : "f659e9e6d87012cbedfb75f65f5de99f385902921cf0e44e38d42fe4b5ef89d0",
+  "originHash" : "80c08dfef2bb44c685cdff9610ca0303c2d4807d702b630cb69719d64e0996aa",
   "pins" : [
     {
       "identity" : "kingfisher",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "33696a71dd4d71f1b0f781ade11a48ba5549581a",
         "version" : "8.0.3"
+      }
+    },
+    {
+      "identity" : "mantis",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/guoyingtao/Mantis",
+      "state" : {
+        "revision" : "d6880eb97267248f89e6cef2dd52785d50627639",
+        "version" : "1.9.0"
       }
     },
     {

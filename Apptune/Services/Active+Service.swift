@@ -11,6 +11,7 @@ enum ActiveType: CaseIterable {
   case my
   case all
   case joined
+  case top
 }
 
 class ActiveService: ObservableObject {
@@ -21,17 +22,18 @@ class ActiveService: ObservableObject {
   @Published var allActives: [ActiveInfo] = []
   @Published var joinedActives: [ActiveInfo] = []
   @Published var pendingActiveReviews: [ActiveInfo] = []
+  @Published var topActives: [ActiveInfo] = []
 
   // 加载状态
   @Published var isSelfLoading = false
   @Published var isAllLoading = false
   @Published var isJoinedLoading = false
-
+  @Published var isTopLoading = false
   // 总数统计
   @Published var totalSelfActive: Int = 0
   @Published var totalAllActive: Int = 0
   @Published var totalJoinedActive: Int = 0
-
+  @Published var totalTopActive: Int = 0
   // 使用 actor 来管理页码
   private actor PageManager {
     private var pages: [ActiveType: Int]
@@ -81,6 +83,12 @@ class ActiveService: ObservableObject {
         isLoading: .init(get: { self.isJoinedLoading }, set: { self.isJoinedLoading = $0 }),
         total: .init(get: { self.totalJoinedActive }, set: { self.totalJoinedActive = $0 })
       )
+    case .top:
+      return (
+        actives: .init(get: { self.topActives }, set: { self.topActives = $0 }),
+        isLoading: .init(get: { self.isTopLoading }, set: { self.isTopLoading = $0 }),
+        total: .init(get: { self.totalTopActive }, set: { self.totalTopActive = $0 })
+      )
     }
   }
 
@@ -121,6 +129,11 @@ class ActiveService: ObservableObject {
             page: currentPage,
             pageSize: pageSize
           )
+        case .top:
+         return try await ActiveAPI.shared.getTopActiveList(
+            page: currentPage,
+            pageSize: pageSize
+          )
         }
       }()
 
@@ -152,6 +165,11 @@ class ActiveService: ObservableObject {
   @MainActor
   func loadJoinedActives(refresh: Bool = false) async {
     await loadActives(type: .joined, refresh: refresh)
+  }
+
+  @MainActor
+  func loadTopActives(refresh: Bool = false) async {
+    await loadActives(type: .top, refresh: refresh)
   }
 
   @MainActor
