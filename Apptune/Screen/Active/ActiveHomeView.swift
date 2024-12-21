@@ -306,6 +306,7 @@ struct ActiveHomeView: View {
     .ignoresSafeArea()
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .padding(.bottom, 32)
+    .background(Color.gray.opacity(0.05))
   }
 }
 

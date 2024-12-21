@@ -89,6 +89,7 @@
 		F2B269FD2CB6D725008C46B8 /* LanchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269FC2CB6D725008C46B8 /* LanchView.swift */; };
 		F2B26A002CB6D764008C46B8 /* GudieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269FF2CB6D764008C46B8 /* GudieView.swift */; };
 		F2B34CCF2CF35EE1009023B8 /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B34CCE2CF35EE1009023B8 /* ReviewView.swift */; };
+		F2C5B4E82D16A31C007E3916 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4E72D16A31C007E3916 /* MessageView.swift */; };
 		F2D6AE242CD92C4800896DD9 /* Empty+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D6AE232CD92C4800896DD9 /* Empty+Component.swift */; };
 		F2EEE39D2D048AF600D7777C /* Codeable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE39C2D048AF600D7777C /* Codeable+Extension.swift */; };
 		F2EEE39F2D04909B00D7777C /* Bindding+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE39E2D04909B00D7777C /* Bindding+Extension.swift */; };
@@ -188,6 +189,7 @@
 		F2B269FC2CB6D725008C46B8 /* LanchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanchView.swift; sourceTree = "<group>"; };
 		F2B269FF2CB6D764008C46B8 /* GudieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GudieView.swift; sourceTree = "<group>"; };
 		F2B34CCE2CF35EE1009023B8 /* ReviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
+		F2C5B4E72D16A31C007E3916 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		F2D6AE232CD92C4800896DD9 /* Empty+Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Empty+Component.swift"; sourceTree = "<group>"; };
 		F2EEE39C2D048AF600D7777C /* Codeable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codeable+Extension.swift"; sourceTree = "<group>"; };
 		F2EEE39E2D04909B00D7777C /* Bindding+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bindding+Extension.swift"; sourceTree = "<group>"; };
@@ -465,6 +467,7 @@
 		F2B269732CB57252001230B4 /* Screen */ = {
 			isa = PBXGroup;
 			children = (
+				F2C5B4E62D16A306007E3916 /* Message */,
 				F21CFCFA2CD6911600CAB613 /* Coin */,
 				F26F15962CC5130500848715 /* Common */,
 				F27A94812CC00AD9002A2BEA /* Product */,
@@ -517,6 +520,14 @@
 				F2EEE3B02D088E2500D7777C /* ActiveDetailView.swift */,
 			);
 			path = Active;
+			sourceTree = "<group>";
+		};
+		F2C5B4E62D16A306007E3916 /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				F2C5B4E72D16A31C007E3916 /* MessageView.swift */,
+			);
+			path = Message;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -625,6 +636,7 @@
 				F21CFD122CD7247300CAB613 /* PublishProductViewModel.swift in Sources */,
 				F27C657D2CB16F1B0074B608 /* ApptuneApp.swift in Sources */,
 				F21CFD0D2CD7245700CAB613 /* PublishActivityView.swift in Sources */,
+				F2C5B4E82D16A31C007E3916 /* MessageView.swift in Sources */,
 				F2AE427E2CB96D6B009E72C3 /* Tap+Extension.swift in Sources */,
 				F20D194E2CD783F5006296D0 /* AppStoreSearch+Sheet.swift in Sources */,
 				F2EEE3A32D05A9B800D7777C /* PromotionView.swift in Sources */,

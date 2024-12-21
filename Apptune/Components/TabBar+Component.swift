@@ -61,7 +61,7 @@ struct MainTabbedView: View {
   @EnvironmentObject var router: Router
 
   private func handleTabSelection(_ item: TabbedItems) {
-      if !TabbedItems.isWhiteListTabbar(to: item) && !UserService.shared.isLogin {
+    if !TabbedItems.isWhiteListTabbar(to: item) && !UserService.shared.isLogin {
       withAnimation {
         router.navigate(to: .login)
       }
@@ -76,41 +76,36 @@ struct MainTabbedView: View {
   }
 
   var body: some View {
-    ZStack {
-      Color(hex: "#f4f4f4")
-        .ignoresSafeArea()
-
-      ZStack(alignment: .bottom) {
-        TabView(selection: $router.currentTab) {
-          ActiveHomeView()
-            .tag(TabbedItems.home)
-          ProductView()
-            .tag(TabbedItems.product)
-          UserView()
-            .tag(TabbedItems.person)
-          Text("消息")
-            .tag(TabbedItems.message)
-        }
-
-        HStack(spacing: 0) {
-          ForEach(TabbedItems.allCases, id: \.self) { item in
-            Button {
-              handleTabSelection(item)
-            } label: {
-              CustomTabItem(item: item, isSelected: router.currentTab == item)
-            }
-            .frame(maxWidth: .infinity)
-          }
-        }
-        .frame(height: 64)
-        .background(
-          Color.white
-            .shadow(color: Color.black.opacity(0.04), radius: 16, x: 0, y: -3)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .padding(.horizontal, 16)
-        .padding(.bottom, 8)
+    ZStack(alignment: .bottom) {
+      TabView(selection: $router.currentTab) {
+        ActiveHomeView()
+          .tag(TabbedItems.home)
+        ProductView()
+          .tag(TabbedItems.product)
+        UserView()
+          .tag(TabbedItems.person)
+        MessageView()
+          .tag(TabbedItems.message)
       }
+
+      HStack(spacing: 0) {
+        ForEach(TabbedItems.allCases, id: \.self) { item in
+          Button {
+            handleTabSelection(item)
+          } label: {
+            CustomTabItem(item: item, isSelected: router.currentTab == item)
+          }
+          .frame(maxWidth: .infinity)
+        }
+      }
+      .frame(height: 72)
+      .background(
+        Color.white
+          .shadow(color: Color.black.opacity(0.04), radius: 16, x: 0, y: -3)
+      )
+      .clipShape(RoundedRectangle(cornerRadius: 20))
+      .padding(.horizontal, 16)
+      .padding(.bottom, 4)
     }
   }
 }

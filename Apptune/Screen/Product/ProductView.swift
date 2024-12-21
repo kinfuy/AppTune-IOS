@@ -290,6 +290,7 @@ struct ProductView: View {
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .padding(.bottom, 32)
+    .background(Color.gray.opacity(0.05))
   }
 }
 

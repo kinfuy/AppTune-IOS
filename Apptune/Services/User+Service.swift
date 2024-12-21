@@ -8,7 +8,7 @@ import SwiftUI
 
 // 基本用户信息
 struct UserProfile {
-  var id:String
+  var id: String
   var email: String
   var role: String
   var name: String
@@ -55,6 +55,10 @@ class UserService: ObservableObject {
     static let loginEmail = "loginEmail"
     static let accessToken = "accessToken"
     static let refreshToken = "refreshToken"
+    static let userRole = "userRole"
+    static let userName = "userName"
+    static let userAvatar = "userAvatar"
+    static let userId = "userId"
   }
 
   // MARK: - Initialization
@@ -62,7 +66,7 @@ class UserService: ObservableObject {
   init() {
     // 初始化默认值
     profile = UserProfile(
-      id:"",
+      id: "",
       email: "",
       role: "",
       name: "--",
@@ -92,6 +96,10 @@ class UserService: ObservableObject {
       profile.email = loginEmail
       auth.accessToken = accessToken
       auth.refreshToken = refreshToken
+      profile.role = storage.string(forKey: StorageKeys.userRole) ?? ""
+      profile.name = storage.string(forKey: StorageKeys.userName) ?? "--"
+      profile.avatar = storage.string(forKey: StorageKeys.userAvatar) ?? "p_8"
+      profile.id = storage.string(forKey: StorageKeys.userId) ?? ""
     }
   }
 
@@ -102,7 +110,7 @@ class UserService: ObservableObject {
     isLogin = true
     updateProfile(
       UserProfile(
-        id:response.id,
+        id: response.id,
         email: response.email,
         role: response.role,
         name: response.name,
@@ -158,7 +166,7 @@ class UserService: ObservableObject {
         guard let self = self else { return }
         self.updateProfile(
           UserProfile(
-            id:info.id,
+            id: info.id,
             email: info.email,
             role: info.role,
             name: info.name,
@@ -184,7 +192,7 @@ class UserService: ObservableObject {
   private func clearAll() {
     // 清除用户资料
     profile = UserProfile(
-        id:"",
+      id: "",
       email: "",
       role: "",
       name: "--",
@@ -205,9 +213,19 @@ class UserService: ObservableObject {
 
     // 清除存储
     storage.removeObject(forKey: StorageKeys.loginEmail)
+
+    // 清除额外存储的用户信息
+    storage.removeObject(forKey: StorageKeys.userRole)
+    storage.removeObject(forKey: StorageKeys.userName)
+    storage.removeObject(forKey: StorageKeys.userAvatar)
+    storage.removeObject(forKey: StorageKeys.userId)
   }
 
   private func saveToStorage() {
     storage.set(profile.email, forKey: StorageKeys.loginEmail)
+    storage.set(profile.role, forKey: StorageKeys.userRole)
+    storage.set(profile.name, forKey: StorageKeys.userName)
+    storage.set(profile.avatar, forKey: StorageKeys.userAvatar)
+    storage.set(profile.id, forKey: StorageKeys.userId)
   }
 }
