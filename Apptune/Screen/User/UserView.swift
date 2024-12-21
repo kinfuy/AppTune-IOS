@@ -19,7 +19,6 @@ struct UserView: View {
                     Group {
 //                        SFSymbol.scan
                         Spacer()
-                        SFSymbol.bell
                         SFSymbol.set
                             .onTapGesture {
                                 router.navigate(to: .setting)
@@ -242,7 +241,6 @@ struct UserView: View {
                 Spacer()
             }
             .padding()
-            .background(Color(hex: "#f4f4f4"))
             VStack {
                 HStack {
                     Spacer()

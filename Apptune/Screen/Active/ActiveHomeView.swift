@@ -54,34 +54,36 @@ struct TopActiveCardView: View {
   var body: some View {
     VStack {
       VStack(alignment: .leading, spacing: 8) {
-          if let tag = active.recommendTag {
-              Text(tag)
-                .foregroundColor(.theme.opacity(0.68))
-                .font(.system(size: 14))
-                .fontWeight(.bold)
-          }
-       
+        if let tag = active.recommendTag {
+          Text(tag)
+            .foregroundColor(.theme.opacity(0.68))
+            .font(.system(size: 14))
+            .fontWeight(.bold)
+        }
+
         HStack {
-            Text(active.title)
+          Text(active.title)
             .font(.system(size: 20))
             .fontWeight(.bold)
           Spacer()
         }
-          if let desc = active.recommendDesc {
-              Text(desc)
-                .foregroundColor(.gray)
-          }
-        
+        if let desc = active.recommendDesc {
+          Text(desc)
+            .foregroundColor(.gray)
+        }
+
       }
       .padding(.top, 16)
-        ImgLoader(active.cover, contentMode: .fill )
-            .frame(maxHeight: 100)
-      .padding(.vertical)
-      .padding(.horizontal, 12)
-      .background(.white)
-      .cornerRadius(12)
+      ImgLoader(active.cover, contentMode: .fill)
+        .frame(maxHeight: 100)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .padding(.vertical)
+        .padding(.horizontal, 12)
+        .background(.white)
+        .cornerRadius(12)
     }
     .frame(maxWidth: .infinity)
+    .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 2)
   }
 }
 
@@ -146,7 +148,6 @@ struct ActiveHomeView: View {
     ZStack {
       RoundedRectangle(cornerRadius: 0, style: .continuous)
         .foregroundStyle(gradientSurface)
-        .background(.ultraThinMaterial)
         .mask(RoundedRectangle(cornerRadius: 0, style: .circular).foregroundColor(.black))
         .overlay {
           VStack {
@@ -175,7 +176,6 @@ struct ActiveHomeView: View {
       .frame(height: maxHeight)
       .padding(.bottom, 24)
       .edgesIgnoringSafeArea(.all)
-      .background(Color(hex: "#f4f4f4"))
       .opacity(1 - progress)
     }
   }
@@ -201,31 +201,46 @@ struct ActiveHomeView: View {
               ForEach(activeService.topActives, id: \.id) { active in
                 TopActiveCardView(active: active)
                   .frame(width: cardWidth)
-                  .onTapGesture {
-                    withAnimation {
-                      router.navigate(to: .activeDetail(active: active))
-                    }
-                  }
               }
             }
             .frame(width: geometry.size.width, alignment: .leading)
             .offset(x: offset)
             .gesture(
-              DragGesture()
+              DragGesture(minimumDistance: 5)
                 .onChanged { value in
-                  offset = -CGFloat(currentIndex) * (cardWidth + spacing) + value.translation.width
+                  let translation = value.translation.width
+                  let baseOffset = -CGFloat(currentIndex) * (cardWidth + spacing)
+                  let dampingFactor: CGFloat = 0.8
+                  let dampedTranslation = translation * dampingFactor
+                  offset = baseOffset + dampedTranslation + 24
                 }
                 .onEnded { value in
-                  let threshold = cardWidth / 3
-                  if -value.predictedEndTranslation.width > threshold {
-                    currentIndex = min(currentIndex + 1, 5 - 1)
-                  } else if value.predictedEndTranslation.width > threshold {
-                    currentIndex = max(currentIndex - 1, 0)
+                  let velocity = value.predictedEndTranslation.width - value.translation.width
+                  let threshold = cardWidth / 4
+
+                  if abs(velocity) > 100 || abs(value.translation.width) > threshold {
+                    if value.translation.width > 0 {
+                      currentIndex = max(currentIndex - 1, 0)
+                    } else {
+                      currentIndex = min(currentIndex + 1, activeService.topActives.count - 1)
+                    }
                   }
-                  withAnimation {
+
+                  withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                     offset = -CGFloat(currentIndex) * (cardWidth + spacing) + 24
                   }
                 }
+                .simultaneously(
+                  with:
+                    TapGesture()
+                    .onEnded {
+                      if let active = activeService.topActives[safe: currentIndex] {
+                        withAnimation {
+                          router.navigate(to: .activeDetail(active: active))
+                        }
+                      }
+                    }
+                )
             )
             .onAppear {
               offset = -CGFloat(currentIndex) * (cardWidth + spacing) + 24
@@ -289,9 +304,14 @@ struct ActiveHomeView: View {
     .collapseProgress($progress)
     .hideScrollIndicators()
     .ignoresSafeArea()
-    .background(Color(hex: "#f4f4f4"))
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .padding(.bottom, 32)
+  }
+}
+
+extension Collection {
+  subscript(safe index: Index) -> Element? {
+    return indices.contains(index) ? self[index] : nil
   }
 }
 

@@ -62,8 +62,17 @@ struct ImageShareSheet: View {
 
   var body: some View {
     VStack {
-      HStack {
-        Spacer()
+      // 预览图片卡片
+      Image(uiImage: shareImage)
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+        .frame(maxHeight: .infinity)
+        .clipped()
+        .padding(.horizontal)
+
+      Spacer()
+
+      HStack(spacing: 20) {
         // 分享按钮
         ShareLink(
           item: Image(uiImage: shareImage),
@@ -76,29 +85,9 @@ struct ImageShareSheet: View {
             Image(systemName: "square.and.arrow.up")
             Text("分享")
           }
-        }
-      }
-      .padding(.horizontal)
-      // 预览图片卡片
-      Image(uiImage: shareImage)
-        .resizable()
-        .aspectRatio(contentMode: .fit)
-        .frame(maxHeight: .infinity)
-        .clipped()
-        .padding(.horizontal)
-
-      Spacer()
-
-      // 添加操作按钮组
-      HStack(spacing: 20) {
-        // 保存到相册按钮
-        Button(action: saveImageToAlbum) {
-          HStack {
-            Image(systemName: "square.and.arrow.down")
-            Text("保存到相册")
-          }
           .buttonStyle(.black)
           .frame(height: 32)
+
         }
       }
       .padding(.horizontal)

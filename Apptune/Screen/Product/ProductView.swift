@@ -214,8 +214,6 @@ struct ProductView: View {
 
   var body: some View {
     ZStack {
-      Color(hex: "#f4f4f4").ignoresSafeArea()
-
       if !router.isShowModules {
         VStack(alignment: .leading, spacing: 24) {
           HStack {
@@ -292,15 +290,6 @@ struct ProductView: View {
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .padding(.bottom, 32)
-    .onAppear {
-      Task {
-        do {
-          try await userService.refreshUserInfo()
-        } catch {
-          notice.openNotice(open: .toast(error.localizedDescription))
-        }
-      }
-    }
   }
 }
 

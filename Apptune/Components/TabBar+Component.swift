@@ -12,11 +12,9 @@ enum TabbedItems: Int, CaseIterable {
   case product = 1
   case message = 2
   case person = 3
- 
 
   static func isWhiteListTabbar(to: TabbedItems) -> Bool {
-    let authRoutes: [TabbedItems] = [.home]
-    return authRoutes.contains(where: { $0 == to })
+    return !to.requiresAuth
   }
 
   var title: String {
@@ -29,7 +27,6 @@ enum TabbedItems: Int, CaseIterable {
       return "消息"
     case .person:
       return "我的"
-   
     }
   }
 
@@ -42,7 +39,20 @@ enum TabbedItems: Int, CaseIterable {
     case .person:
       return SFSymbol.person
     case .message:
-        return SFSymbol.message
+      return SFSymbol.message
+    }
+  }
+
+  var requiresAuth: Bool {
+    switch self {
+    case .home:
+      return false
+    case .product:
+      return true
+    case .message:
+      return true
+    case .person:
+      return true
     }
   }
 }
@@ -50,64 +60,109 @@ enum TabbedItems: Int, CaseIterable {
 struct MainTabbedView: View {
   @EnvironmentObject var router: Router
 
-  var body: some View {
-    ZStack(alignment: .bottom) {
-      TabView(selection: $router.currentTab) {
-        ActiveHomeView()
-          .tag(TabbedItems.home)
-        ProductView()
-          .tag(TabbedItems.product)
-        UserView()
-          .tag(TabbedItems.person)
-        Text("消息")
-          .tag(TabbedItems.message)
+  private func handleTabSelection(_ item: TabbedItems) {
+      if !TabbedItems.isWhiteListTabbar(to: item) && !UserService.shared.isLogin {
+      withAnimation {
+        router.navigate(to: .login)
       }
+      return
+    }
 
-      ZStack {
-        HStack {
+    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+      Tap.shared.play(.light)
+      router.isShowModules = false
+      router.currentTab = item
+    }
+  }
+
+  var body: some View {
+    ZStack {
+      Color(hex: "#f4f4f4")
+        .ignoresSafeArea()
+
+      ZStack(alignment: .bottom) {
+        TabView(selection: $router.currentTab) {
+          ActiveHomeView()
+            .tag(TabbedItems.home)
+          ProductView()
+            .tag(TabbedItems.product)
+          UserView()
+            .tag(TabbedItems.person)
+          Text("消息")
+            .tag(TabbedItems.message)
+        }
+
+        HStack(spacing: 0) {
           ForEach(TabbedItems.allCases, id: \.self) { item in
             Button {
-              router.isShowModules = false
-              router.currentTab = item
-
+              handleTabSelection(item)
             } label: {
-              CustomTabItem(
-                imageName: item.iconName, title: item.title,
-                isActive: router.currentTab == item)
+              CustomTabItem(item: item, isSelected: router.currentTab == item)
             }
+            .frame(maxWidth: .infinity)
           }
         }
-        .padding()
+        .frame(height: 64)
+        .background(
+          Color.white
+            .shadow(color: Color.black.opacity(0.04), radius: 16, x: 0, y: -3)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .padding(.horizontal, 16)
+        .padding(.bottom, 8)
       }
-      .frame(height: 70)
-      .background(Color.gray.opacity(0.1))
-      .cornerRadius(35)
-      .padding(.horizontal)
     }
   }
 }
 
-extension MainTabbedView {
-  func CustomTabItem(imageName: SFSymbol, title: String, isActive: Bool) -> some View {
-    HStack(spacing: 10) {
-      Spacer()
-      imageName
-        .resizable()
-        .renderingMode(.template)
-        .fontWeight(isActive ? .heavy : .medium)
-        .foregroundColor(isActive ? Color(hex: "#666666") : .gray)
-        .frame(width: 20, height: 20)
-      if isActive {
-        Text(title)
-          .font(.system(size: 14))
-          .fontWeight(isActive ? .heavy : .medium)
-          .foregroundColor(isActive ? Color(hex: "#666666") : .gray)
+struct CustomTabItem: View {
+  let item: TabbedItems
+  let isSelected: Bool
+
+  @State private var iconScale: CGFloat = 1
+  @State private var yOffset: CGFloat = 0
+
+  var body: some View {
+    VStack(spacing: 6) {
+      // 图标容器
+      ZStack {
+        if isSelected {
+          Circle()
+            .fill(Color.theme.opacity(0.12))
+            .frame(width: 40, height: 40)
+            .matchedGeometryEffect(id: "background", in: namespace)
+        }
+
+        item.iconName
+          .resizable()
+          .renderingMode(.template)
+          .frame(width: 22, height: 22)
+          .foregroundColor(isSelected ? Color.theme : .gray.opacity(0.65))
+          .scaleEffect(iconScale)
+          .offset(y: yOffset)
       }
-      Spacer()
+
+      Text(item.title)
+        .font(.system(size: 11, weight: isSelected ? .medium : .regular))
+        .foregroundColor(isSelected ? Color.theme : .gray.opacity(0.65))
     }
-    .frame(width: isActive ? nil : 80)
-    .frame(height: 54)
-    .background(isActive ? Color.gray.opacity(0.28) : .clear)
-    .cornerRadius(30)
+    .frame(maxWidth: .infinity)
+    .frame(height: 56)
+    .contentShape(Rectangle())
+    .onChange(of: isSelected) { newValue in
+      if newValue {
+        withAnimation(.spring(response: 0.2, dampingFraction: 0.6)) {
+          iconScale = 1.2
+          yOffset = -2
+        }
+
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.6).delay(0.1)) {
+          iconScale = 1
+          yOffset = 0
+        }
+      }
+    }
   }
+
+  @Namespace private var namespace
 }
