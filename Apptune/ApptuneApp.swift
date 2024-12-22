@@ -18,6 +18,7 @@ struct ApptuneApp: App {
   var body: some Scene {
     WindowGroup {
       ScreenManage()
+        .defaultKeyboard(.default)
     }
   }
 }

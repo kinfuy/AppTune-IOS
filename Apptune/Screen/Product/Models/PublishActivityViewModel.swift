@@ -1,122 +1,209 @@
 import Foundation
 
+struct ProductBasicInfo {
+    let id: String
+    let name: String
+    let icon: String
+}
+
 @MainActor
 final class PublishActivityViewModel: ObservableObject {
-  @Published var product: ProductInfo?
-  // 基本信息
-  @Published var title: String = ""
-  @Published var description: String = ""
-  @Published var cover: String?
-  @Published var tags: [TagEntity] = []
-  @Published var images: [String] = []
+    @Published var isEditMode: Bool = false
+    @Published var editingActivityId: String?
 
-  // 时间设置
-  @Published var startAt: Date = Date()
-  @Published var endAt: Date?
+    @Published var product: ProductBasicInfo?
+    // 基本信息
+    @Published var title: String = ""
+    @Published var description: String = ""
+    @Published var cover: String?
+    @Published var tags: [TagEntity] = []
+    @Published var images: [String] = []
 
-  // 状态
-  @Published var isLoading: Bool = false
+    // 时间设置
+    @Published var startAt: Date = Date()
+    @Published var endAt: Date?
 
-  // 高级配置
-  @Published var limit: Int?  // 人数限制
-  @Published var reward: RewardType = .selfManaged  // 奖励说明
-  @Published var isAutoEnd: Bool = false {
-    didSet {
-      if isAutoEnd && endAt == nil {
-        endAt = Calendar.current.date(byAdding: .hour, value: 24, to: Date())
-      }
-    }
-  }
+    // 状态
+    @Published var isLoading: Bool = false
 
-  // 模板配置
-  @Published var isTemplate: Bool = false  // 是否存为模板
+    // 高级配置
+    @Published var limit: Int? // 人数限制
 
-  @Published var selectedRewardType: RewardType = .selfManaged
-  @Published var pointsAmount: Int = 0
+    @Published var rewardType: RewardType = .selfManaged // 奖励类型
+    @Published var rewardDesc: String = "" // 奖励说明
+    @Published var points: Int = 0
+    @Published var promoCodes: [String] = []
 
-  // 移除 isValid 属性,改用 checkValid 函数
-  func checkValid() -> Toast? {
-    if product == nil {
-      return Toast(msg: "请选择产品")
-    }
+    // 添加步骤状态
+    @Published var step: PublishStep = .selectProduct
+    // 添加模式状态
+    @Published var publishMode: PublishMode = .quick
 
-    if images.isEmpty {
-      return Toast(msg: "请上传活动封面")
+    @Published var isAutoEnd: Bool = false {
+        didSet {
+            if isAutoEnd && endAt == nil {
+                endAt = Calendar.current.date(byAdding: .hour, value: 24, to: Date())
+            }
+        }
     }
 
-    if title.isEmpty {
-      return Toast(msg: "请输入活动标题")
+    // 模板配置
+    @Published var isTemplate: Bool = false // 是否存为模板
+
+    @Published var selectedRewardType: RewardType = .selfManaged
+    @Published var pointsAmount: Int = 0
+
+    // 添加原始数据属性
+    private var originalActive: ActiveInfo?
+
+    // 移除 isValid 属性,改用 checkValid 函数
+    func checkValid() -> Toast? {
+        if !isEditMode && product == nil {
+            return Toast(msg: "请选择产品")
+        }
+
+        if images.isEmpty {
+            return Toast(msg: "请上传活动封面")
+        }
+
+        if title.isEmpty {
+            return Toast(msg: "请输入活动标题")
+        }
+
+        if description.isEmpty {
+            return Toast(msg: "请输入活动描述")
+        }
+        return nil
     }
 
-    if description.isEmpty {
-      return Toast(msg: "请输入活动描述")
+    var activeInfo: ActiveInfo {
+        return ActiveInfo(
+            id: editingActivityId ?? "",
+            title: title,
+            description: description,
+            cover: (images.first ?? cover) ?? "",
+            startAt: startAt,
+            endAt: endAt,
+            limit: limit,
+            rewardType: rewardType,
+            joinCount: nil,
+            likeCount: nil,
+            status: 0,
+            createTime: Date(),
+            productId: product?.id ?? "",
+            productName: product?.name ?? "",
+            productLogo: product?.icon ?? "",
+            images: images,
+            tags: tags,
+            link: nil,
+            reward: rewardDesc,
+            rewardPoints: points,
+            rewardPromoCodes: promoCodes,
+            userId: "",
+            isTop: false,
+            recommendTag: nil,
+            recommendDesc: nil,
+            pubMode: publishMode
+        )
     }
-    return nil
-  }
 
-  var activeInfo: ActiveInfo {
-    return ActiveInfo(
-      id: "",
-      title: title,
-      description: description,
-      cover: (images.first ?? cover) ?? "",
-      startAt: startAt,
-      endAt: endAt,
-      limit: limit,
-      rewardType: reward,
-      joinCount: nil,
-      likeCount: nil,
-      status: 0,
-      createTime: Date(),
-      productId: product!.id,
-      productName: product!.name,
-      productLogo: product!.icon,
-      images: images,
-      tags: tags,
-      link: nil,
-      reward: nil,
-      userId: "",
-      isTop: false,
-      recommendTag: nil,
-      recommendDesc: nil
-    )
-  }
+    func publishOrUpdateActivity(success: (() -> Void)?) async {
+        isLoading = true
+        defer { isLoading = false }
 
-  func publishActivity() async {
-    isLoading = true
-    defer { isLoading = false }
-    do {
-      let params = activeInfo
-      let _ = try await ActiveAPI.shared.createActive(params, isTemplate)
-      reset()
-    } catch {
-      print(error.localizedDescription)
+        do {
+            let params = activeInfo
+            if isEditMode {
+                let _ = try await ActiveAPI.shared.updateActive(params)
+            } else {
+                let _ = try await ActiveAPI.shared.createActive(params, isTemplate)
+            }
+            reset()
+            if let success = success {
+                success()
+            }
+           
+        } catch {
+            print(error.localizedDescription)
+        }
     }
-  }
 
-  // 重置表单
-  func reset() {
-    product = nil
-    title = ""
-    description = ""
-    cover = nil
-    tags = []
-    startAt = Date()
-    endAt = nil
-    limit = nil
-    reward = .selfManaged
-    isAutoEnd = false
-  }
+    // 重置表单
+    func reset() {
+        originalActive = nil
+        isEditMode = false
+        editingActivityId = nil
+        product = nil
+        title = ""
+        description = ""
+        cover = nil
+        tags = []
+        images = []
+        startAt = Date()
+        endAt = nil
+        limit = nil
+        rewardType = .selfManaged
+        rewardDesc = ""
+        points = 0
+        promoCodes = []
+        isAutoEnd = false
+    }
 
-  // 从模板初始化表单
-  func initFromTemplate(_ template: ActiveTemplateInfo) {
-    title = template.title
-    description = template.description ?? ""
-    cover = template.cover
-    tags = template.tags
-    images = template.images
-    reward = template.rewardType
-    limit = template.limit
-    isAutoEnd = false
-  }
+    // 从模板初始化表单
+    func initFromTemplate(_ template: ActiveTemplateInfo) {
+        title = template.title
+        description = template.description ?? ""
+        cover = template.cover
+        tags = template.tags
+        images = template.images
+        rewardType = template.rewardType
+        rewardDesc = template.reward ?? ""
+        limit = template.limit
+        isAutoEnd = false
+    }
+
+    func editActivity(active: ActiveInfo) {
+        isEditMode = true
+        editingActivityId = active.id
+        // 保存原始数据
+        originalActive = active
+
+        // 如果有产品信息,设置基本产品信息
+        if !active.productId.isEmpty {
+            product = ProductBasicInfo(
+                id: active.productId,
+                name: active.productName,
+                icon: active.productLogo
+            )
+            step = .editActivity
+        }
+
+        title = active.title
+        description = active.description
+        cover = active.cover
+        tags = active.tags
+        images = active.images
+        startAt = active.startAt
+        endAt = active.endAt
+        limit = active.limit
+        publishMode = active.pubMode
+        rewardType = active.rewardType
+        rewardDesc = active.reward ?? ""
+        points = active.rewardPoints ?? 0
+        promoCodes = active.rewardPromoCodes ?? []
+    }
+
+    func hasUnsavedChanges() -> Bool {
+        // 如果是编辑模式,对比原始数据和当前数据
+        if let originalActive = originalActive {
+            return title != originalActive.title || description != originalActive.description
+                || images != originalActive.images || rewardDesc != (originalActive.reward ?? "")
+                || limit != originalActive.limit || startAt != originalActive.startAt
+                || endAt != originalActive.endAt || publishMode != originalActive.pubMode
+        }
+
+        // 如果是新建模式,检查是否填写了内容
+        return !title.isEmpty || !description.isEmpty || !images.isEmpty || !rewardDesc.isEmpty
+            || limit != nil || isAutoEnd
+    }
 }

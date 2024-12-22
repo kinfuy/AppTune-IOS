@@ -17,7 +17,7 @@ struct CreatedByWatermarkModifier: ViewModifier {
 
       // 水印部分使用半透明背景提升视觉效果
       HStack(spacing: 6) {
-        Text("Created By")
+        Text("查看详情去")
           .font(.system(size: 12, weight: .regular))
           .foregroundColor(.gray.opacity(0.8))
 
@@ -42,6 +42,19 @@ struct CreatedByWatermarkModifier: ViewModifier {
   }
 }
 
+// 添加必填标记的 ViewModifier
+struct RequiredFieldModifier: ViewModifier {
+  func body(content: Content) -> some View {
+    HStack(spacing: 4) {
+      content
+
+      Text("*")
+        .foregroundColor(.red)
+        .font(.system(size: 14, weight: .bold))
+    }
+  }
+}
+
 // View 的扩展，添加水印方法
 extension View {
   func createdBy(
@@ -51,6 +64,11 @@ extension View {
       CreatedByWatermarkModifier(
         logo: logo ?? "logo"
       ))
+  }
+
+  /// 添加必填标记（小红心）
+  func required() -> some View {
+    modifier(RequiredFieldModifier())
   }
 }
 
@@ -79,8 +97,31 @@ struct WatermarkExample: View {
   }
 }
 
-#Preview {
-  WatermarkExample()
+// 更新预览示例，添加必填字段的演示
+struct RequiredFieldExample: View {
+  var body: some View {
+    VStack(spacing: 20) {
+      // 原有的 WatermarkExample 内容...
+
+      // 添加必填字段示例
+      TextField("用户名", text: .constant(""))
+        .textFieldStyle(.roundedBorder)
+        .required()
+        .frame(width: 200)
+
+      Text("手机号码")
+        .required()
+    }
     .padding()
-    .background(Color.gray.opacity(0.1))
+  }
+}
+
+#Preview {
+  VStack(spacing: 30) {
+    WatermarkExample()
+      .padding()
+      .background(Color.gray.opacity(0.1))
+
+    RequiredFieldExample()
+  }
 }

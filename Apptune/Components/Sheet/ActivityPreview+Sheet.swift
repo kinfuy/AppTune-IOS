@@ -77,7 +77,8 @@ struct ActivityPreviewSheet: View {
             Spacer()
           }
 
-          RewardContentView(rewardType: active.rewardType, reward: active.reward)
+          RewardContentView(
+            rewardType: active.rewardType, reward: active.reward, rewardPoints: active.rewardPoints)
         }
         .padding()
 
@@ -106,29 +107,55 @@ struct ActivityPreviewSheet: View {
 struct RewardContentView: View {
   let rewardType: RewardType
   let reward: String?
+  let rewardPoints: Int?
 
   var body: some View {
     HStack(spacing: 16) {
-      Image(systemName: rewardType.iconName)
-        .font(.system(size: 40))
-        .foregroundColor(rewardType.themeColor)
-
-      VStack(alignment: .leading, spacing: 8) {
-        Text(rewardType.description)
-          .font(.system(size: 14))
-          .foregroundColor(.secondary)
-
-        if let reward = reward {
-          Text(reward)
-            .font(.system(size: 16, weight: .bold))
+      // 左侧图标区域
+      Circle()
+        .fill(rewardType.themeColor.opacity(0.1))
+        .frame(width: 44, height: 44)
+        .overlay(
+          Image(systemName: rewardType.iconName)
+            .font(.system(size: 20))
             .foregroundColor(rewardType.themeColor)
+        )
+
+      // 右侧内容区域
+      VStack(alignment: .leading, spacing: 6) {
+        if case .points = rewardType, let points = rewardPoints {
+          HStack(alignment: .firstTextBaseline, spacing: 4) {
+            Text("\(points)")
+              .font(.system(size: 28, weight: .semibold))
+              .foregroundColor(rewardType.themeColor)
+            Text("积分")
+              .font(.system(size: 15))
+              .foregroundColor(rewardType.themeColor.opacity(0.8))
+          }
         }
+
+        if let reward = reward, reward != "" {
+          Text(reward)
+            .font(.system(size: 15))
+            .foregroundColor(.primary)
+            .lineLimit(2)
+        }
+
+        Text(rewardType.description)
+          .font(.system(size: 13))
+          .foregroundColor(.secondary)
       }
-      Spacer()
+
+      Spacer(minLength: 0)
     }
-    .padding()
-    .background(rewardType.themeColor.opacity(0.1))
-    .cornerRadius(all: 12)
+    .frame(maxWidth: .infinity)
+    .padding(.vertical, 16)
+    .padding(.horizontal, 16)
+    .background(
+      RoundedRectangle(cornerRadius: 12)
+        .fill(Color(UIColor.systemBackground))
+        .shadow(color: Color(.systemGray4).opacity(0.5), radius: 8, x: 0, y: 2)
+    )
   }
 }
 
@@ -136,11 +163,11 @@ extension RewardType {
   var iconName: String {
     switch self {
     case .points:
-      return "dollarsign.circle.fill"
+      return "star.fill"  // 更改为星星图标
     case .promoCode:
       return "ticket.fill"
     case .selfManaged:
-      return "gift.circle.fill"
+      return "gift.fill"  // 移除 circle 后缀
     }
   }
 
@@ -149,9 +176,9 @@ extension RewardType {
     case .points:
       return .orange
     case .promoCode:
-      return .blue
+      return Color(hex: "#007AFF")  // iOS 蓝色
     case .selfManaged:
-      return .gray
+      return Color(hex: "#FF2D55")  // iOS 粉色
     }
   }
 
@@ -162,52 +189,7 @@ extension RewardType {
     case .promoCode:
       return "完成活动可获得兑换码"
     case .selfManaged:
-      return "请悉知该活动奖励由发布者自行管理 发放"
+      return "请悉知该活动奖励由发布者自行管理发放"
     }
   }
-}
-
-#Preview {
-  ActivityPreviewSheet(
-    active: ActiveInfo(
-      id: "preview-1",
-      title: "新人专享活动",
-      description: """
-        欢迎加入我们!参与活动即可获得积分奖励。活动期间完成任务最高可得1000积分,可用于兑换商城礼品。
-
-        活动规则:
-        1. 首次登录奖励100积分
-        2. 每日签到奖励10积分
-        3. 邀请好友奖励50积分/人
-        4. 完成新手任务奖励200积分
-        """,
-      cover: "https://picsum.photos/800/400",
-      startAt: Date(),
-      endAt: Date().addingTimeInterval(7 * 24 * 60 * 60),
-      limit: 1000,
-      rewardType: .points,
-      joinCount: 128,
-      likeCount: 56,
-      status: 1,
-      createTime: Date(),
-      productId: "product-1",
-      productName: "示例产品",
-      productLogo: "https://picsum.photos/100/100",
-      images: [
-        "https://picsum.photos/400/600",
-        "https://picsum.photos/400/600",
-        "https://picsum.photos/400/600",
-      ],
-      tags: [
-        TagEntity(name: "新人专享", color: .theme),
-        TagEntity(name: "限时活动", color: .orange),
-      ],
-      link: nil,
-      reward: "1000",
-      userId: "",
-      isTop: false,
-      recommendTag: nil,
-      recommendDesc: nil
-    )
-  )
 }

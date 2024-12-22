@@ -346,11 +346,14 @@ private struct ConfigItemContainer: View {
                         TagEntity(name: "活动", color: .orange),
                     ],
                     link: nil,
-                    reward: "1000积分",
+                    reward: "完成活动即可获得积分奖励",
+                    rewardPoints: 1000,
+                    rewardPromoCodes: nil,
                     userId: "1",
                     isTop: false,
                     recommendTag: nil,
-                    recommendDesc: nil
+                    recommendDesc: nil,
+                    pubMode: .pro
                 )
             )
             .environmentObject(SheetManager())

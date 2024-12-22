@@ -8,226 +8,319 @@
 import SwiftUI
 
 struct ActiveDetailView: View {
-    var active: ActiveInfo
-    @EnvironmentObject var activeService: ActiveService
-    @EnvironmentObject var userService: UserService
-    @EnvironmentObject var router: Router
-    @EnvironmentObject var sheet: SheetManager
+  var active: ActiveInfo
+  @EnvironmentObject var activeService: ActiveService
+  @EnvironmentObject var productService: ProductService
+  @EnvironmentObject var userService: UserService
+  @EnvironmentObject var router: Router
+  @EnvironmentObject var sheet: SheetManager
+  @EnvironmentObject var notice: NoticeManager
+  @State private var showDeleteAlert = false
 
-    private var isSelfActive: Bool {
-        if !userService.isLogin {
-            return false
-        }
-        return active.userId == userService.profile.id
+  private var isSelfActive: Bool {
+    if !userService.isLogin {
+      return false
     }
+    return active.userId == userService.profile.id
+  }
 
-    // 头部视图
-    private var HeaderView: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // 活动封面图 - 使用 images 数组中的图片
-            if !active.images.isEmpty {
-                TabView {
-                    ForEach(active.images, id: \.self) { imageUrl in
-                        ImgLoader(imageUrl)
-                            .frame(height: 400)
-                            .clipped()
-                    }
-                }
-                .frame(height: 400)
-                .tabViewStyle(PageTabViewStyle())
-            } else {
-                ImgLoader(active.cover)
-                    .frame(height: 400)
-                    .clipped()
-            }
+  private var isAdmin: Bool {
+    return userService.isAdmin
+  }
 
-            // 活动标题和基本信息
-            VStack(alignment: .leading, spacing: 16) {
-                Text(active.title)
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .lineSpacing(4)
-
-                HStack(spacing: 12) {
-                    ImgLoader(active.productLogo)
-                        .frame(width: 38, height: 38)
-                        .cornerRadius(all: 8)
-
-                    Text(active.productName)
-                        .font(.system(size: 15, weight: .medium))
-                        .foregroundColor(.primary)
-                }
-
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "clock")
-                            .font(.system(size: 14))
-                            .foregroundColor(.blue)
-                        Text("\(active.startAt.formatted())")
-                            .font(.system(size: 14))
-                            .foregroundColor(.secondary)
-                        if let endAt = active.endAt {
-                            Text("-\(endAt.formatted())")
-                                .font(.system(size: 14))
-                                .foregroundColor(.secondary)
-                        }
-                    }
-
-                    if let limit = active.limit  {
-                        HStack(spacing: 6) {
-                            Image(systemName: "person")
-                                .font(.system(size: 14))
-                                .foregroundColor(.blue)
-                            Text("\(limit) 人数限制")
-                                .font(.system(size: 14))
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                }
-                .padding(.top, 4)
-            }
-            .padding(.horizontal)
+  // 头部视图
+  private var HeaderView: some View {
+    VStack(alignment: .leading, spacing: 12) {
+      // 活动封面图 - 使用 images 数组中的图片
+      if !active.images.isEmpty {
+        TabView {
+          ForEach(active.images, id: \.self) { imageUrl in
+            ImgLoader(imageUrl)
+              .frame(height: 400)
+              .clipped()
+          }
         }
-    }
+        .frame(height: 400)
+        .tabViewStyle(PageTabViewStyle())
+      } else {
+        ImgLoader(active.cover)
+          .frame(height: 400)
+          .clipped()
+      }
 
-    // 奖励板块
-    private var RewardView: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Text("活动奖励")
-                    .font(.headline)
-                    .fontWeight(.bold)
-                Spacer()
-            }
-            RewardContentView(rewardType: active.rewardType, reward: active.reward)
+      // 活动标题和基本信息
+      VStack(alignment: .leading, spacing: 16) {
+        Text(active.title)
+          .font(.title2)
+          .fontWeight(.bold)
+          .lineSpacing(4)
+
+        HStack(spacing: 12) {
+          ImgLoader(active.productLogo)
+            .frame(width: 38, height: 38)
+            .cornerRadius(all: 8)
+
+          Text(active.productName)
+            .font(.system(size: 15, weight: .medium))
+            .foregroundColor(.primary)
         }
-        .padding()
-    }
 
-    // 活动详情
-    private var ContentView: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Text("活动详情")
-                    .font(.headline)
-                    .fontWeight(.bold)
-                Spacer()
+        VStack(alignment: .leading, spacing: 10) {
+          HStack(spacing: 6) {
+            Image(systemName: "clock")
+              .font(.system(size: 14))
+              .foregroundColor(.blue)
+            Text("\(active.startAt.formatted())")
+              .font(.system(size: 14))
+              .foregroundColor(.secondary)
+            if let endAt = active.endAt {
+              Text("-\(endAt.formatted())")
+                .font(.system(size: 14))
+                .foregroundColor(.secondary)
             }
+          }
 
-            HStack {
-                Text(active.description)
-                    .font(.body)
-                    .foregroundColor(.secondary)
-                Spacer()
+          if let limit = active.limit {
+            HStack(spacing: 6) {
+              Image(systemName: "person")
+                .font(.system(size: 14))
+                .foregroundColor(.blue)
+              Text("\(limit) 人数限制")
+                .font(.system(size: 14))
+                .foregroundColor(.secondary)
             }
+          }
         }
-        .padding()
+        .padding(.top, 4)
+      }
+      .padding(.horizontal)
     }
+  }
 
-    // 底部操作栏
-    private var ShareBar: some View {
+  // 奖励板块
+  private var RewardView: some View {
+    VStack(alignment: .leading, spacing: 16) {
+      HStack {
+        Text("活动奖励")
+          .font(.headline)
+          .fontWeight(.bold)
+        Spacer()
+      }
+      RewardContentView(
+        rewardType: active.rewardType, reward: active.reward, rewardPoints: active.rewardPoints)
+    }
+    .padding()
+  }
+
+  // 活动详情
+  private var ContentView: some View {
+    VStack(alignment: .leading, spacing: 16) {
+      HStack {
+        Text("活动详情")
+          .font(.headline)
+          .fontWeight(.bold)
+        Spacer()
+      }
+
+      HStack {
+        Text(active.description)
+          .font(.body)
+          .foregroundColor(.secondary)
+        Spacer()
+      }
+    }
+    .padding()
+  }
+
+  // 底部操作栏
+  private var ShareBar: some View {
+    VStack {
+      Button(action: {
+        sheet.show(.activeShare(active: active))
+      }) {
+        Text("分享活动")
+          .primaryButton()
+          .frame(height: 48)
+      }
+    }
+    .padding()
+    .background(Color.white)
+  }
+
+  private var JoinBar: some View {
+    VStack {
+      Button(action: {
+      }) {
+        Text("立即报名")
+          .primaryButton()
+          .frame(height: 48)
+      }
+    }
+    .padding()
+    .background(Color.white)
+  }
+
+  var body: some View {
+    ZStack {
+      ScrollView {
         VStack {
-            Button(action: {
-                sheet.show(.activeShare(active: active))
-            }) {
-                Text("分享活动")
-                    .primaryButton()
-                    .frame(height: 48)
-            }
+          HeaderView
+          RewardView
+          ContentView
+          Spacer(minLength: 80)  // 为底部栏留出空间
         }
-        .padding()
-        .background(Color.white)
-    }
-    
-    private var JoinBar: some View {
+      }
+      if isSelfActive {
         VStack {
-            Button(action: {
-                
-            }) {
-                Text("立即报名")
-                    .primaryButton()
-                    .frame(height: 48)
-            }
+          Spacer()
+          ShareBar
         }
-        .padding()
-        .background(Color.white)
+      } else {
+        VStack {
+          Spacer()
+          JoinBar
+        }
+      }
     }
-   
-
-    var body: some View {
-        ZStack {
-            ScrollView {
-                VStack {
-                    HeaderView
-                    RewardView
-                    ContentView
-                    Spacer(minLength: 80) // 为底部栏留出空间
-                }
-            }
+    .background(Color(hex: "#f4f4f4"))
+    .navigationBarBackButtonHidden()
+    .navigationTitle(active.title)
+    .navigationBarTitleDisplayMode(.inline)
+    .navigationBarItems(
+      leading: Button(action: { router.back() }) {
+        Label("返回", systemImage: "chevron.left")
+          .foregroundStyle(Color(hex: "#333333"))
+      },
+      // 更多操作
+      trailing: Group {
+        if isSelfActive || isAdmin {
+          Menu {
+            // 活动创建者可以编辑和结束活动
             if isSelfActive {
-                VStack {
-                    Spacer()
-                    ShareBar
+              Button(action: {
+                Task {
+                  await productService.load()
                 }
-            } else {
-                VStack {
-                    Spacer()
-                    JoinBar
-                }
-            }
-        }
-        .background(Color(hex: "#f4f4f4"))
-        .navigationBarBackButtonHidden()
-        .navigationTitle(active.title)
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarItems(
-            leading: Button(action: { router.back() }) {
-                Label("返回", systemImage: "chevron.left")
-                    .foregroundStyle(Color(hex: "#333333"))
-            }
-        )
-    }
+                router.navigate(to: .publishActivity(active: active))
+              }) {
+                Label("编辑", systemImage: "pencil")
+              }
 
-    // 参与活动
-    private func joinActive() async {
-    }
+              // Button(action: {
+              //   notice.openNotice(
+              //     open: .confirm(
+              //       Confirm(
+              //         title: "确定结束此活动吗",
+              //         desc: "结束后，不再允许新用户报名",
+              //         onSuccess: {
+              //           // 处理结束活动的逻辑
+              //         }
+              //       )
+              //     )
+              //   )
+              // }) {
+              //   Label("结束", systemImage: "stop.circle")
+              // }
+
+              Divider()
+            }
+
+            if isAdmin {
+              Divider()
+              // 管理员和活动创建者都可以删除活动
+              Button(
+                role: .destructive,
+                action: {
+                  notice.openNotice(
+                    open: .confirm(
+                      Confirm(
+                        title: "确定删除此活动吗",
+                        desc: "删除后数据将无法恢复",
+                        onSuccess: {
+                          Task {
+                            await deleteActive()
+                          }
+                        }
+                      )
+                    )
+                  )
+                }
+              ) {
+                Label("删除", systemImage: "trash")
+                  .foregroundColor(.red)
+              }
+            }
+
+          } label: {
+            Image(systemName: "ellipsis")
+              .foregroundStyle(Color(hex: "#333333"))
+              .frame(width: 24, height: 24)
+          }
+        }
+      }
+    )
+  }
+
+  // 参与活动
+  private func joinActive() async {
+  }
+
+  // 添加删除活动的方法
+  private func deleteActive() async {
+    await activeService.deleteActive(
+      id: active.id,
+      success: {
+        notice.openNotice(open: .toast("删除成功"))
+        Task {
+          await activeService.loadSelfActives(refresh: true)
+        }
+        router.back()
+      })
+  }
 }
 
 #Preview {
+  NavigationStack {
     ActiveDetailView(
-        active: ActiveInfo(
-            id: "preview-1",
-            title: "新人专享活动",
-            description:
-            "欢迎加入我们!参与活动即可获得积分奖励。活动期间完成任务最高可得1000积分,可用于兑换商城礼品。\n\n活动规则:\n1. 首次登录奖励100积分\n2. 每日签到奖励10积分\n3. 邀请好友奖励50积分/人\n4. 完成新手任务奖励200积分",
-            cover: "https://picsum.photos/800/400",
-            startAt: Date(),
-            endAt: Date().addingTimeInterval(7 * 24 * 60 * 60),
-            limit: 1000,
-            rewardType: .selfManaged,
-            joinCount: 128,
-            likeCount: 56,
-            status: 1,
-            createTime: Date(),
-            productId: "product-1",
-            productName: "示例产品",
-            productLogo: "https://picsum.photos/100/100",
-            images: [
-                "https://picsum.photos/400/600", "https://picsum.photos/400/600",
-                "https://picsum.photos/400/600",
-            ],
-            tags: [
-                TagEntity(name: "新人专享", color: .theme),
-                TagEntity(name: "限时活动", color: .orange),
-            ],
-            link: nil,
-            reward: "1000积分",
-            userId: "1",
-            isTop: false,
-            recommendTag: nil,
-            recommendDesc: nil
-        )
+      active: ActiveInfo(
+        id: "preview-1",
+        title: "新人专享活动",
+        description:
+          "欢迎加入我们!参与活动即可获得积分奖励。活动期间完成任务最高可得1000积分,可用于兑换商城礼品。\n\n活动规则:\n1. 首次登录奖励100积分\n2. 每日签到奖励10积分\n3. 邀请好友奖励50积分/人\n4. 完成新手任务奖励200积分",
+        cover: "https://picsum.photos/800/400",
+        startAt: Date(),
+        endAt: Date().addingTimeInterval(7 * 24 * 60 * 60),
+        limit: 1000,
+        rewardType: .points,
+        joinCount: 128,
+        likeCount: 56,
+        status: 1,
+        createTime: Date(),
+        productId: "product-1",
+        productName: "示例产品",
+        productLogo: "https://picsum.photos/100/100",
+        images: [
+          "https://picsum.photos/400/600", "https://picsum.photos/400/600",
+          "https://picsum.photos/400/600",
+        ],
+        tags: [
+          TagEntity(name: "新人专享", color: .theme),
+          TagEntity(name: "限时活动", color: .orange),
+        ],
+        link: nil,
+        reward: "活动期间完成任务最高可得1000积分,可用于兑换商城礼品",
+        rewardPoints: 1000,
+        rewardPromoCodes: nil,
+        userId: "1",
+        isTop: false,
+        recommendTag: nil,
+        recommendDesc: nil,
+        pubMode: .pro
+      )
     )
     .environmentObject(ActiveService())
     .environmentObject(UserService())
+    .environmentObject(SheetManager())
+    .environmentObject(NoticeManager())
+  }
 }

@@ -68,7 +68,7 @@ struct MyActicesView: View {
           EmptyView(text: "快新建一个活动吧")
             .padding(.horizontal)
         } else {
-          ForEach(acticeService.selfActives) { ac in
+          ForEach(acticeService.selfActives, id: \.id) { ac in
             ActiveCard(
               title: ac.title,
               description: ac.description,

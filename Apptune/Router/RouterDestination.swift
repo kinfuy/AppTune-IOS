@@ -11,7 +11,7 @@ enum GeneralRouterDestination: Hashable {
   case coinTasks  // 积分任务
   case coinShop  // 积分商店
   case publishProduct  // 发布产品
-  case publishActivity  // 发布活动
+  case publishActivity(active: ActiveInfo?)  // 发布活动
   case createPromotion  // 创建促销码
   case activeDetail(active: ActiveInfo)  // 活动详情
 
@@ -55,8 +55,8 @@ extension GeneralRouterDestination {
       CoinShopView()
     case .publishProduct:
       PublishProductView()
-    case .publishActivity:
-      PublishActivityView()
+    case .publishActivity(let active):
+      PublishActivityView(active: active)
     case .createPromotion:
       CreatePromotionView()
     case .activeDetail(let active):

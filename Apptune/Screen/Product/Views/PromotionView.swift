@@ -10,7 +10,7 @@ import SwiftUI
 struct PromotionCardView: View {
   var productId: String
   var productName: String
-  var productLogo:String
+  var productLogo: String
   var codes: [PromotionCode]
   @State private var isExpanded = false
   @State private var expandedGroups: Set<String> = []
@@ -33,21 +33,21 @@ struct PromotionCardView: View {
       // 卡片头部
       HStack {
         ImgLoader(productLogo)
-              .frame(width: 32,height: 32)
+          .frame(width: 32, height: 32)
         Text("促销码")
           .font(.subheadline)
           .foregroundColor(.primary)
         Spacer()
-          Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-            .foregroundColor(.secondary)
-            .frame(width: 24, height: 24)
+        Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+          .foregroundColor(.secondary)
+          .frame(width: 24, height: 24)
       }
       .contentShape(Rectangle())
       .onTapGesture {
-          withAnimation(.spring) {
-              isExpanded.toggle()
-          }
-          
+        withAnimation(.spring) {
+          isExpanded.toggle()
+        }
+
       }
       .padding(.horizontal, 12)
       .padding(.vertical, 8)

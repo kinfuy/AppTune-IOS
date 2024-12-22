@@ -138,4 +138,10 @@ class ProductAPI {
     )
     let _ = try await apiManager.session.data(for: request)
   }
+
+  func deleteProduct(id: String) async throws {
+    let urlString = "\(BASR_SERVE_URL)/product/delete"
+    let request = try apiManager.createRequest(url: urlString, method: "POST", body: ["id": id])
+   let _ = try await apiManager.session.data(for: request)
+  }
 }

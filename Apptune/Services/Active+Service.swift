@@ -130,7 +130,7 @@ class ActiveService: ObservableObject {
             pageSize: pageSize
           )
         case .top:
-         return try await ActiveAPI.shared.getTopActiveList(
+          return try await ActiveAPI.shared.getTopActiveList(
             page: currentPage,
             pageSize: pageSize
           )
@@ -222,5 +222,15 @@ class ActiveService: ObservableObject {
     }
 
     isTemplatesLoading = false
+  }
+
+  @MainActor
+  func deleteActive(id: String, success: @escaping () -> Void) async {
+    do {
+      try await ActiveAPI.shared.deleteActive(id: id)
+      success()
+    } catch {
+      print(error)
+    }
   }
 }

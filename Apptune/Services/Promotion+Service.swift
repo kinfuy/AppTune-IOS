@@ -25,6 +25,11 @@ class PromotionService: ObservableObject {
   var groupedPromotions: [String: [PromotionCode]] {
     Dictionary(grouping: promotions) { $0.productId }
   }
+    
+    
+  func getProductPromotions(productId: String) -> [PromotionCode] {
+    groupedPromotions[productId] ?? []
+  }
 
   // 加载用户的所有促销码
   @MainActor

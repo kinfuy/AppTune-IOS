@@ -26,6 +26,8 @@ struct ReviewView: View {
             ForEach(activeService.pendingActiveReviews) { activity in
               ActivityReviewCard(activity: activity) { status in
                 await activeService.review(id: activity.id, status: status)
+                await activeService.loadPendingActiveReviews()
+                await activeService.loadSelfActives(refresh: true)
               }
             }
           }
@@ -49,6 +51,8 @@ struct ReviewView: View {
             ForEach(productService.pendingProductReviews) { product in
               ProductReviewCard(product: product) { status in
                 await productService.review(id: product.id, status: status)
+                await activeService.loadPendingActiveReviews()
+                await productService.loadProducts(refresh: true)
               }
             }
           }

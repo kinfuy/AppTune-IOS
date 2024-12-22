@@ -44,7 +44,7 @@ enum Catalog: String, CaseIterable, Codable {
 }
 
 let gradientSurface = LinearGradient(
-  colors: [.white.opacity(0.1), .clear],
+  colors: [.white.opacity(0.01), .clear],
   startPoint: .topLeading,
   endPoint: .bottomTrailing
 )
@@ -146,9 +146,11 @@ struct ActiveHomeView: View {
 
   private func largeHeader(progress: CGFloat) -> some View {
     ZStack {
-      RoundedRectangle(cornerRadius: 0, style: .continuous)
-        .foregroundStyle(gradientSurface)
-        .mask(RoundedRectangle(cornerRadius: 0, style: .circular).foregroundColor(.black))
+      Rectangle()
+        .fill(.ultraThinMaterial)
+        .overlay {
+          gradientSurface
+        }
         .overlay {
           VStack {
             Spacer()
@@ -306,7 +308,7 @@ struct ActiveHomeView: View {
     .ignoresSafeArea()
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .padding(.bottom, 32)
-    .background(Color.gray.opacity(0.05))
+    .background(Color(hex: "#f4f4f4"))
   }
 }
 

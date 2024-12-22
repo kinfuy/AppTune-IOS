@@ -7,7 +7,7 @@
 import SwiftUI
 
 // 基本用户信息
-struct UserProfile {
+struct UserProfile: Codable {
   var id: String
   var email: String
   var role: String
@@ -33,8 +33,6 @@ struct UserAuth {
 class UserService: ObservableObject {
   static let shared = UserService()
 
-  // MARK: - Published Properties
-
   @Published var isLogin = false
   @Published var profile: UserProfile
   @Published var stats: UserStats
@@ -52,13 +50,9 @@ class UserService: ObservableObject {
 
   private let storage = UserDefaults.standard
   private enum StorageKeys {
-    static let loginEmail = "loginEmail"
+    static let profile = "userProfile"
     static let accessToken = "accessToken"
     static let refreshToken = "refreshToken"
-    static let userRole = "userRole"
-    static let userName = "userName"
-    static let userAvatar = "userAvatar"
-    static let userId = "userId"
   }
 
   // MARK: - Initialization
@@ -87,19 +81,16 @@ class UserService: ObservableObject {
     )
 
     // 从本地存储恢复登录状态
-    if let loginEmail = storage.string(forKey: StorageKeys.loginEmail),
-      let accessToken = storage.string(forKey: StorageKeys.accessToken),
+    if let accessToken = storage.string(forKey: StorageKeys.accessToken),
       let refreshToken = storage.string(forKey: StorageKeys.refreshToken),
-      !loginEmail.isEmpty && !accessToken.isEmpty && !refreshToken.isEmpty
+      let profileData = storage.data(forKey: StorageKeys.profile),
+      let savedProfile = try? JSONDecoder().decode(UserProfile.self, from: profileData),
+      !savedProfile.email.isEmpty && !accessToken.isEmpty && !refreshToken.isEmpty
     {
       isLogin = true
-      profile.email = loginEmail
+      profile = savedProfile
       auth.accessToken = accessToken
       auth.refreshToken = refreshToken
-      profile.role = storage.string(forKey: StorageKeys.userRole) ?? ""
-      profile.name = storage.string(forKey: StorageKeys.userName) ?? "--"
-      profile.avatar = storage.string(forKey: StorageKeys.userAvatar) ?? "p_8"
-      profile.id = storage.string(forKey: StorageKeys.userId) ?? ""
     }
   }
 
@@ -212,20 +203,12 @@ class UserService: ObservableObject {
     clearToken()
 
     // 清除存储
-    storage.removeObject(forKey: StorageKeys.loginEmail)
-
-    // 清除额外存储的用户信息
-    storage.removeObject(forKey: StorageKeys.userRole)
-    storage.removeObject(forKey: StorageKeys.userName)
-    storage.removeObject(forKey: StorageKeys.userAvatar)
-    storage.removeObject(forKey: StorageKeys.userId)
+    storage.removeObject(forKey: StorageKeys.profile)
   }
 
   private func saveToStorage() {
-    storage.set(profile.email, forKey: StorageKeys.loginEmail)
-    storage.set(profile.role, forKey: StorageKeys.userRole)
-    storage.set(profile.name, forKey: StorageKeys.userName)
-    storage.set(profile.avatar, forKey: StorageKeys.userAvatar)
-    storage.set(profile.id, forKey: StorageKeys.userId)
+    if let profileData = try? JSONEncoder().encode(profile) {
+      storage.set(profileData, forKey: StorageKeys.profile)
+    }
   }
 }

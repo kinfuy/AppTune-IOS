@@ -37,11 +37,14 @@ struct ActiveInfo: Codable, Identifiable, Hashable {
   let images: [String]
   let tags: [TagEntity]
   let link: String?
-  let reward: String?
+  let reward: String?  // 奖励说明
+  let rewardPoints: Int?  // 奖励积分
+  let rewardPromoCodes: [String]?  // 奖励优惠码
   let userId: String
   let isTop: Bool?
   let recommendTag: String?
   let recommendDesc: String?
+  let pubMode: PublishMode  // 发布模式
 
   // 实现 Hashable
   func hash(into hasher: inout Hasher) {
@@ -73,8 +76,8 @@ struct CreateActiveParams: Codable {
   let productId: String
   let title: String
   let description: String
-  let startTime: Date
-  let endTime: Date
+  let startAt: Date
+  let endAt: Date
   let images: [String]
   let tags: [TagEntity]
   let isAutoEnd: Bool
@@ -198,7 +201,7 @@ class ActiveAPI {
   }
 
   // 添加创建活动的方法
-  func createActive(_ params: ActiveInfo, _ saveTemplate: Bool = false) async throws -> ActiveInfo {
+  func createActive(_ params: ActiveInfo, _ saveTemplate: Bool = false) async throws {
     let urlString = "\(BASR_SERVE_URL)/active/create"
 
     // 直接转换参数，不需要处理异常
@@ -213,6 +216,24 @@ class ActiveAPI {
       body: body
     )
 
-    return try await apiManager.session.data(for: request)
+    let _ = try await apiManager.session.data(for: request)
+  }
+
+  func updateActive(_ params: ActiveInfo) async throws {
+    let urlString = "\(BASR_SERVE_URL)/active/update"
+
+    let request = try apiManager.createRequest(
+      url: urlString,
+      method: "POST",
+      body: params.asDictionary()
+    )
+
+    let _ = try await apiManager.session.data(for: request)
+  }
+
+  func deleteActive(id: String) async throws {
+    let urlString = "\(BASR_SERVE_URL)/active/delete"
+    let request = try apiManager.createRequest(url: urlString, method: "POST", body: ["id": id])
+    let _ = try await apiManager.session.data(for: request)
   }
 }

@@ -1,5 +1,47 @@
 import SwiftUI
 
+// 创建一个自定义的环境键
+private struct KeyboardTypeKey: EnvironmentKey {
+  static let defaultValue: UIKeyboardType = .default
+}
+
+// 扩展 EnvironmentValues 以添加我们的自定义键
+extension EnvironmentValues {
+  var keyboardType: UIKeyboardType {
+    get { self[KeyboardTypeKey.self] }
+    set { self[KeyboardTypeKey.self] = newValue }
+  }
+}
+
+// 扩展 View 以添加便捷修饰符
+extension View {
+  func defaultKeyboard(_ type: UIKeyboardType = .default) -> some View {
+    environment(\.keyboardType, type)
+  }
+}
+
+// 扩展 TextField 和 TextEditor 以使用环境值
+extension TextField {
+  func useEnvironmentKeyboard() -> some View {
+    self.modifier(KeyboardTypeModifier())
+  }
+}
+
+extension TextEditor {
+  func useEnvironmentKeyboard() -> some View {
+    self.modifier(KeyboardTypeModifier())
+  }
+}
+
+// 创建修饰符来应用环境键盘类型
+struct KeyboardTypeModifier: ViewModifier {
+  @Environment(\.keyboardType) var keyboardType
+
+  func body(content: Content) -> some View {
+    content.keyboardType(keyboardType)
+  }
+}
+
 func attributedString(str: String) -> AttributedString {
   var attributedString = AttributedString(str)
   attributedString.link = nil
@@ -62,6 +104,16 @@ extension View {
         .allowsHitTesting(false)
     )
   }
+
+  // 添加新的键盘设置修饰符
+  func systemKeyboard() -> some View {
+    if let textField = self as? TextField<Text> {
+      return AnyView(textField.keyboardType(.default))
+    } else if let textEditor = self as? TextEditor {
+      return AnyView(textEditor.keyboardType(.default))
+    }
+    return AnyView(self)
+  }
 }
 
 // 创建一个自定义修饰符来处理点击收起键盘
@@ -82,5 +134,19 @@ extension UIApplication {
       to: nil,
       from: nil,
       for: nil)
+  }
+}
+
+// 扩展 TextField 添加默认键盘设置
+extension TextField {
+  func useSystemKeyboard() -> some View {
+    self.keyboardType(.default)
+  }
+}
+
+// 扩展 TextEditor 添加默认键盘设置
+extension TextEditor {
+  func useSystemKeyboard() -> some View {
+    self.keyboardType(.default)
   }
 }

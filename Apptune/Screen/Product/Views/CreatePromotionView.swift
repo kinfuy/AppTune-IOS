@@ -12,7 +12,8 @@ struct CreatePromotionView: View {
     @EnvironmentObject private var router: Router
     @EnvironmentObject private var notice: NoticeManager
     @EnvironmentObject private var sheet: SheetManager
-    @EnvironmentObject private var producttService: ProductService
+    @EnvironmentObject private var productService: ProductService
+    @EnvironmentObject private var promotionService: PromotionService
     @StateObject private var viewModel = CreatePromotionViewModel()
     @State private var promoCodes: String = ""
 
@@ -30,7 +31,7 @@ struct CreatePromotionView: View {
                 Section("选择产品") {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 12) {
-                            ForEach(producttService.selfProducts) { product in
+                            ForEach(productService.selfProducts) { product in
                                 ProductSelectItem(
                                     product: product,
                                     isSelected: viewModel.selectedProduct?.id == product.id
@@ -94,8 +95,13 @@ struct CreatePromotionView: View {
                         }
                         Tap.shared.play(.light)
                         Task {
-                            await viewModel.createPromotion()
-                            notice.openNotice(open: .toast("促销码创建成功"))
+                            await viewModel.createPromotion(success: {
+                                router.toTabBar(.product, isShowModules: true)
+                                notice.openNotice(open: .toast("促销码创建成功"))
+                                Task {
+                                    await promotionService.loadPromotions()
+                                }
+                            })
                         }
                     }
                     .frame(height: 38)

@@ -195,7 +195,7 @@ struct ProductView: View {
         text: "新建",
         action: {
           Tap.shared.play(.light)
-          router.navigate(to: .publishActivity)
+          router.navigate(to: .publishActivity(active: nil))
         }
       )
     case .promotion:
@@ -290,7 +290,7 @@ struct ProductView: View {
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .padding(.bottom, 32)
-    .background(Color.gray.opacity(0.05))
+    .background(Color(hex: "#f4f4f4"))
   }
 }
 

@@ -254,7 +254,7 @@ struct UserView: View {
       }
       .ignoresSafeArea()
     }
-    .background(Color.gray.opacity(0.05))
+    .background(Color(hex: "#f4f4f4"))
     .onAppear {
       let auth = router.checkAuth(tab: router.currentTab)
       if !auth {

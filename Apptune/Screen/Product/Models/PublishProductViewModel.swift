@@ -29,7 +29,7 @@ class PublishProductViewModel: ObservableObject {
   }
 
   var isValid: Bool {
-    !productName.isEmpty && !productDescription.isEmpty  && !iconUrl.isEmpty
+    !productName.isEmpty && !productDescription.isEmpty && !iconUrl.isEmpty
   }
 
   var hasAppStoreInfo: Bool {
@@ -65,7 +65,7 @@ class PublishProductViewModel: ObservableObject {
   }
 
   @MainActor
-  func publishProduct() async {
+  func publishProduct(success: @escaping () -> Void) async {
     isLoading = true
     do {
       let priceValue = Double(price)
@@ -82,7 +82,7 @@ class PublishProductViewModel: ObservableObject {
         version: version.isEmpty ? nil : version
       )
       isLoading = false
-      Router.shared.toTabBar(.product, isShowModules: true)
+      success()
     } catch {
       isLoading = false
     }
