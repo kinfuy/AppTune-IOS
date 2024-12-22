@@ -84,7 +84,7 @@ struct MainTabbedView: View {
           .tag(TabbedItems.product)
         UserView()
           .tag(TabbedItems.person)
-        MessageView()
+        NotificationView()
           .tag(TabbedItems.message)
       }
 

@@ -26,7 +26,7 @@ class ProductService: ObservableObject {
 
         isLoading = true
         do {
-            let response = try await ProductAPI.shared.getSelfProductList(
+            let response = try await API.getSelfProductList(
                 page: currentPage,
                 pageSize: pageSize
             )
@@ -56,7 +56,7 @@ class ProductService: ObservableObject {
     func loadPendingProductReviews() async {
         do {
             // 获取待审核产品列表,不需要分页
-            let response = try await ProductAPI.shared.getAuditProductList()
+            let response = try await API.getAuditProductList()
             pendingProductReviews = response.items
         } catch {
             isLoading = false
@@ -66,7 +66,7 @@ class ProductService: ObservableObject {
     @MainActor
     func review(id: String, status: Int) async {
         do {
-            try await ProductAPI.shared.auditProduct(id: id, status: status)
+            try await API.auditProduct(id: id, status: status)
         } catch {
             print(error)
         }

@@ -17,7 +17,7 @@ struct CreatedByWatermarkModifier: ViewModifier {
 
       // 水印部分使用半透明背景提升视觉效果
       HStack(spacing: 6) {
-        Text("查看详情去")
+        Text("Created By")
           .font(.system(size: 12, weight: .regular))
           .foregroundColor(.gray.opacity(0.8))
 

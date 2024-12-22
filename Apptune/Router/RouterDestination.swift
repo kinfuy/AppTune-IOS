@@ -14,6 +14,11 @@ enum GeneralRouterDestination: Hashable {
   case publishActivity(active: ActiveInfo?)  // 发布活动
   case createPromotion  // 创建促销码
   case activeDetail(active: ActiveInfo)  // 活动详情
+  case followNotice  // 关注通知
+  case joinNotice  // 报名通知
+  case auditNotice  // 审核通知
+  case officeNotice  // 官方通知
+  case submitActiveReview(active: ActiveInfo)
 
   static func isWhiteListRoute(to: GeneralRouterDestination) -> Bool {
     switch to {
@@ -61,6 +66,16 @@ extension GeneralRouterDestination {
       CreatePromotionView()
     case .activeDetail(let active):
       ActiveDetailView(active: active)
+    case .followNotice:
+      FollowNoticeView()
+    case .joinNotice:
+      JoinNoticeView()
+    case .auditNotice:
+      AuditNoticeView()
+    case .officeNotice:
+      OfficeNoticeView()
+    case .submitActiveReview(let active):
+      SubmitActiveReviewView(active: active)
     }
   }
 }

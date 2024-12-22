@@ -152,7 +152,7 @@ class UserService: ObservableObject {
     guard isLogin && !profile.email.isEmpty else { return }
 
     do {
-      let info = try await UserAPI.shared.fetchUserInfo(email: profile.email)
+      let info = try await API.fetchUserInfo(email: profile.email)
       DispatchQueue.main.async { [weak self] in
         guard let self = self else { return }
         self.updateProfile(

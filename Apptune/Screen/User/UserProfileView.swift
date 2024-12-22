@@ -103,7 +103,7 @@ struct UserProfileView: View {
     private func uploadImage(_ image: UIImage) async -> String? {
         guard let imageData = image.jpegData(compressionQuality: 0.6) else { return nil }
         do {
-            let url = try await FileAPI.shared.uploadAvatar(imageData)
+            let url = try await API.uploadAvatar(imageData)
             return url
         } catch {
             notice.openNotice(open: .toast("图片上传失败"))
@@ -114,7 +114,7 @@ struct UserProfileView: View {
     // 更新用户信息
     private func updateUserInfo(_ info: [String: Any]) async {
         do {
-            let _ = try await UserAPI.shared.updateUserInfo(info)
+            let _ = try await API.updateUserInfo(info)
             notice.openNotice(open: .toast("更新成功"))
             router.back()
         } catch {

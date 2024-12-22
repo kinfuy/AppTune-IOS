@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - Models
 struct PromotionCode: Codable {
   let id: String
   let group: String  // 组
@@ -24,69 +25,59 @@ struct PromotionCode: Codable {
   }
 }
 
-class PromotionAPI {
-  static let shared = PromotionAPI()
-  private let apiManager = APIManager.shared
-
+// MARK: - API Methods
+extension API {
   // 获取用户所有促销码
-  func getUserPromotions() async throws -> ListResponse<
-    PromotionCode
-  > {
-    let urlString = "\(BASR_SERVE_URL)/promotion/list"
-
-    let request = try apiManager.createRequest(
-      url: urlString,
+  static func getUserPromotions() async throws -> ListResponse<PromotionCode> {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/promotion/list",
       method: "GET",
       body: nil
     )
-    return try await apiManager.session.data(for: request)
+    return try await API.shared.session.data(for: request)
   }
 
   // 创建促销码
-  func createPromotion(productId: String, codes: [String], group: String)
-    async throws
-  {
+  static func createPromotion(productId: String, codes: [String], group: String) async throws {
     let params: [String: Any] = [
       "productId": productId,
       "codes": codes,
       "group": group,
     ]
 
-    let request = try apiManager.createRequest(
+    let request = try API.shared.createRequest(
       url: "\(BASR_SERVE_URL)/promotion/create",
       method: "POST",
       body: params
     )
 
-    let _ = try await apiManager.session.data(for: request)
+    let _: VoidCodable = try await API.shared.session.data(for: request)
   }
 
   // 删除促销码
-  func deletePromotion(id: String) async throws {
-    let urlString = "\(BASR_SERVE_URL)/promotion/\(id)"
-
-    let request = try apiManager.createRequest(
-      url: urlString,
-      method: "DELETE",
+  static func deletePromotion(id: String) async throws {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/promotion/\(id)",
+      method: "POST",
       body: nil
     )
 
-    let _ = try await apiManager.session.data(for: request)
+    let _: VoidCodable = try await API.shared.session.data(for: request)
   }
 
-  // 添加新方法
-  func checkPromoCodes(_ codes: [String], productId: String) async throws -> [String] {
-    let body: [String: Any] = [
+  // 检查促销码
+  static func checkPromoCodes(_ codes: [String], productId: String) async throws -> [String] {
+    let params: [String: Any] = [
       "codes": codes,
       "productId": productId,
     ]
 
-    let request = try apiManager.createRequest(
+    let request = try API.shared.createRequest(
       url: "\(BASR_SERVE_URL)/promotion/check-codes",
       method: "POST",
-      body: body
+      body: params
     )
 
-    return try await apiManager.session.data(for: request)
+    return try await API.shared.session.data(for: request)
   }
 }

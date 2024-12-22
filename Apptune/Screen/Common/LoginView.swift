@@ -84,7 +84,7 @@ struct LoginView: View {
           )
 
           // 将用户信息传递给服务器
-          let response = try await UserAPI.shared.signApple(
+          let response = try await API.signApple(
             idToken: idToken,
             email: email,
             name: name // 直接传递组合后的姓名

@@ -38,7 +38,7 @@ class PromotionService: ObservableObject {
     isLoading = true
 
     do {
-      let response = try await PromotionAPI.shared.getUserPromotions()
+      let response = try await API.getUserPromotions()
       self.promotions = response.items
       isLoading = false
     } catch {
@@ -51,7 +51,7 @@ class PromotionService: ObservableObject {
   @MainActor
   func createPromotion(productId: String, codes: [String], group: String) async {
     do {
-      try await PromotionAPI.shared.createPromotion(
+      try await API.createPromotion(
         productId: productId,
         codes: codes,
         group: group
@@ -65,7 +65,7 @@ class PromotionService: ObservableObject {
   @MainActor
   func deletePromotion(id: String) async {
     do {
-      try await PromotionAPI.shared.deletePromotion(id: id)
+      try await API.deletePromotion(id: id)
     } catch {
       print(error)
     }

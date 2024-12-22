@@ -115,22 +115,22 @@ class ActiveService: ObservableObject {
       let response = try await {
         switch type {
         case .my:
-          return try await ActiveAPI.shared.getSelfActiveList(
+          return try await API.getSelfActiveList(
             page: currentPage,
             pageSize: pageSize
           )
         case .all:
-          return try await ActiveAPI.shared.getActiveList(
+          return try await API.getActiveList(
             page: currentPage,
             pageSize: pageSize
           )
         case .joined:
-          return try await ActiveAPI.shared.getJoinedActiveList(
+          return try await API.getJoinedActiveList(
             page: currentPage,
             pageSize: pageSize
           )
         case .top:
-          return try await ActiveAPI.shared.getTopActiveList(
+          return try await API.getTopActiveList(
             page: currentPage,
             pageSize: pageSize
           )
@@ -176,7 +176,7 @@ class ActiveService: ObservableObject {
   func loadPendingActiveReviews() async {
     do {
       // 获取待审核活动列表,不需要分页
-      let response = try await ActiveAPI.shared.getReviewActiveList()
+      let response = try await API.getReviewActiveList()
       pendingActiveReviews = response.items
     } catch {
       print(error)
@@ -198,7 +198,7 @@ class ActiveService: ObservableObject {
   @MainActor
   func review(id: String, status: Int) async {
     do {
-      try await ActiveAPI.shared.auditActive(id: id, status: status)
+      try await API.auditActive(id: id, status: status)
     } catch {
       print(error)
     }
@@ -216,7 +216,7 @@ class ActiveService: ObservableObject {
     isTemplatesLoading = true
 
     do {
-      templates = try await ActiveAPI.shared.getTemplates()
+      templates = try await API.getTemplates()
     } catch {
       print("Failed to load templates:", error)
     }
@@ -227,10 +227,50 @@ class ActiveService: ObservableObject {
   @MainActor
   func deleteActive(id: String, success: @escaping () -> Void) async {
     do {
-      try await ActiveAPI.shared.deleteActive(id: id)
+      try await API.deleteActive(id: id)
       success()
     } catch {
       print(error)
+    }
+  }
+
+  @MainActor
+  func joinActive(id: String, success: @escaping () -> Void) async {
+    do {
+      try await API.joinActive(id: id)
+      success()
+    } catch {
+      print(error)
+    }
+  }
+
+  @MainActor
+  func submitAudit(activeId: String, content: String, images: [String]) async {
+    do {
+      try await API.submitAudit(activeId: activeId, content: content, images: images)
+    } catch {
+      print(error)
+    }
+  }
+
+  func checkActiveStatus(id: String) async -> (hasJoined: Bool, hasSubmitted: Bool) {
+    do {
+      let response = try await API.checkActiveStatus(id: id)
+      return (response.hasJoined, response.hasSubmitted)
+    } catch {
+      print(error)
+      return (false, false)
+    }
+  }
+
+  @MainActor
+  func getReviewHistory(activeId: String) async -> ActiveSubmission? {
+    do {
+      let submission = try await API.getReviewHistory(activeId: activeId)
+      return submission
+    } catch {
+      print(error)
+      return nil
     }
   }
 }

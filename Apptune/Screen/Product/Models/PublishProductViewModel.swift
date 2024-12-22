@@ -48,7 +48,7 @@ class PublishProductViewModel: ObservableObject {
 
     isLoading = true
     do {
-      searchResults = try await ProductAPI.shared.searchAppStore(keyword: name)
+      searchResults = try await API.searchAppStore(keyword: name)
       isLoading = false
     } catch {
       searchResults = []
@@ -69,7 +69,7 @@ class PublishProductViewModel: ObservableObject {
     isLoading = true
     do {
       let priceValue = Double(price)
-      try await ProductAPI.shared.publishProduct(
+      try await API.publishProduct(
         name: productName,
         description: productDescription,
         icon: iconUrl,
@@ -104,7 +104,7 @@ class PublishProductViewModel: ObservableObject {
   private func uploadCustomImage(_ image: UIImage) {
     Task {
       do {
-        let url = try await FileAPI.shared.uploadImage(image, extraData: ["type": "product"])
+        let url = try await API.uploadImage(image, extraData: ["type": "product"])
         await MainActor.run {
           self.iconUrl = url
         }

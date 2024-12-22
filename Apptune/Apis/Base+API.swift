@@ -12,8 +12,8 @@ struct TokenInfo: Decodable {
   var refreshToken: String
 }
 
-class APIManager {
-  static let shared = APIManager()
+class API {
+  static let shared = API()
 
   let session: URLSession = {
     let config = URLSessionConfiguration.default
@@ -28,9 +28,20 @@ class APIManager {
   }
 
   func createRequest(url: String, method: String, body: [String: Any]?) throws -> URLRequest {
-    guard let url = URL(string: url) else {
+    var urlString = url
+    if method == "GET" && body != nil {
+      let queryItems = body!.map { key, value in
+        return "\(key)=\(value)"
+      }.joined(separator: "&")
+
+      urlString += urlString.contains("?") ? "&" : "?"
+      urlString += queryItems
+    }
+
+    guard let url = URL(string: urlString) else {
       throw APIError.serveError(code: "999999", message: "无效的请求地址")
     }
+
     var request = URLRequest(url: url)
     request.httpMethod = method
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -39,8 +50,8 @@ class APIManager {
       request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     }
 
-    if let body = body {
-      let jsonData = try JSONSerialization.data(withJSONObject: body, options: [])
+    if method != "GET" && body != nil {
+      let jsonData = try JSONSerialization.data(withJSONObject: body!, options: [])
       request.httpBody = jsonData
     }
 

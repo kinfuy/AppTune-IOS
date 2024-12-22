@@ -10,6 +10,7 @@ struct ScreenManage: View {
   @StateObject var promotionService = PromotionService()
   @StateObject var activeService = ActiveService()
   @StateObject var tagService = TagService()
+  @StateObject var notificationService = NotificationService()
 
   @State private var launchViewAlpha: CGFloat = 1
   @State private var showGuide = false
@@ -41,6 +42,7 @@ struct ScreenManage: View {
               .environmentObject(promotionService)
               .environmentObject(activeService)
               .environmentObject(tagService)
+              .environmentObject(notificationService)
               .transition(
                 .asymmetric(
                   insertion: .move(edge: .trailing),
@@ -57,6 +59,7 @@ struct ScreenManage: View {
         .environmentObject(promotionService)
         .environmentObject(activeService)
         .environmentObject(tagService)
+        .environmentObject(notificationService)
         .opacity(launchViewAlpha == 1 ? 0 : 1)
         .navigationBarBackButtonHidden(true)
         .interactivePopGesture(enable: true) {
@@ -78,6 +81,7 @@ struct ScreenManage: View {
             .environmentObject(promotionService)
             .environmentObject(activeService)
             .environmentObject(tagService)
+            .environmentObject(notificationService)
         }
         .fullScreenCover(
           isPresented: Binding(
@@ -94,6 +98,7 @@ struct ScreenManage: View {
             .environmentObject(productService)
             .environmentObject(promotionService)
             .environmentObject(tagService)
+            .environmentObject(notificationService)
         }
 
         if notice.isNotice && !sheet.isPresented {
@@ -106,6 +111,7 @@ struct ScreenManage: View {
             .environmentObject(productService)
             .environmentObject(promotionService)
             .environmentObject(tagService)
+            .environmentObject(notificationService)
             .ignoresSafeArea()
             .transition(.opacity)
         }

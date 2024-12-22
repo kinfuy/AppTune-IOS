@@ -50,26 +50,24 @@ struct ListResponse<T: Codable>: Codable {
   let pageSize: Int
 }
 
-class ProductAPI {
-  static let shared = ProductAPI()
-  private let apiManager = APIManager.shared
+extension API {
 
-  func searchAppStore(keyword: String) async throws -> [AppSearchInfo] {
+  static func searchAppStore(keyword: String) async throws -> [AppSearchInfo] {
     let urlString =
       "\(BASR_SERVE_URL)/product/app-store/search?keyword=\(keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")"
 
-    let request = try apiManager.createRequest(
+    let request = try API.shared.createRequest(
       url: urlString,
       method: "GET",
       body: nil
     )
 
-    let response: AppStoreSearchResponse = try await apiManager.session.data(
+    let response: AppStoreSearchResponse = try await API.shared.session.data(
       for: request, loading: false)
     return response.results
   }
 
-  func publishProduct(
+  static func publishProduct(
     name: String, description: String, icon: String, link: String,
     category: Catalog, appId: String?, developer: String?,
     price: Double?, bundleId: String?, version: String?
@@ -88,39 +86,39 @@ class ProductAPI {
       "version": version,
     ].compactMapValues { $0 }  // 移除所有 nil 值
 
-    let request = try apiManager.createRequest(
+    let request = try API.shared.createRequest(
       url: "\(BASR_SERVE_URL)/product",
       method: "POST",
       body: params
     )
 
-    let _ = try await apiManager.session.data(for: request)
+    let _ = try await API.shared.session.data(for: request)
   }
 
-  func getSelfProductList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<
+  static func getSelfProductList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<
     ProductInfo
   > {
     let urlString = "\(BASR_SERVE_URL)/product/myList?page=\(page)&pageSize=\(pageSize)"
 
-    let request = try apiManager.createRequest(
+    let request = try API.shared.createRequest(
       url: urlString,
       method: "GET",
       body: nil
     )
-    return try await apiManager.session.data(for: request)
+    return try await API.shared.session.data(for: request)
   }
 
-  func getAuditProductList() async throws -> ListResponse<
+  static func getAuditProductList() async throws -> ListResponse<
     ProductInfo
   > {
     let urlString = "\(BASR_SERVE_URL)/product/auditList"
 
-    let request = try apiManager.createRequest(
+    let request = try API.shared.createRequest(
       url: urlString,
       method: "GET",
       body: nil
     )
-    return try await apiManager.session.data(for: request)
+    return try await API.shared.session.data(for: request)
   }
 
   /**
@@ -128,20 +126,20 @@ class ProductAPI {
      * @param id ID
      * @param status 状态
      */
-  func auditProduct(id: String, status: Int) async throws {
+  static func auditProduct(id: String, status: Int) async throws {
     let urlString = "\(BASR_SERVE_URL)/product/audit"
 
-    let request = try apiManager.createRequest(
+    let request = try API.shared.createRequest(
       url: urlString,
       method: "POST",
       body: ["id": id, "status": status]
     )
-    let _ = try await apiManager.session.data(for: request)
+    let _ = try await API.shared.session.data(for: request)
   }
 
-  func deleteProduct(id: String) async throws {
+  static func deleteProduct(id: String) async throws {
     let urlString = "\(BASR_SERVE_URL)/product/delete"
-    let request = try apiManager.createRequest(url: urlString, method: "POST", body: ["id": id])
-   let _ = try await apiManager.session.data(for: request)
+    let request = try API.shared.createRequest(url: urlString, method: "POST", body: ["id": id])
+    let _ = try await API.shared.session.data(for: request)
   }
 }

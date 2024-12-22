@@ -89,8 +89,17 @@
 		F2B269FD2CB6D725008C46B8 /* LanchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269FC2CB6D725008C46B8 /* LanchView.swift */; };
 		F2B26A002CB6D764008C46B8 /* GudieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269FF2CB6D764008C46B8 /* GudieView.swift */; };
 		F2B34CCF2CF35EE1009023B8 /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B34CCE2CF35EE1009023B8 /* ReviewView.swift */; };
-		F2C5B4E82D16A31C007E3916 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4E72D16A31C007E3916 /* MessageView.swift */; };
+		F2C5B4E82D16A31C007E3916 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4E72D16A31C007E3916 /* NotificationView.swift */; };
 		F2C5B4EA2D17AF25007E3916 /* PreCodePicker+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4E92D17AF25007E3916 /* PreCodePicker+Sheet.swift */; };
+		F2C5B4EC2D18354D007E3916 /* Notification+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4EB2D18354D007E3916 /* Notification+API.swift */; };
+		F2C5B4EE2D18355F007E3916 /* Notification+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4ED2D18355F007E3916 /* Notification+Service.swift */; };
+		F2C5B4F02D184820007E3916 /* JoinNoticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4EF2D184820007E3916 /* JoinNoticeView.swift */; };
+		F2C5B4F22D18482F007E3916 /* FollowNoticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4F12D18482F007E3916 /* FollowNoticeView.swift */; };
+		F2C5B4F42D18483F007E3916 /* AuditNoticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4F32D18483F007E3916 /* AuditNoticeView.swift */; };
+		F2C5B4F62D18484F007E3916 /* OfficeNoticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4F52D18484F007E3916 /* OfficeNoticeView.swift */; };
+		F2C5B4F82D1849BE007E3916 /* NoticeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4F72D1849BE007E3916 /* NoticeViewModel.swift */; };
+		F2C5B4FB2D184CB4007E3916 /* NoticeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4F92D184CB4007E3916 /* NoticeListView.swift */; };
+		F2C5B4FD2D186976007E3916 /* SubmitActiveReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4FC2D186976007E3916 /* SubmitActiveReviewView.swift */; };
 		F2D6AE242CD92C4800896DD9 /* Empty+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D6AE232CD92C4800896DD9 /* Empty+Component.swift */; };
 		F2EEE39D2D048AF600D7777C /* Codeable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE39C2D048AF600D7777C /* Codeable+Extension.swift */; };
 		F2EEE39F2D04909B00D7777C /* Bindding+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE39E2D04909B00D7777C /* Bindding+Extension.swift */; };
@@ -190,8 +199,17 @@
 		F2B269FC2CB6D725008C46B8 /* LanchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanchView.swift; sourceTree = "<group>"; };
 		F2B269FF2CB6D764008C46B8 /* GudieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GudieView.swift; sourceTree = "<group>"; };
 		F2B34CCE2CF35EE1009023B8 /* ReviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
-		F2C5B4E72D16A31C007E3916 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
+		F2C5B4E72D16A31C007E3916 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		F2C5B4E92D17AF25007E3916 /* PreCodePicker+Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreCodePicker+Sheet.swift"; sourceTree = "<group>"; };
+		F2C5B4EB2D18354D007E3916 /* Notification+API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+API.swift"; sourceTree = "<group>"; };
+		F2C5B4ED2D18355F007E3916 /* Notification+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Service.swift"; sourceTree = "<group>"; };
+		F2C5B4EF2D184820007E3916 /* JoinNoticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinNoticeView.swift; sourceTree = "<group>"; };
+		F2C5B4F12D18482F007E3916 /* FollowNoticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowNoticeView.swift; sourceTree = "<group>"; };
+		F2C5B4F32D18483F007E3916 /* AuditNoticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuditNoticeView.swift; sourceTree = "<group>"; };
+		F2C5B4F52D18484F007E3916 /* OfficeNoticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficeNoticeView.swift; sourceTree = "<group>"; };
+		F2C5B4F72D1849BE007E3916 /* NoticeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoticeViewModel.swift; sourceTree = "<group>"; };
+		F2C5B4F92D184CB4007E3916 /* NoticeListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoticeListView.swift; sourceTree = "<group>"; };
+		F2C5B4FC2D186976007E3916 /* SubmitActiveReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitActiveReviewView.swift; sourceTree = "<group>"; };
 		F2D6AE232CD92C4800896DD9 /* Empty+Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Empty+Component.swift"; sourceTree = "<group>"; };
 		F2EEE39C2D048AF600D7777C /* Codeable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codeable+Extension.swift"; sourceTree = "<group>"; };
 		F2EEE39E2D04909B00D7777C /* Bindding+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bindding+Extension.swift"; sourceTree = "<group>"; };
@@ -370,6 +388,7 @@
 			children = (
 				F26F159C2CC538CE00848715 /* User+Service.swift */,
 				F288297D2CF20EDD002D012A /* Active+Service.swift */,
+				F2C5B4ED2D18355F007E3916 /* Notification+Service.swift */,
 				F2EEE3A62D05BD0700D7777C /* Promotion+Service.swift */,
 				F28829872CF30053002D012A /* Tag+Service.swift */,
 				F288297B2CF20D37002D012A /* Product+Service.swift */,
@@ -382,6 +401,7 @@
 			children = (
 				F26F15A22CC69D6E00848715 /* User+API.swift */,
 				F21CFD132CD75F9C00CAB613 /* Product+API.swift */,
+				F2C5B4EB2D18354D007E3916 /* Notification+API.swift */,
 				F2EEE3A42D05BB4B00D7777C /* Promotion+API.swift */,
 				F288297F2CF21328002D012A /* Active+API.swift */,
 				F2FC0F402CCAA49400CF8ACE /* Base+API.swift */,
@@ -470,7 +490,7 @@
 		F2B269732CB57252001230B4 /* Screen */ = {
 			isa = PBXGroup;
 			children = (
-				F2C5B4E62D16A306007E3916 /* Message */,
+				F2C5B4E62D16A306007E3916 /* Notification */,
 				F21CFCFA2CD6911600CAB613 /* Coin */,
 				F26F15962CC5130500848715 /* Common */,
 				F27A94812CC00AD9002A2BEA /* Product */,
@@ -519,18 +539,33 @@
 			isa = PBXGroup;
 			children = (
 				F2B269F42CB6C2C5008C46B8 /* ActiveHomeView.swift */,
+				F2C5B4FC2D186976007E3916 /* SubmitActiveReviewView.swift */,
 				F2EEE3B22D0B2F9900D7777C /* ActiveShareView.swift */,
 				F2EEE3B02D088E2500D7777C /* ActiveDetailView.swift */,
 			);
 			path = Active;
 			sourceTree = "<group>";
 		};
-		F2C5B4E62D16A306007E3916 /* Message */ = {
+		F2C5B4E62D16A306007E3916 /* Notification */ = {
 			isa = PBXGroup;
 			children = (
-				F2C5B4E72D16A31C007E3916 /* MessageView.swift */,
+				F2C5B4E72D16A31C007E3916 /* NotificationView.swift */,
+				F2C5B4FA2D184CB4007E3916 /* Components */,
+				F2C5B4F52D18484F007E3916 /* OfficeNoticeView.swift */,
+				F2C5B4F32D18483F007E3916 /* AuditNoticeView.swift */,
+				F2C5B4F72D1849BE007E3916 /* NoticeViewModel.swift */,
+				F2C5B4F12D18482F007E3916 /* FollowNoticeView.swift */,
+				F2C5B4EF2D184820007E3916 /* JoinNoticeView.swift */,
 			);
-			path = Message;
+			path = Notification;
+			sourceTree = "<group>";
+		};
+		F2C5B4FA2D184CB4007E3916 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F2C5B4F92D184CB4007E3916 /* NoticeListView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -621,6 +656,7 @@
 			files = (
 				F27A94832CC00AEC002A2BEA /* ProductView.swift in Sources */,
 				F2D6AE242CD92C4800896DD9 /* Empty+Component.swift in Sources */,
+				F2C5B4F22D18482F007E3916 /* FollowNoticeView.swift in Sources */,
 				F288297E2CF20EDD002D012A /* Active+Service.swift in Sources */,
 				F21CFCDD2CD6463A00CAB613 /* ProductTab.swift in Sources */,
 				F2EEE3AB2D05DE5000D7777C /* CreatePromotionView.swift in Sources */,
@@ -639,13 +675,16 @@
 				F21CFD122CD7247300CAB613 /* PublishProductViewModel.swift in Sources */,
 				F27C657D2CB16F1B0074B608 /* ApptuneApp.swift in Sources */,
 				F21CFD0D2CD7245700CAB613 /* PublishActivityView.swift in Sources */,
-				F2C5B4E82D16A31C007E3916 /* MessageView.swift in Sources */,
+				F2C5B4E82D16A31C007E3916 /* NotificationView.swift in Sources */,
 				F2AE427E2CB96D6B009E72C3 /* Tap+Extension.swift in Sources */,
 				F20D194E2CD783F5006296D0 /* AppStoreSearch+Sheet.swift in Sources */,
+				F2C5B4F42D18483F007E3916 /* AuditNoticeView.swift in Sources */,
 				F2EEE3A32D05A9B800D7777C /* PromotionView.swift in Sources */,
 				F2EEE39D2D048AF600D7777C /* Codeable+Extension.swift in Sources */,
 				F26F159D2CC538CE00848715 /* User+Service.swift in Sources */,
 				F21CFD072CD691BB00CAB613 /* CoinShopViewModel.swift in Sources */,
+				F2C5B4EE2D18355F007E3916 /* Notification+Service.swift in Sources */,
+				F2C5B4F02D184820007E3916 /* JoinNoticeView.swift in Sources */,
 				F28829802CF21328002D012A /* Active+API.swift in Sources */,
 				F21CFCD72CD6462400CAB613 /* ProductCard.swift in Sources */,
 				F2B2697A2CB578DD001230B4 /* Color+Extension.swift in Sources */,
@@ -655,6 +694,7 @@
 				F2EEE3B92D0D5B1400D7777C /* ImageSave+Sheet.swift in Sources */,
 				F288298A2CF309F5002D012A /* Image+Sheet.swift in Sources */,
 				F23F8F732CBD5AD5005546EE /* Font+Extension.swift in Sources */,
+				F2C5B4EC2D18354D007E3916 /* Notification+API.swift in Sources */,
 				F2EEE39F2D04909B00D7777C /* Bindding+Extension.swift in Sources */,
 				F21CFCD82CD6462400CAB613 /* TitleBar.swift in Sources */,
 				F2B2697D2CB57B80001230B4 /* Radio+Component.swift in Sources */,
@@ -662,12 +702,14 @@
 				F2F4C6D52CE100E1003F20A5 /* ImagePicker+Component.swift in Sources */,
 				F28829862CF2FEB0002D012A /* Tag+Component.swift in Sources */,
 				F22377E32CC6AC0200F780AE /* Network+Util.swift in Sources */,
+				F2C5B4FD2D186976007E3916 /* SubmitActiveReviewView.swift in Sources */,
 				F2B269F92CB6C6AA008C46B8 /* SFSymbol+Component.swift in Sources */,
 				F2A0D6102CC49FD800536C58 /* Toast+Modal.swift in Sources */,
 				F299FE592CC94D2F0009C956 /* MD5+Util.swift in Sources */,
 				F2FAEAFB2CE04C03007BD6D8 /* Message+Modal.swift in Sources */,
 				F2AE42802CB96DFF009E72C3 /* TextColor+Component.swift in Sources */,
 				F2B34CCF2CF35EE1009023B8 /* ReviewView.swift in Sources */,
+				F2C5B4F62D18484F007E3916 /* OfficeNoticeView.swift in Sources */,
 				F21CFD1A2CD7778D00CAB613 /* RouterManager.swift in Sources */,
 				F23F8F792CBEB2BA005546EE /* UserView.swift in Sources */,
 				F28829882CF30053002D012A /* Tag+Service.swift in Sources */,
@@ -683,6 +725,7 @@
 				F26F15982CC513C300848715 /* Confirm+Modal.swift in Sources */,
 				F2B269772CB574B0001230B4 /* LoginView.swift in Sources */,
 				F288297C2CF20D37002D012A /* Product+Service.swift in Sources */,
+				F2C5B4F82D1849BE007E3916 /* NoticeViewModel.swift in Sources */,
 				F2A0D6142CC4D37000536C58 /* UserAccountView.swift in Sources */,
 				F21CFD092CD691C000CAB613 /* CoinTasksViewModel.swift in Sources */,
 				F2A0D6022CC386DF00536C58 /* String+Extension.swift in Sources */,
@@ -702,6 +745,7 @@
 				F21CFD1B2CD7778D00CAB613 /* RouterDestination.swift in Sources */,
 				F21CFD0E2CD7245700CAB613 /* PublishActivityViewModel.swift in Sources */,
 				F283B0452D0DD4370051FBF1 /* ImageClip+Component.swift in Sources */,
+				F2C5B4FB2D184CB4007E3916 /* NoticeListView.swift in Sources */,
 				F22377E12CC6ABBB00F780AE /* UrlSession+Extension.swift in Sources */,
 				F28829842CF2EB3D002D012A /* ActivityTemplates+Sheet.swift in Sources */,
 				F237E5A02CCE6BFB00CC1074 /* AboutAuthorView.swift in Sources */,

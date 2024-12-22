@@ -120,7 +120,7 @@ struct EmailLoginView: View {
 
                       Task {
                         do {
-                          try await UserAPI.shared.sendCode(email: email)
+                          try await API.sendCode(email: email)
                           notice.closeNotice(id: loading)
                           initTimer()
                         } catch {
@@ -153,7 +153,7 @@ struct EmailLoginView: View {
             isLoading = true
             Task {
               do {
-                let response = try await UserAPI.shared.sign(
+                let response = try await API.sign(
                   email: email,
                   password: password,
                   code: code

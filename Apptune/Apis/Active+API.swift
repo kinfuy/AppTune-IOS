@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - Models
 struct TagEntity: Codable {
   let name: String
   let color: Color
@@ -48,11 +49,11 @@ struct ActiveInfo: Codable, Identifiable, Hashable {
 
   // 实现 Hashable
   func hash(into hasher: inout Hasher) {
-    hasher.combine(id)  // 只需要使用 id 作为唯一标识即可
+    hasher.combine(id)
   }
 
   static func == (lhs: ActiveInfo, rhs: ActiveInfo) -> Bool {
-    lhs.id == rhs.id  // 同样只需要比较 id
+    lhs.id == rhs.id
   }
 }
 
@@ -71,169 +72,188 @@ struct ActiveTemplateInfo: Codable, Identifiable {
   let tags: [TagEntity]
 }
 
-// 添加创建活动的参数模型
-struct CreateActiveParams: Codable {
-  let productId: String
-  let title: String
-  let description: String
-  let startAt: Date
-  let endAt: Date
-  let images: [String]
-  let tags: [TagEntity]
-  let isAutoEnd: Bool
-  // 可选参数
-  let cover: String?
-  let maxParticipants: Int?
-  let reward: String?
+struct ActiveStatus: Codable {
+  let hasJoined: Bool
+  let hasSubmitted: Bool
 }
 
-class ActiveAPI {
-  static let shared = ActiveAPI()
-  private let apiManager = APIManager.shared
+// MARK: - API Methods
+extension API {
+  // 获取审核活动列表
+  static func getReviewActiveList() async throws -> ListResponse<ActiveInfo> {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/auditList",
+      method: "GET",
+      body: nil
+    )
+    return try await API.shared.session.data(for: request)
+  }
 
-  func getReviewActiveList() async throws -> ListResponse<
+  // 获取个人活动列表
+  static func getSelfActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<
     ActiveInfo
   > {
-    let urlString = "\(BASR_SERVE_URL)/active/auditList"
-
-    let request = try apiManager.createRequest(
-      url: urlString,
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/myList",
       method: "GET",
-      body: nil
+      body: ["page": page, "pageSize": pageSize]
     )
-
-    return try await apiManager.session.data(for: request)
+    return try await API.shared.session.data(for: request)
   }
 
-  func getSelfActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<ActiveInfo>
-  {
-    let urlString = "\(BASR_SERVE_URL)/active/myList?page=\(page)&pageSize=\(pageSize)"
-
-    let request = try apiManager.createRequest(
-      url: urlString,
-      method: "GET",
-      body: nil
-    )
-
-    return try await apiManager.session.data(for: request)
-  }
-
-  func getJoinedActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<
+  // 获取参与的活动列表
+  static func getJoinedActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<
     ActiveInfo
   > {
-    let urlString = "\(BASR_SERVE_URL)/active/joinList?page=\(page)&pageSize=\(pageSize)"
-
-    let request = try apiManager.createRequest(
-      url: urlString,
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/joinList",
       method: "GET",
-      body: nil
+      body: ["page": page, "pageSize": pageSize]
     )
-
-    return try await apiManager.session.data(for: request)
+    return try await API.shared.session.data(for: request)
   }
 
-  func getActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<ActiveInfo> {
+  // 获取活动列表
+  static func getActiveList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<
+    ActiveInfo
+  > {
     let urlString = "\(BASR_SERVE_URL)/active/list?page=\(page)&pageSize=\(pageSize)"
-
-    let request = try apiManager.createRequest(
+    let request = try API.shared.createRequest(
       url: urlString,
       method: "GET",
       body: nil
     )
-
-    return try await apiManager.session.data(for: request)
+    return try await API.shared.session.data(for: request)
   }
 
-  func getTopActiveList(page: Int = 1, pageSize: Int = 5) async throws -> ListResponse<ActiveInfo> {
-    let urlString = "\(BASR_SERVE_URL)/active/tops?page=\(page)&pageSize=\(pageSize)"
-
-    let request = try apiManager.createRequest(
-      url: urlString,
+  // 获取置顶活动列表
+  static func getTopActiveList(page: Int = 1, pageSize: Int = 5) async throws -> ListResponse<
+    ActiveInfo
+  > {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/tops",
       method: "GET",
-      body: nil
+      body: ["page": page, "pageSize": pageSize]
     )
-
-    return try await apiManager.session.data(for: request)
+    return try await API.shared.session.data(for: request)
   }
 
-  /**
-   * 审核活动
-   * @param id 活动ID
-   * @param status 状态
-   */
-  func auditActive(id: String, status: Int) async throws {
-    let urlString = "\(BASR_SERVE_URL)/active/audit"
-
-    let request = try apiManager.createRequest(
-      url: urlString,
+  // 审核活动
+  static func auditActive(id: String, status: Int) async throws {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/audit",
       method: "POST",
       body: ["id": id, "status": status]
     )
-    let _ = try await apiManager.session.data(for: request)
+    let _: VoidCodable = try await API.shared.session.data(for: request)
   }
 
-  // 添加获取我的模板列表的方法
-  func getMyActiveTemplateList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<
-    ActiveTemplateInfo
-  > {
-    let urlString = "\(BASR_SERVE_URL)/active-template/myList?page=\(page)&pageSize=\(pageSize)"
+  // 获取个人模板列表
+  static func getMyActiveTemplateList(page: Int = 1, pageSize: Int = 10) async throws
+    -> ListResponse<ActiveTemplateInfo>
+  {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active-template/myList",
+      method: "GET",
+      body: ["page": page, "pageSize": pageSize]
+    )
+    return try await API.shared.session.data(for: request)
+  }
 
-    let request = try apiManager.createRequest(
-      url: urlString,
+  // 获取用户模板列表
+  static func getTemplates() async throws -> [ActiveTemplateInfo] {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active-template/templates",
       method: "GET",
       body: nil
     )
-
-    return try await apiManager.session.data(for: request)
+    return try await API.shared.session.data(for: request)
   }
 
-  // 获取用户模板列表(不分页)
-  func getTemplates() async throws -> [ActiveTemplateInfo] {
-    let urlString = "\(BASR_SERVE_URL)/active-template/templates"
-
-    let request = try apiManager.createRequest(
-      url: urlString,
-      method: "GET",
-      body: nil
-    )
-
-    return try await apiManager.session.data(for: request)
-  }
-
-  // 添加创建活动的方法
-  func createActive(_ params: ActiveInfo, _ saveTemplate: Bool = false) async throws {
-    let urlString = "\(BASR_SERVE_URL)/active/create"
-
-    // 直接转换参数，不需要处理异常
+  // 创建活动
+  static func createActive(_ params: ActiveInfo, _ saveTemplate: Bool = false) async throws {
     var body = params.asDictionary()
     if saveTemplate {
       body["saveTemplate"] = true
     }
 
-    let request = try apiManager.createRequest(
-      url: urlString,
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/create",
       method: "POST",
       body: body
     )
-
-    let _ = try await apiManager.session.data(for: request)
+    let _: VoidCodable = try await API.shared.session.data(for: request)
   }
 
-  func updateActive(_ params: ActiveInfo) async throws {
-    let urlString = "\(BASR_SERVE_URL)/active/update"
-
-    let request = try apiManager.createRequest(
-      url: urlString,
+  // 更新活动
+  static func updateActive(_ params: ActiveInfo) async throws {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/update",
       method: "POST",
       body: params.asDictionary()
     )
-
-    let _ = try await apiManager.session.data(for: request)
+    let _: VoidCodable = try await API.shared.session.data(for: request)
   }
 
-  func deleteActive(id: String) async throws {
-    let urlString = "\(BASR_SERVE_URL)/active/delete"
-    let request = try apiManager.createRequest(url: urlString, method: "POST", body: ["id": id])
-    let _ = try await apiManager.session.data(for: request)
+  // 删除活动
+  static func deleteActive(id: String) async throws {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/delete",
+      method: "POST",
+      body: ["id": id]
+    )
+    let _: VoidCodable = try await API.shared.session.data(for: request)
   }
+
+  // 报名活动
+  static func joinActive(id: String) async throws {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/join",
+      method: "POST",
+      body: ["activeId": id]
+    )
+    let _: VoidCodable = try await API.shared.session.data(for: request)
+  }
+
+  // 提交审核
+  static func submitAudit(activeId: String, content: String, images: [String]) async throws {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/submission/create",
+      method: "POST",
+      body: ["activeId": activeId, "content": content, "images": images]
+    )
+    let _: VoidCodable = try await API.shared.session.data(for: request)
+  }
+
+  // ���查活动状态
+  static func checkActiveStatus(id: String) async throws -> ActiveStatus {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/submission/check",
+      method: "GET",
+      body: ["activeId": id]
+    )
+    return try await API.shared.session.data(for: request)
+  }
+
+  // 获取审核历史
+  static func getReviewHistory(activeId: String) async throws -> ActiveSubmission {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/submission/history",
+      method: "GET",
+      body: ["activeId": activeId]
+    )
+    return try await API.shared.session.data(for: request)
+  }
+}
+
+// 添加 ActiveSubmission 模型
+struct ActiveSubmission: Codable {
+  let id: String
+  let userId: String
+  let activeId: String
+  let content: String
+  let images: [String]?
+  let status: Int
+  let reviewHistory: [ReviewRecord]
+  let createTime: Date
 }

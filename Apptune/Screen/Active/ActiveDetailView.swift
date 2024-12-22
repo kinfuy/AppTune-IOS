@@ -16,6 +16,8 @@ struct ActiveDetailView: View {
   @EnvironmentObject var sheet: SheetManager
   @EnvironmentObject var notice: NoticeManager
   @State private var showDeleteAlert = false
+  @State private var hasJoined = false
+  @State private var hasSubmitted = false
 
   private var isSelfActive: Bool {
     if !userService.isLogin {
@@ -150,14 +152,30 @@ struct ActiveDetailView: View {
   private var JoinBar: some View {
     VStack {
       Button(action: {
+        if !hasJoined {
+          Task {
+            await joinActive()
+          }
+        } else {
+          // 不管是否提交过,都可以进入审核页面
+          router.navigate(to: .submitActiveReview(active: active))
+        }
       }) {
-        Text("立即报名")
+        Text(buttonText)
           .primaryButton()
           .frame(height: 48)
       }
     }
     .padding()
     .background(Color.white)
+  }
+
+  private var buttonText: String {
+    if !hasJoined {
+      return "立即报名"
+    } else {
+      return "审核"
+    }
   }
 
   var body: some View {
@@ -206,22 +224,6 @@ struct ActiveDetailView: View {
                 Label("编辑", systemImage: "pencil")
               }
 
-              // Button(action: {
-              //   notice.openNotice(
-              //     open: .confirm(
-              //       Confirm(
-              //         title: "确定结束此活动吗",
-              //         desc: "结束后，不再允许新用户报名",
-              //         onSuccess: {
-              //           // 处理结束活动的逻辑
-              //         }
-              //       )
-              //     )
-              //   )
-              // }) {
-              //   Label("结束", systemImage: "stop.circle")
-              // }
-
               Divider()
             }
 
@@ -259,10 +261,32 @@ struct ActiveDetailView: View {
         }
       }
     )
+    .onAppear {
+      Task {
+        // 只有在不是自己的活动时才检查报名状态
+        if userService.isLogin && !isSelfActive {
+          let status = await activeService.checkActiveStatus(id: active.id)
+          hasJoined = status.hasJoined
+          hasSubmitted = status.hasSubmitted
+        }
+      }
+    }
   }
 
   // 参与活动
   private func joinActive() async {
+    if !userService.isLogin {
+      router.navigate(to: .login)
+      return
+    }
+
+    await activeService.joinActive(
+      id: active.id,
+      success: {
+        notice.openNotice(open: .toast("报名成功"))
+        hasJoined = true
+      }
+    )
   }
 
   // 添加删除活动的方法
