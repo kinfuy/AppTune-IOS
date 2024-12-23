@@ -273,4 +273,8 @@ class ActiveService: ObservableObject {
       return nil
     }
   }
+
+  func submitAuditResult(activeId: String, status: ReviewStatus, reason: String?) async throws {
+    // 实现审核结果提交的API调用
+  }
 }

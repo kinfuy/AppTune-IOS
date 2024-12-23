@@ -1,12 +1,13 @@
 import SwiftUI
 
 // MARK: - 页面路由定义
+
 enum GeneralRouterDestination: Hashable {
   case login  // 登录
   case setting  // 设置
   case accountSetting  // 账号设置
   case emailLogin  // 邮箱登录
-  case aboutAuthor  //关于作者
+  case aboutAuthor  // 关于作者
   case userProfile  // 用户详情
   case coinTasks  // 积分任务
   case coinShop  // 积分商店
@@ -18,7 +19,8 @@ enum GeneralRouterDestination: Hashable {
   case joinNotice  // 报名通知
   case auditNotice  // 审核通知
   case officeNotice  // 官方通知
-  case submitActiveReview(active: ActiveInfo)
+  case submitActiveReview(active: ActiveInfo, mode: ReviewMode)
+  case registration(active: ActiveInfo)  // 添加报名管理路由
 
   static func isWhiteListRoute(to: GeneralRouterDestination) -> Bool {
     switch to {
@@ -31,13 +33,13 @@ enum GeneralRouterDestination: Hashable {
 }
 
 enum SheetDestination: Hashable {
-
 }
 
 enum FullScreenDestination: Hashable {
 }
 
 // MARK: - 视图构建器
+
 extension GeneralRouterDestination {
   @ViewBuilder
   func buildView() -> some View {
@@ -60,11 +62,11 @@ extension GeneralRouterDestination {
       CoinShopView()
     case .publishProduct:
       PublishProductView()
-    case .publishActivity(let active):
+    case let .publishActivity(active):
       PublishActivityView(active: active)
     case .createPromotion:
       CreatePromotionView()
-    case .activeDetail(let active):
+    case let .activeDetail(active):
       ActiveDetailView(active: active)
     case .followNotice:
       FollowNoticeView()
@@ -74,8 +76,10 @@ extension GeneralRouterDestination {
       AuditNoticeView()
     case .officeNotice:
       OfficeNoticeView()
-    case .submitActiveReview(let active):
-      SubmitActiveReviewView(active: active)
+    case let .submitActiveReview(active, mode):
+      SubmitActiveReviewView(active: active, mode: mode)
+    case let .registration(active):
+      RegistrationView(active: active)
     }
   }
 }

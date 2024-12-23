@@ -26,10 +26,6 @@ struct ActiveDetailView: View {
     return active.userId == userService.profile.id
   }
 
-  private var isAdmin: Bool {
-    return userService.isAdmin
-  }
-
   // 头部视图
   private var HeaderView: some View {
     VStack(alignment: .leading, spacing: 12) {
@@ -134,21 +130,44 @@ struct ActiveDetailView: View {
     .padding()
   }
 
-  // 底部操作栏
-  private var ShareBar: some View {
-    VStack {
+  // 活动创建者的底部操作栏
+  private var CreatorBar: some View {
+    HStack(spacing: 12) {
+      // 主要操作按钮 - 管理报名用户
       Button(action: {
-        sheet.show(.activeShare(active: active))
+        router.navigate(to: .registration(active: active))
       }) {
-        Text("分享活动")
-          .primaryButton()
-          .frame(height: 48)
+        HStack {
+          Image(systemName: "person.2")
+          Text("报名管理")
+        }
+        .primaryButton()
+        .frame(height: 48)
+      }
+      .frame(maxWidth: .infinity)
+
+      // 次要操作按钮组
+      HStack(spacing: 8) {
+        // 分享活动
+        Button(action: {
+          sheet.show(.activeShare(active: active))
+        }) {
+          VStack {
+            Image(systemName: "square.and.arrow.up")
+              .font(.system(size: 20))
+            Text("分享")
+              .font(.caption)
+          }
+          .foregroundColor(.black)
+          .frame(width: 60, height: 48)
+        }
       }
     }
     .padding()
     .background(Color.white)
   }
 
+  // 底部操作栏
   private var JoinBar: some View {
     VStack {
       Button(action: {
@@ -158,7 +177,7 @@ struct ActiveDetailView: View {
           }
         } else {
           // 不管是否提交过,都可以进入审核页面
-          router.navigate(to: .submitActiveReview(active: active))
+          router.navigate(to: .submitActiveReview(active: active, mode: .edit))
         }
       }) {
         Text(buttonText)
@@ -174,7 +193,7 @@ struct ActiveDetailView: View {
     if !hasJoined {
       return "立即报名"
     } else {
-      return "审核"
+      return "审核中"
     }
   }
 
@@ -188,14 +207,12 @@ struct ActiveDetailView: View {
           Spacer(minLength: 80)  // 为底部栏留出空间
         }
       }
-      if isSelfActive {
-        VStack {
-          Spacer()
-          ShareBar
-        }
-      } else {
-        VStack {
-          Spacer()
+
+      VStack {
+        Spacer()
+        if isSelfActive {
+          CreatorBar
+        } else {
           JoinBar
         }
       }
@@ -211,46 +228,41 @@ struct ActiveDetailView: View {
       },
       // 更多操作
       trailing: Group {
-        if isSelfActive || isAdmin {
+        if isSelfActive {
           Menu {
             // 活动创建者可以编辑和结束活动
-            if isSelfActive {
-              Button(action: {
-                Task {
-                  await productService.load()
-                }
-                router.navigate(to: .publishActivity(active: active))
-              }) {
-                Label("编辑", systemImage: "pencil")
+            Button(action: {
+              Task {
+                await productService.load()
               }
-
-              Divider()
+              router.navigate(to: .publishActivity(active: active))
+            }) {
+              Label("编辑", systemImage: "pencil")
             }
 
-            if isAdmin {
-              Divider()
-              // 管理员和活动创建者都可以删除活动
-              Button(
-                role: .destructive,
-                action: {
-                  notice.openNotice(
-                    open: .confirm(
-                      Confirm(
-                        title: "确定删除此活动吗",
-                        desc: "删除后数据将无法恢复",
-                        onSuccess: {
-                          Task {
-                            await deleteActive()
-                          }
+            Divider()
+
+            // 管理员和活动创建者都可以删除活动
+            Button(
+              role: .destructive,
+              action: {
+                notice.openNotice(
+                  open: .confirm(
+                    Confirm(
+                      title: "确定删除此活动吗",
+                      desc: "删除后数据将无法恢复",
+                      onSuccess: {
+                        Task {
+                          await deleteActive()
                         }
-                      )
+                      }
                     )
                   )
-                }
-              ) {
-                Label("删除", systemImage: "trash")
-                  .foregroundColor(.red)
+                )
               }
+            ) {
+              Label("删除", systemImage: "trash")
+                .foregroundColor(.red)
             }
 
           } label: {

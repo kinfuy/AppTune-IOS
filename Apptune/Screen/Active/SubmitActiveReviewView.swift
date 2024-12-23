@@ -8,19 +8,28 @@
 import PhotosUI
 import SwiftUI
 
+enum ReviewMode {
+  case view  // 查看模式
+  case edit  // 编辑模式
+  case review  // 审核模式
+}
+
 struct SubmitActiveReviewView: View {
   @EnvironmentObject var activeService: ActiveService
   @EnvironmentObject var router: Router
   @EnvironmentObject var notice: NoticeManager
   @EnvironmentObject var sheet: SheetManager
   var active: ActiveInfo
+  @State var mode: ReviewMode
 
   @State private var content: String = ""
   @State private var images: [String] = []
   @State private var isSubmitting = false
   @State private var historyReviews: [ReviewRecord] = []
   @State private var isLoadingHistory = false
-  @State private var hasSubmitted = false
+  @State private var hasSubmitted = true
+  @State private var reviewStatus: ReviewStatus = .pending
+  @State private var reviewReason: String = ""
 
   // 上传图片
   private func uploadImage(_ image: UIImage) async -> String? {
@@ -35,161 +44,41 @@ struct SubmitActiveReviewView: View {
   }
 
   private var canSubmit: Bool {
-    return !content.isEmpty && !isSubmitting
+    switch mode {
+    case .edit:
+      return !content.isEmpty && !isSubmitting
+    case .review:
+      return !isSubmitting && (reviewStatus != .pending || !reviewReason.isEmpty)
+    case .view:
+      return false
+    }
   }
 
   var body: some View {
     VStack {
       ScrollView {
         VStack(alignment: .leading, spacing: 20) {
-          // 根据是否已提交显示不同内容
-          if !hasSubmitted {
-            // 审核内容输入部分
-            VStack(alignment: .leading, spacing: 12) {
-              // 图片上传部分
-              VStack(alignment: .leading) {
-                ScrollView(.horizontal, showsIndicators: false) {
-                  HStack(spacing: 16) {
-                    // 上传按钮
-                    Button(action: {
-                      sheet.show(
-                        .imagePicker(onSelect: { image in
-                          Task {
-                            if let url = await uploadImage(image) {
-                              images.append(url)
-                            }
-                          }
-                        }))
-                    }) {
-                      Rectangle()
-                        .fill(Color(hex: "#f4f4f4"))
-                        .frame(width: 100, height: 100)
-                        .cornerRadius(8)
-                        .overlay(
-                          VStack(spacing: 8) {
-                            Image(systemName: "plus")
-                              .font(.system(size: 32))
-                          }
-                          .foregroundColor(.gray)
-                        )
-                    }
+          // 内容展示部分
+          contentSection
 
-                    // 已上传图片
-                    if !images.isEmpty {
-                      ForEach(images, id: \.self) { image in
-                        ImgLoader(image)
-                          .frame(width: 100, height: 100)
-                          .clipped()
-                          .cornerRadius(8)
-                          .overlay(
-                            Button(action: {
-                              images.removeAll { $0 == image }
-                            }) {
-                              SFSymbol.close
-                                .font(.system(size: 12))
-                                .padding(4)
-                                .background(.black.opacity(0.7))
-                                .cornerRadius(4)
-                                .foregroundColor(.white)
-                            }
-                            .padding(4),
-                            alignment: .topTrailing
-                          )
-                      }
-                    }
-                  }
-                }
-              }
-
-              CustomTextField(
-                text: $content,
-                placeholder: "活动描述",
-                isMultiline: true,
-                maxLength: 500
-              )
-            }
-          } else {
-            // 显示当前提交的内容
-            VStack(alignment: .leading, spacing: 12) {
-              Text("当前提交")
-                .font(.headline)
-                .padding(.horizontal)
-
-              VStack(alignment: .leading, spacing: 12) {
-                // 提交的文字内容
-                Text(content)
-                  .font(.system(size: 15))
-                  .foregroundColor(.primary)
-
-                // 提交的图片
-                if !images.isEmpty {
-                  ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                      ForEach(images, id: \.self) { imageUrl in
-                        ImgLoader(imageUrl)
-                          .frame(width: 80, height: 80)
-                          .cornerRadius(8)
-                      }
-                    }
-                  }
-                }
-              }
-              .padding()
-              .background(Color.white)
-              .cornerRadius(12)
-              .shadow(color: .gray.opacity(0.05), radius: 8)
-              .padding(.horizontal)
-            }
+          // 审核操作部分（仅在审核模式下显示）
+          if mode == .review {
+            reviewSection
           }
 
-          // 历史审核记录部分
+          // 历史记录部分
           if !historyReviews.isEmpty {
-            VStack(alignment: .leading, spacing: 16) {
-              Text("历史审核记录")
-                .font(.headline)
-                .padding(.horizontal)
-
-                ForEach(historyReviews, id: \.reviewerId) { record in
-                ReviewRecordCard(record: record)
-              }
-            }
-          }
-
-          // 加载中状态
-          if isLoadingHistory {
-            HStack {
-              Spacer()
-              ProgressView()
-              Spacer()
-            }
-            .padding()
+            historySection
           }
         }
         .padding(.horizontal)
         .padding(.top)
       }
 
-      // 只有在未提交时才显示提交按钮
-      if !hasSubmitted {
-        Button(action: {
-          Task {
-            await submitReview()
-          }
-        }) {
-          if isSubmitting {
-            ProgressView()
-              .progressViewStyle(CircularProgressViewStyle(tint: .white))
-          } else {
-            Text("提交审核")
-          }
-        }
-        .buttonStyle(.black)
-        .frame(height: 48)
-        .padding()
-        .disabled(!canSubmit)
-      }
+      // 底部按钮
+      bottomButton
     }
-    .navigationTitle("审核")
+    .navigationTitle(navigationTitle)
     .navigationBarBackButtonHidden()
     .navigationBarTitleDisplayMode(.inline)
     .navigationBarItems(
@@ -211,10 +100,138 @@ struct SubmitActiveReviewView: View {
         // 检查提交状态
         let status = await activeService.checkActiveStatus(id: active.id)
         hasSubmitted = status.hasSubmitted
+        if mode != .review {
+          mode = hasSubmitted ? .view : .edit
+        }
 
         await loadHistoryReviews()
       }
     }
+  }
+
+  // 导航栏标题
+  private var navigationTitle: String {
+    switch mode {
+    case .view: return "查看审核"
+    case .edit: return "提交审核"
+    case .review: return "审核"
+    }
+  }
+
+  // 内容展示部分
+  private var contentSection: some View {
+    VStack(alignment: .leading, spacing: 12) {
+      if mode == .edit {
+        editableContent
+      } else {
+        readOnlyContent
+      }
+    }
+  }
+
+  // 可编辑内容
+  private var editableContent: some View {
+    VStack(alignment: .leading, spacing: 12) {
+      // 图片上传部分
+      imageUploadSection
+
+      // 文本输入部分
+      CustomTextField(
+        text: $content,
+        placeholder: "活动描述",
+        isMultiline: true,
+        maxLength: 500
+      )
+    }
+  }
+
+  // 只读内容
+  private var readOnlyContent: some View {
+    VStack(alignment: .leading, spacing: 12) {
+      Text("审核内容")
+        .font(.headline)
+
+      VStack(alignment: .leading, spacing: 12) {
+        Text(content)
+          .font(.system(size: 15))
+
+        if !images.isEmpty {
+          imageGridView
+        }
+      }
+      .padding()
+      .background(Color.white)
+      .cornerRadius(12)
+      .shadow(color: .gray.opacity(0.05), radius: 8)
+    }
+  }
+
+  // 审核操作部分
+  private var reviewSection: some View {
+    VStack(alignment: .leading, spacing: 16) {
+      Text("审核操作")
+        .font(.headline)
+
+      // 审核状态选择
+      Picker("审核状态", selection: $reviewStatus) {
+        Text("通过").tag(ReviewStatus.approved)
+        Text("拒绝").tag(ReviewStatus.rejected)
+      }
+      .pickerStyle(.segmented)
+
+      // 审核意见输入
+      CustomTextField(
+        text: $reviewReason,
+        placeholder: "请输入审核意见（必填）",
+        isMultiline: true,
+        maxLength: 200
+      )
+    }
+    .padding()
+    .background(Color.white)
+    .cornerRadius(12)
+  }
+
+  // 底部按钮
+  private var bottomButton: some View {
+    Group {
+      if mode != .view {
+        Button(action: {
+          Task {
+            if mode == .edit {
+              await submitReview()
+            } else {
+              await submitAuditResult()
+            }
+          }
+        }) {
+          if isSubmitting {
+            ProgressView()
+              .progressViewStyle(CircularProgressViewStyle(tint: .white))
+          } else {
+            Text(mode == .edit ? "提交审核" : "提交")
+          }
+        }
+        .buttonStyle(.black)
+        .frame(height: 48)
+        .padding()
+        .disabled(!canSubmit)
+      }
+    }
+  }
+
+  // 提交审核结果
+  private func submitAuditResult() async {
+    isSubmitting = true
+    // 这里需要实现提交审核结果的API调用
+    // await activeService.submitAuditResult(
+    //     activeId: active.id,
+    //     status: reviewStatus,
+    //     reason: reviewReason
+    // )
+    isSubmitting = false
+    notice.openNotice(open: .toast("审核完成"))
+    router.back()
   }
 
   func submitReview() async {
@@ -240,6 +257,98 @@ struct SubmitActiveReviewView: View {
       historyReviews = submission.reviewHistory
     }
     isLoadingHistory = false
+  }
+
+  // 历史记录部分
+  private var historySection: some View {
+    VStack(alignment: .leading, spacing: 16) {
+      Text("审核记录")
+        .font(.headline)
+        .padding(.horizontal)
+
+      ForEach(historyReviews, id: \.reviewerId) { record in
+        ReviewRecordCard(record: record)
+      }
+
+      if isLoadingHistory {
+        HStack {
+          Spacer()
+          ProgressView()
+          Spacer()
+        }
+        .padding()
+      }
+    }
+  }
+
+  // 图片上传部分
+  private var imageUploadSection: some View {
+    VStack(alignment: .leading) {
+      ScrollView(.horizontal, showsIndicators: false) {
+        HStack(spacing: 16) {
+          // 上传按钮
+          Button(action: {
+            sheet.show(
+              .imagePicker(onSelect: { image in
+                Task {
+                  if let url = await uploadImage(image) {
+                    images.append(url)
+                  }
+                }
+              }))
+          }) {
+            Rectangle()
+              .fill(Color(hex: "#f4f4f4"))
+              .frame(width: 100, height: 100)
+              .cornerRadius(8)
+              .overlay(
+                VStack(spacing: 8) {
+                  Image(systemName: "plus")
+                    .font(.system(size: 32))
+                }
+                .foregroundColor(.gray)
+              )
+          }
+
+          // 已上传图片
+          if !images.isEmpty {
+            ForEach(images, id: \.self) { image in
+              ImgLoader(image)
+                .frame(width: 100, height: 100)
+                .clipped()
+                .cornerRadius(8)
+                .overlay(
+                  Button(action: {
+                    images.removeAll { $0 == image }
+                  }) {
+                    SFSymbol.close
+                      .font(.system(size: 12))
+                      .padding(4)
+                      .background(.black.opacity(0.7))
+                      .cornerRadius(4)
+                      .foregroundColor(.white)
+                  }
+                  .padding(4),
+                  alignment: .topTrailing
+                )
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 图片网格视图
+  private var imageGridView: some View {
+    ScrollView(.horizontal, showsIndicators: false) {
+      HStack(spacing: 8) {
+        ForEach(images, id: \.self) { imageUrl in
+          ImgLoader(imageUrl)
+            .frame(width: 80, height: 80)
+            .cornerRadius(8)
+        }
+      }
+    }
   }
 }
 
@@ -291,7 +400,7 @@ struct ReviewRecordCard: View {
 }
 
 // 审核记录模型
-struct ReviewRecord:  Codable {
+struct ReviewRecord: Codable {
   let reviewerId: String
   let reviewTime: Date
   let status: ReviewStatus
@@ -351,7 +460,8 @@ enum ReviewStatus: Int, Codable {
         recommendTag: nil,
         recommendDesc: nil,
         pubMode: .pro
-      )
+      ),
+      mode: .review
     )
     .environmentObject(ActiveService())
     .environmentObject(Router())
