@@ -101,6 +101,8 @@
 		F2C5B4FB2D184CB4007E3916 /* NoticeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4F92D184CB4007E3916 /* NoticeListView.swift */; };
 		F2C5B4FD2D186976007E3916 /* SubmitActiveReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4FC2D186976007E3916 /* SubmitActiveReviewView.swift */; };
 		F2C5B4FF2D19AFD6007E3916 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B4FE2D19AFD6007E3916 /* RegistrationView.swift */; };
+		F2C5B5012D1DA240007E3916 /* SearchActiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B5002D1DA240007E3916 /* SearchActiveView.swift */; };
+		F2C5B5032D1DA737007E3916 /* SearchHistory+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C5B5022D1DA737007E3916 /* SearchHistory+Util.swift */; };
 		F2D6AE242CD92C4800896DD9 /* Empty+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D6AE232CD92C4800896DD9 /* Empty+Component.swift */; };
 		F2EEE39D2D048AF600D7777C /* Codeable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE39C2D048AF600D7777C /* Codeable+Extension.swift */; };
 		F2EEE39F2D04909B00D7777C /* Bindding+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EEE39E2D04909B00D7777C /* Bindding+Extension.swift */; };
@@ -212,6 +214,8 @@
 		F2C5B4F92D184CB4007E3916 /* NoticeListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoticeListView.swift; sourceTree = "<group>"; };
 		F2C5B4FC2D186976007E3916 /* SubmitActiveReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitActiveReviewView.swift; sourceTree = "<group>"; };
 		F2C5B4FE2D19AFD6007E3916 /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
+		F2C5B5002D1DA240007E3916 /* SearchActiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchActiveView.swift; sourceTree = "<group>"; };
+		F2C5B5022D1DA737007E3916 /* SearchHistory+Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SearchHistory+Util.swift"; sourceTree = "<group>"; };
 		F2D6AE232CD92C4800896DD9 /* Empty+Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Empty+Component.swift"; sourceTree = "<group>"; };
 		F2EEE39C2D048AF600D7777C /* Codeable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codeable+Extension.swift"; sourceTree = "<group>"; };
 		F2EEE39E2D04909B00D7777C /* Bindding+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bindding+Extension.swift"; sourceTree = "<group>"; };
@@ -472,6 +476,7 @@
 				F2A0D5FD2CC3862700536C58 /* UserDefault+Util.swift */,
 				F2A0D6112CC4AFB200536C58 /* Const+Util.swift */,
 				F299FE582CC94D2F0009C956 /* MD5+Util.swift */,
+				F2C5B5022D1DA737007E3916 /* SearchHistory+Util.swift */,
 				F22377E22CC6AC0200F780AE /* Network+Util.swift */,
 			);
 			path = Utils;
@@ -542,6 +547,7 @@
 			children = (
 				F2B269F42CB6C2C5008C46B8 /* ActiveHomeView.swift */,
 				F2C5B4FC2D186976007E3916 /* SubmitActiveReviewView.swift */,
+				F2C5B5002D1DA240007E3916 /* SearchActiveView.swift */,
 				F2C5B4FE2D19AFD6007E3916 /* RegistrationView.swift */,
 				F2EEE3B22D0B2F9900D7777C /* ActiveShareView.swift */,
 				F2EEE3B02D088E2500D7777C /* ActiveDetailView.swift */,
@@ -661,6 +667,7 @@
 				F2D6AE242CD92C4800896DD9 /* Empty+Component.swift in Sources */,
 				F2C5B4F22D18482F007E3916 /* FollowNoticeView.swift in Sources */,
 				F288297E2CF20EDD002D012A /* Active+Service.swift in Sources */,
+				F2C5B5032D1DA737007E3916 /* SearchHistory+Util.swift in Sources */,
 				F21CFCDD2CD6463A00CAB613 /* ProductTab.swift in Sources */,
 				F2EEE3AB2D05DE5000D7777C /* CreatePromotionView.swift in Sources */,
 				F2A0D60C2CC3A28D00536C58 /* Version+Modal.swift in Sources */,
@@ -703,6 +710,7 @@
 				F2B2697D2CB57B80001230B4 /* Radio+Component.swift in Sources */,
 				F26F15A32CC69D6E00848715 /* User+API.swift in Sources */,
 				F2F4C6D52CE100E1003F20A5 /* ImagePicker+Component.swift in Sources */,
+				F2C5B5012D1DA240007E3916 /* SearchActiveView.swift in Sources */,
 				F28829862CF2FEB0002D012A /* Tag+Component.swift in Sources */,
 				F22377E32CC6AC0200F780AE /* Network+Util.swift in Sources */,
 				F2C5B4FD2D186976007E3916 /* SubmitActiveReviewView.swift in Sources */,

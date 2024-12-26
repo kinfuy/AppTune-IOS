@@ -43,6 +43,12 @@ struct Message {
   var theme: MessageTheme = .dark
 }
 
+struct ImagePreview {
+  var id: UUID = UUID()
+  var url: String
+  var imageType: ImageType
+}
+
 enum NoticeDestiantion {
   case version(String)  // 版本更新检查
   case agreement(String)  // 用户协议同意
@@ -50,6 +56,7 @@ enum NoticeDestiantion {
   case loading(Toast)  // 加载
   case confirm(Confirm)  // 确认弹窗
   case message(Message)  // 新增 message 类型
+  case imagePreview(ImagePreview)  // 新增图片预览类型
 
   var id: String {
     switch self {
@@ -59,6 +66,7 @@ enum NoticeDestiantion {
     case let .version(id): id
     case let .confirm(ctx): ctx.id.uuidString
     case let .message(ctx): ctx.id.uuidString
+    case let .imagePreview(ctx): ctx.id.uuidString
     }
   }
 
@@ -70,6 +78,8 @@ enum NoticeDestiantion {
       NoticeConfig.transparent
     case .agreement, .confirm:
       NoticeConfig.blocking
+    case .imagePreview:
+      NoticeConfig(maskHiden: true, mask: true, blockInteraction: true)
     }
   }
 
@@ -130,6 +140,10 @@ enum NoticeDestiantion {
         autoClose: autoClose,
         theme: theme
       ))
+  }
+
+  static func imagePreview(url: String, imageType: ImageType) -> NoticeDestiantion {
+    return .imagePreview(ImagePreview(url: url, imageType: imageType))
   }
 }
 
@@ -244,6 +258,12 @@ class NoticeManager: ObservableObject {
           loading: msg.loading,
           time: msg.time,
           theme: msg.theme
+        )
+      case let .imagePreview(preview):
+        ImagePreviewView(
+          url: preview.url,
+          imageType: preview.imageType,
+          id: preview.id.uuidString
         )
       }
     }

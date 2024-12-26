@@ -12,10 +12,12 @@ struct NoticeListView: View {
                     ForEach(viewModel.notices) { notice in
                         NoticeRow(notice: notice)
                             .onAppear {
-                                Task {
-                                    await viewModel.markAsRead(notice.id)
-                                    if notice.id == viewModel.notices.last?.id {
-                                        await viewModel.loadMore()
+                                if !notice.isRead {
+                                    Task {
+                                        await viewModel.markAsRead(notice.id)
+                                        if notice.id == viewModel.notices.last?.id {
+                                            await viewModel.loadMore()
+                                        }
                                     }
                                 }
                             }

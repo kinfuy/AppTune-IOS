@@ -245,9 +245,12 @@ class ActiveService: ObservableObject {
   }
 
   @MainActor
-  func submitAudit(activeId: String, content: String, images: [String]) async {
+  func submitAudit(
+    activeId: String, content: String, images: [String], success: @escaping () -> Void
+  ) async {
     do {
       try await API.submitAudit(activeId: activeId, content: content, images: images)
+      success()
     } catch {
       print(error)
     }
@@ -264,9 +267,9 @@ class ActiveService: ObservableObject {
   }
 
   @MainActor
-  func getReviewHistory(activeId: String) async -> ActiveSubmission? {
+  func getReviewHistory(activeId: String, userId: String?) async -> ActiveSubmission? {
     do {
-      let submission = try await API.getReviewHistory(activeId: activeId)
+      let submission = try await API.getReviewHistory(activeId: activeId, userId: userId)
       return submission
     } catch {
       print(error)
@@ -274,7 +277,46 @@ class ActiveService: ObservableObject {
     }
   }
 
-  func submitAuditResult(activeId: String, status: ReviewStatus, reason: String?) async throws {
+  func submitAuditResult(
+    activeId: String, userId: String, status: ReviewStatus, reason: String,
+    success: @escaping () -> Void
+  ) async {
     // 实现审核结果提交的API调用
+    do {
+      try await API.submitAuditResult(
+        activeId: activeId, userId: userId, status: status.rawValue, reason: reason)
+      success()
+    } catch {
+      print(error)
+    }
+  }
+
+  func getActiveRegistrationList(activeId: String) async -> [RegistrationUser]? {
+    do {
+      let rst = try await API.getActiveRegistrationList(activeId: activeId)
+      return rst.items
+    } catch {
+      print(error)
+      return nil
+    }
+  }
+
+  func getActiveRegistrationStats(activeId: String) async -> RegistrationStats {
+    do {
+      return try await API.getActiveRegistrationStats(activeId: activeId)
+    } catch {
+      print(error)
+      return RegistrationStats(
+        totalJoins: 0, pendingReviews: 0, approvedReviews: 0, rejectedReviews: 0)
+    }
+  }
+
+  func searchActive(keyword: String) async -> [ActiveInfo] {
+    do {
+      return try await API.searchActive(keyword: keyword)
+    } catch {
+      print(error)
+      return []
+    }
   }
 }

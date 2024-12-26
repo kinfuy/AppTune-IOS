@@ -35,12 +35,7 @@ class Router: ObservableObject {
     return false
   }
 
-  func navigate(to destination: GeneralRouterDestination) {
-    print("navigate to \(destination)")
-    print("paths: \(paths)")
-    print("path: \(path)")
-    print("currentTab: \(currentTab)")
-
+  func navigate(to destination: GeneralRouterDestination, isReplace: Bool = false) {
     // 登录页面的特殊处理
     if destination == .login {
       // 直接清空导航堆栈并设置登录页面
@@ -71,6 +66,11 @@ class Router: ObservableObject {
     // 如果当前显示的是登录页面，直接清空导航堆栈
     if path.count == 1 && paths.isEmpty {
       path = NavigationPath()
+    }
+
+    if isReplace {
+      path.removeLast()
+      paths.removeLast()
     }
 
     path.append(destination)

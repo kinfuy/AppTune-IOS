@@ -21,6 +21,7 @@ struct SubmitActiveReviewView: View {
   @EnvironmentObject var sheet: SheetManager
   var active: ActiveInfo
   @State var mode: ReviewMode
+  var userId: String?
 
   @State private var content: String = ""
   @State private var images: [String] = []
@@ -30,6 +31,10 @@ struct SubmitActiveReviewView: View {
   @State private var hasSubmitted = true
   @State private var reviewStatus: ReviewStatus = .pending
   @State private var reviewReason: String = ""
+
+  @State private var isLoading = false
+  @State private var dragOffset: CGFloat = 0
+  @State private var isDragging = false
 
   // 上传图片
   private func uploadImage(_ image: UIImage) async -> String? {
@@ -54,29 +59,108 @@ struct SubmitActiveReviewView: View {
     }
   }
 
+  var auditButtons: some View {
+    VStack(spacing: 0) {
+      Divider()
+
+      HStack(spacing: 12) {
+        // 主按钮 - 通过
+        Button(action: {
+          notice.openNotice(
+            open: .confirm(
+              title: "确定通过审核吗？",
+              onSuccess: {
+                Task {
+                  reviewStatus = .approved
+                  await submitAuditResult()
+                }
+              }))
+        }) {
+          HStack(spacing: 8) {
+            Image(systemName: "checkmark.circle.fill")
+            Text("通过审核")
+          }
+          .buttonStyle(.black)
+          .frame(height: 44)
+        }
+
+        // 辅助按钮 - 驳回
+        Button(action: {
+          notice.openNotice(
+            open: .confirm(
+              title: "确定驳回审核吗？",
+              onSuccess: {
+                Task {
+                  reviewStatus = .rejected
+                  await submitAuditResult()
+                }
+              }))
+        }) {
+          HStack(spacing: 4) {
+            Image(systemName: "xmark.circle.fill")
+            Text("驳回")
+          }
+          .font(.system(size: 16, weight: .medium))
+          .foregroundColor(.gray)
+          .frame(width: 90, height: 44)
+          .background(Color.gray.opacity(0.1))
+          .cornerRadius(22)
+        }
+      }
+      .padding(.horizontal, 16)
+      .padding(.vertical, 12)
+      .background(Color.white)
+    }
+  }
+
+  var submitButton: some View {
+    Button(action: {
+      Task {
+        await submitReview()
+      }
+    }) {
+      Text("提交")
+    }
+    .buttonStyle(.black)
+    .frame(height: 48)
+    .padding()
+    .disabled(!canSubmit)
+  }
+
   var body: some View {
     VStack {
-      ScrollView {
-        VStack(alignment: .leading, spacing: 20) {
-          // 内容展示部分
-          contentSection
+      if isLoading {
+        ProgressView()
+      } else {
+        ScrollView {
+          VStack(alignment: .leading, spacing: 20) {
+            // 内容展示部分
+            contentSection
 
-          // 审核操作部分（仅在审核模式下显示）
-          if mode == .review {
-            reviewSection
-          }
+            // 审核操作部分（仅在审核模式下显示）
+            if mode == .review {
+              reviewSection
+            }
 
-          // 历史记录部分
-          if !historyReviews.isEmpty {
-            historySection
+            // 历史记录部分
+            if !historyReviews.isEmpty {
+              historySection
+            }
           }
+          .padding(.horizontal)
+          .padding(.top)
         }
-        .padding(.horizontal)
-        .padding(.top)
-      }
 
-      // 底部按钮
-      bottomButton
+        Spacer()
+
+        // 底部按钮
+        if mode == .review {
+          auditButtons
+        }
+        if mode == .edit {
+          submitButton
+        }
+      }
     }
     .navigationTitle(navigationTitle)
     .navigationBarBackButtonHidden()
@@ -96,15 +180,15 @@ struct SubmitActiveReviewView: View {
         })
     )
     .onAppear {
+      isLoading = true
       Task {
         // 检查提交状态
         let status = await activeService.checkActiveStatus(id: active.id)
         hasSubmitted = status.hasSubmitted
-        if mode != .review {
-          mode = hasSubmitted ? .view : .edit
-        }
 
-        await loadHistoryReviews()
+        await loadHistoryReviews(userId: userId)
+
+        isLoading = false
       }
     }
   }
@@ -172,22 +256,15 @@ struct SubmitActiveReviewView: View {
       Text("审核操作")
         .font(.headline)
 
-      // 审核状态选择
-      Picker("审核状态", selection: $reviewStatus) {
-        Text("通过").tag(ReviewStatus.approved)
-        Text("拒绝").tag(ReviewStatus.rejected)
-      }
-      .pickerStyle(.segmented)
-
       // 审核意见输入
       CustomTextField(
         text: $reviewReason,
-        placeholder: "请输入审核意见（必填）",
+        placeholder: "请输入审核意见",
         isMultiline: true,
+        padding: 0,
         maxLength: 200
       )
     }
-    .padding()
     .background(Color.white)
     .cornerRadius(12)
   }
@@ -222,16 +299,24 @@ struct SubmitActiveReviewView: View {
 
   // 提交审核结果
   private func submitAuditResult() async {
+    if userId == nil {
+      return
+    }
     isSubmitting = true
     // 这里需要实现提交审核结果的API调用
-    // await activeService.submitAuditResult(
-    //     activeId: active.id,
-    //     status: reviewStatus,
-    //     reason: reviewReason
-    // )
-    isSubmitting = false
-    notice.openNotice(open: .toast("审核完成"))
-    router.back()
+    await activeService.submitAuditResult(
+      activeId: active.id,
+      userId: userId!,
+      status: reviewStatus,
+      reason: reviewReason,
+      success: {
+        isSubmitting = false
+        notice.openNotice(open: .toast("审核完成"))
+        Task {
+          await loadHistoryReviews(userId: userId)
+        }
+      }
+    )
   }
 
   func submitReview() async {
@@ -240,23 +325,31 @@ struct SubmitActiveReviewView: View {
     await activeService.submitAudit(
       activeId: active.id,
       content: content,
-      images: images
+      images: images,
+      success: {
+        isSubmitting = false
+        notice.openNotice(open: .toast("提交成功"))
+        router.back()
+      }
     )
-
-    isSubmitting = false
-    notice.openNotice(open: .toast("提交成功"))
-    router.back()
   }
 
-  func loadHistoryReviews() async {
+  func loadHistoryReviews(userId: String?) async {
     isLoadingHistory = true
     // 加载历史审核记录
-    if let submission = await activeService.getReviewHistory(activeId: active.id) {
+    if let submission = await activeService.getReviewHistory(activeId: active.id, userId: userId) {
       content = submission.content
       images = submission.images ?? []
       historyReviews = submission.reviewHistory
     }
     isLoadingHistory = false
+
+    // 检查是否有已通过的审核记录
+    if historyReviews.first(where: { $0.status == .approved }) != nil {
+      mode = .view
+    } else if mode != .review {
+      mode = hasSubmitted ? .view : .edit
+    }
   }
 
   // 历史记录部分
@@ -343,7 +436,7 @@ struct SubmitActiveReviewView: View {
     ScrollView(.horizontal, showsIndicators: false) {
       HStack(spacing: 8) {
         ForEach(images, id: \.self) { imageUrl in
-          ImgLoader(imageUrl)
+          ImgLoader(imageUrl, contentMode: .fill, canPreview: true)
             .frame(width: 80, height: 80)
             .cornerRadius(8)
         }
@@ -383,11 +476,9 @@ struct ReviewRecordCard: View {
             .foregroundColor(.secondary)
 
           Text(message)
-            .font(.system(size: 15))
+            .font(.system(size: 12))
             .foregroundColor(.primary)
-            .padding(12)
-            .background(Color(hex: "#f8f8f8"))
-            .cornerRadius(8)
+            .lineLimit(5)
         }
       }
     }
@@ -430,41 +521,74 @@ enum ReviewStatus: Int, Codable {
   }
 }
 
-#Preview {
+#Preview("查看模式") {
   NavigationStack {
     SubmitActiveReviewView(
-      active: ActiveInfo(
-        id: "1",
-        title: "测试活动",
-        description: "这是个测试活动",
-        cover: "https://picsum.photos/200",
-        startAt: Date(),
-        endAt: nil,
-        limit: nil,
-        rewardType: .points,
-        joinCount: 0,
-        likeCount: 0,
-        status: 1,
-        createTime: Date(),
-        productId: "1",
-        productName: "测试产品",
-        productLogo: "https://picsum.photos/100",
-        images: [],
-        tags: [],
-        link: nil,
-        reward: nil,
-        rewardPoints: 100,
-        rewardPromoCodes: nil,
-        userId: "1",
-        isTop: false,
-        recommendTag: nil,
-        recommendDesc: nil,
-        pubMode: .pro
-      ),
-      mode: .review
+      active: mockActive,
+      mode: .view,
+      userId: "1"
     )
     .environmentObject(ActiveService())
     .environmentObject(Router())
     .environmentObject(NoticeManager())
+    .environmentObject(SheetManager())
   }
 }
+
+#Preview("审核模式") {
+  NavigationStack {
+    SubmitActiveReviewView(
+      active: mockActive,
+      mode: .review,
+      userId: "1"
+    )
+    .environmentObject(ActiveService())
+    .environmentObject(Router())
+    .environmentObject(NoticeManager())
+    .environmentObject(SheetManager())
+  }
+}
+
+#Preview("编辑模式") {
+  NavigationStack {
+    SubmitActiveReviewView(
+      active: mockActive,
+      mode: .edit,
+      userId: "1"
+    )
+    .environmentObject(ActiveService())
+    .environmentObject(Router())
+    .environmentObject(NoticeManager())
+    .environmentObject(SheetManager())
+  }
+}
+
+// 添加模拟数据
+private let mockActive = ActiveInfo(
+  id: "1",
+  title: "测试活动",
+  description: "这是个测试活动描述",
+  cover: "https://picsum.photos/200",
+  startAt: Date(),
+  endAt: Date().addingTimeInterval(86400),
+  limit: 100,
+  rewardType: .points,
+  joinCount: 10,
+  likeCount: 5,
+  status: 1,
+  createTime: Date(),
+  productId: "1",
+  productName: "测试产品",
+  productLogo: "https://picsum.photos/100",
+  images: ["https://picsum.photos/200", "https://picsum.photos/201"],
+  tags: [],
+  link: "https://example.com",
+  reward: nil,
+  rewardPoints: 100,
+  rewardPromoCodes: nil,
+  userId: "1",
+  isTop: false,
+  recommendTag: "推荐",
+  recommendDesc: "推荐描述",
+  pubMode: .pro
+)

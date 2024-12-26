@@ -1,17 +1,51 @@
 import Kingfisher
 import SwiftUI
 
+// MARK: - Private Methods
+enum ImageType {
+  case remote
+  case assets
+  case local
+}
+
+private struct PreviewTapModifier: ViewModifier {
+  let canPreview: Bool
+  @EnvironmentObject var notice: NoticeManager
+  let url: String
+  let imageType: ImageType
+
+  func body(content: Content) -> some View {
+    ZStack {
+      content
+
+      if canPreview {
+        Color.clear
+          .contentShape(Rectangle())
+          .onTapGesture {
+            notice.openNotice(
+              open: .imagePreview(url: url, imageType: imageType)
+            )
+          }
+          .allowsHitTesting(canPreview)
+      }
+    }
+  }
+}
+
 @MainActor
 struct ImgLoader: View {
+  @EnvironmentObject var notice: NoticeManager
   private let url: String
   private let placeholder: String = "empty"
   private let contentMode: SwiftUI.ContentMode
+  private let canPreview: Bool
   @State private var imageRatio: CGFloat = 1.0
 
   // MARK: - Init
-  init(_ img: String, contentMode: SwiftUI.ContentMode = .fill) {
+  init(_ img: String, contentMode: SwiftUI.ContentMode = .fill, canPreview: Bool = false) {
     self.url = img
     self.contentMode = contentMode
+    self.canPreview = canPreview
   }
 
   // MARK: - Body
@@ -27,13 +61,12 @@ struct ImgLoader: View {
       }
     }
     .aspectRatio(imageRatio, contentMode: contentMode)
-  }
-
-  // MARK: - Private Methods
-  private enum ImageType {
-    case remote
-    case assets
-    case local
+    .modifier(
+      PreviewTapModifier(
+        canPreview: canPreview,
+        url: url,
+        imageType: getImageType(url)
+      ))
   }
 
   private func getImageType(_ url: String) -> ImageType {
@@ -71,5 +104,54 @@ struct ImgLoader: View {
       .resizable()
       .loadDiskFileSynchronously()
       .fade(duration: 0.25)
+  }
+}
+
+struct ImagePreviewView: View {
+  let url: String
+  let imageType: ImageType
+  let id: String
+  @Environment(\.displayScale) private var displayScale
+  @EnvironmentObject var notice: NoticeManager
+
+  var body: some View {
+    GeometryReader { geometry in
+      VStack {
+        Group {
+          switch imageType {
+          case .remote:
+            KFImage(URL(string: url))
+              .resizable()
+              .aspectRatio(contentMode: .fit)
+              .frame(
+                maxWidth: min(geometry.size.width * 0.9, geometry.size.height * 0.9),
+                maxHeight: min(geometry.size.width * 0.9, geometry.size.height * 0.9)
+              )
+          case .assets:
+            KFImage(URL(string: "\(IMAGE_SERVER_URL)\(url)"))
+              .resizable()
+              .aspectRatio(contentMode: .fit)
+              .frame(
+                maxWidth: min(geometry.size.width * 0.9, geometry.size.height * 0.9),
+                maxHeight: min(geometry.size.width * 0.9, geometry.size.height * 0.9)
+              )
+          case .local:
+            Image(url)
+              .resizable()
+              .aspectRatio(contentMode: .fit)
+              .frame(
+                maxWidth: min(geometry.size.width * 0.9, geometry.size.height * 0.9),
+                maxHeight: min(geometry.size.width * 0.9, geometry.size.height * 0.9)
+              )
+          }
+        }
+      }
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
+      .background(Color.black.opacity(0.9))
+      .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+      .onTapGesture {
+        notice.closeNotice(id: id)
+      }
+    }
   }
 }

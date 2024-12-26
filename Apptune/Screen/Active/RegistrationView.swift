@@ -8,11 +8,20 @@
 import SwiftUI
 
 // 定义报名状态枚举
-enum RegistrationStatus: String {
-  case registered = "已报名"
-  case pending = "待审核"
-  case rejected = "已驳回"
-  case completed = "已完成"
+enum RegistrationStatus: Int, Codable {
+  case registered = 0
+  case pending = 1
+  case completed = 2
+  case rejected = 3
+
+  var label: String {
+    switch self {
+    case .registered: return "已报名"
+    case .pending: return "待审核"
+    case .rejected: return "已驳回"
+    case .completed: return "已完成"
+    }
+  }
 
   // 获取状态对应的颜色
   var statusColor: Color {
@@ -35,15 +44,13 @@ enum RegistrationStatus: String {
 }
 
 // 用户报名信息模型
-struct RegistrationUser: Identifiable {
-  let id = UUID()
+struct RegistrationUser: Codable {
+  let userId: String
   let username: String
-  let registrationTime: Date
-  var status: RegistrationStatus
-  let phone: String
-  let email: String
-  let reason: String  // 报名理由
-  let attachments: [String]  // 附件链接
+  let avatar: String
+  let joinTime: Date
+  var submissionStatus: RegistrationStatus?
+  var submissionTime: Date?
 }
 
 // 添加数据统计模型
@@ -92,76 +99,35 @@ struct StatisticCard: View {
 
 struct RegistrationView: View {
   @EnvironmentObject var router: Router
-  @State private var registrationUsers: [RegistrationUser] = [
-    RegistrationUser(
-      username: "张三",
-      registrationTime: Date(),
-      status: .pending,
-      phone: "13800138000",
-      email: "zhangsan@example.com",
-      reason: "我对这个活动非常感兴趣，希望能够参与其中...",
-      attachments: ["resume.pdf", "portfolio.pdf"]
-    ),
-    RegistrationUser(
-      username: "李四",
-      registrationTime: Date(),
-      status: .pending,
-      phone: "13800138000",
-      email: "zhangsan@example.com",
-      reason: "我对这个活动非常感兴趣，希望能够参与其中...",
-      attachments: ["resume.pdf", "portfolio.pdf"]
-    ),
-    RegistrationUser(
-      username: "王五",
-      registrationTime: Date(),
-      status: .registered,
-      phone: "13800138000",
-      email: "zhangsan@example.com",
-      reason: "我对这个活动非常感兴趣，希望能够参与其中...",
-      attachments: ["resume.pdf", "portfolio.pdf"]
-    ),
-    RegistrationUser(
-      username: "赵六",
-      registrationTime: Date(),
-      status: .completed,
-      phone: "13800138000",
-      email: "zhangsan@example.com",
-      reason: "我对这个活动非常感兴趣，希望能够参与其中...",
-      attachments: ["resume.pdf", "portfolio.pdf"]
-    ),
-    RegistrationUser(
-      username: "钱七",
-      registrationTime: Date(),
-      status: .rejected,
-      phone: "13800138000",
-      email: "zhangsan@example.com",
-      reason: "我对这个活动非常感兴趣，希望能够参与其中...",
-      attachments: ["resume.pdf", "portfolio.pdf"]
-    ),
-  ]
+  @EnvironmentObject var activeService: ActiveService
+
+  @State private var registrationUsers: [RegistrationUser] = []
   let active: ActiveInfo
 
   // 统计数据
-  private var statisticItems: [StatisticItem] {
-    [
+  @State private var statisticItems: [StatisticItem] = []
+
+  private func loadStatisticItems() async {
+    let stats = await activeService.getActiveRegistrationStats(activeId: active.id)
+    statisticItems = [
       StatisticItem(
         title: "总报名人数",
-        count: registrationUsers.count,
-        trend: 12.5
+        count: stats.totalJoins,
+        trend: nil
       ),
       StatisticItem(
         title: "待审核",
-        count: registrationUsers.filter { $0.status == .pending }.count,
-        trend: -5.2
+        count: stats.pendingReviews,
+        trend: nil
       ),
       StatisticItem(
         title: "审核通过",
-        count: registrationUsers.filter { $0.status == .completed }.count,
-        trend: 8.3
+        count: stats.approvedReviews,
+        trend: nil
       ),
       StatisticItem(
         title: "已驳回",
-        count: registrationUsers.filter { $0.status == .rejected }.count,
+        count: stats.rejectedReviews,
         trend: nil
       ),
     ]
@@ -169,14 +135,14 @@ struct RegistrationView: View {
 
   // 按状态分组的用户列表
   private var groupedUsers: [(String, [RegistrationUser])] {
-    let grouped = Dictionary(grouping: registrationUsers) { $0.status }
+    let grouped = Dictionary(grouping: registrationUsers) { $0.submissionStatus }
 
     // 定义状态显示顺序
     let orderPriority: [RegistrationStatus] = [.pending, .registered, .completed, .rejected]
 
     return orderPriority.compactMap { status in
       if let users = grouped[status] {
-        return (status.rawValue, users)
+        return (status.label, users)
       }
       return nil
     }
@@ -208,7 +174,7 @@ struct RegistrationView: View {
               .foregroundColor(.gray)
               .padding(.top, 8)
           ) {
-            ForEach(section.1) { user in
+            ForEach(section.1, id: \.userId) { user in
               RegistrationUserRow(user: user, active: active)
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
@@ -217,6 +183,13 @@ struct RegistrationView: View {
         }
       }
       .listStyle(.plain)
+    }
+    .onAppear {
+      Task {
+        let users = await activeService.getActiveRegistrationList(activeId: active.id)
+        registrationUsers = users ?? []
+        await loadStatisticItems()
+      }
     }
     .background(Color(hex: "#f4f4f4"))
     .navigationBarBackButtonHidden()
@@ -248,36 +221,52 @@ struct RegistrationUserRow: View {
   var body: some View {
     HStack(spacing: 12) {
       // 用户头像
-      Circle()
-        .fill(Color(.systemGray5))
-        .frame(width: 40, height: 40)
-        .overlay(
-          Text(String(user.username.prefix(1)))
-            .foregroundColor(.gray)
-        )
+      ImgLoader(user.avatar)
+        .frame(width: 44, height: 44)
+        .cornerRadius(all: 22)
 
       VStack(alignment: .leading, spacing: 4) {
         Text(user.username)
-          .font(.system(size: 16, weight: .medium))
-        Text(user.registrationTime.formatted())
-          .font(.system(size: 13))
-          .foregroundColor(.gray)
+          .font(.system(size: 15, weight: .medium))
+
+        HStack(spacing: 8) {
+          if let status = user.submissionStatus {
+            Text(status.label)
+              .font(.system(size: 12))
+              .foregroundColor(status.textColor)
+          }
+
+          Text("•")
+            .font(.system(size: 12))
+            .foregroundColor(Color(hex: "#999999"))
+
+          Text(user.joinTime.formatted())
+            .font(.system(size: 12))
+            .foregroundColor(Color(hex: "#999999"))
+        }
       }
 
       Spacer()
 
-      Text(user.status.rawValue)
-        .font(.system(size: 13, weight: .medium))
-        .foregroundColor(user.status.textColor)
-        .padding(.horizontal, 12)
-        .padding(.vertical, 6)
-        .background(user.status.statusColor)
-        .cornerRadius(6)
+      // 非报名状态显示查看按钮
+      if let status = user.submissionStatus, status != .registered {
+        Button(action: {
+          router.navigate(
+            to: .submitActiveReview(active: active, mode: .review, userId: user.userId))
+        }) {
+          Text("查看")
+            .font(.system(size: 14))
+            .foregroundColor(Color(.systemBlue))
+        }
+      }
     }
-    .padding(.vertical, 8)
-    .onTapGesture {
-      router.navigate(to: .submitActiveReview(active: active, mode: .review))
-    }
+    .padding(.horizontal, 12)
+    .padding(.vertical, 12)
+    .background(
+      RoundedRectangle(cornerRadius: 12)
+        .fill(Color(.systemBackground))
+    )
+    .padding(.vertical, 4)
   }
 }
 
@@ -324,9 +313,9 @@ struct InfoRowCustom<Content: View>: View {
   }
 }
 
-//#Preview {
+// #Preview {
 //  NavigationView {
 //    RegistrationView()
 //      .environmentObject(Router())
 //  }
-//}
+// }

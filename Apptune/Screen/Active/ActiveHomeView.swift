@@ -171,6 +171,7 @@ struct ActiveHomeView: View {
             .font(.system(size: 24))
             .onTapGesture {
               Tap.shared.play(.light)
+              router.navigate(to: .searchActive)
             }
         }
       }
@@ -194,8 +195,8 @@ struct ActiveHomeView: View {
         largeHeader(progress: progress)
       }
     } content: {
-      GroupView
-        .padding(.horizontal)
+      //      GroupView
+      //        .padding(.horizontal)
       if activeService.topActives.count > 0 {
         VStack {
           GeometryReader { geometry in
@@ -254,7 +255,7 @@ struct ActiveHomeView: View {
 
       VStack {
         HStack {
-          Text("热门")
+          Text("最新")
             .font(.system(size: 22))
             .fontWeight(.bold)
           Spacer()

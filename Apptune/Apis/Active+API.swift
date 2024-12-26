@@ -77,6 +77,13 @@ struct ActiveStatus: Codable {
   let hasSubmitted: Bool
 }
 
+struct RegistrationStats: Codable {
+  let totalJoins: Int
+  let pendingReviews: Int
+  let approvedReviews: Int
+  let rejectedReviews: Int
+}
+
 // MARK: - API Methods
 extension API {
   // 获取审核活动列表
@@ -225,7 +232,7 @@ extension API {
     let _: VoidCodable = try await API.shared.session.data(for: request)
   }
 
-  // ���查活动状态
+  // 查询活动状态
   static func checkActiveStatus(id: String) async throws -> ActiveStatus {
     let request = try API.shared.createRequest(
       url: "\(BASR_SERVE_URL)/active/submission/check",
@@ -236,11 +243,59 @@ extension API {
   }
 
   // 获取审核历史
-  static func getReviewHistory(activeId: String) async throws -> ActiveSubmission {
+  static func getReviewHistory(activeId: String, userId: String?) async throws -> ActiveSubmission {
+    var body = ["activeId": activeId]
+    if let userId = userId {
+      body["userId"] = userId
+    }
     let request = try API.shared.createRequest(
       url: "\(BASR_SERVE_URL)/active/submission/history",
       method: "GET",
+      body: body
+    )
+    return try await API.shared.session.data(for: request)
+  }
+
+  // 获取活动报名用户列表
+  static func getActiveRegistrationList(activeId: String) async throws -> ListResponse<
+    RegistrationUser
+  > {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/registration/list",
+      method: "GET",
       body: ["activeId": activeId]
+    )
+    return try await API.shared.session.data(for: request)
+  }
+
+  // 获取活动报名用户统计
+  static func getActiveRegistrationStats(activeId: String) async throws -> RegistrationStats {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/registration/stats",
+      method: "GET",
+      body: ["activeId": activeId]
+    )
+    return try await API.shared.session.data(for: request)
+  }
+
+  // 提交审核结果
+  static func submitAuditResult(
+    activeId: String, userId: String, status: Int, reason: String?
+  ) async throws {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/submission/submit",
+      method: "POST",
+      body: ["activeId": activeId, "userId": userId, "status": status, "reason": reason ?? ""]
+    )
+    let _: VoidCodable = try await API.shared.session.data(for: request)
+  }
+
+  // 搜索活动
+  static func searchActive(keyword: String) async throws -> [ActiveInfo] {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/active/search",
+      method: "GET",
+      body: ["keyword": keyword]
     )
     return try await API.shared.session.data(for: request)
   }
