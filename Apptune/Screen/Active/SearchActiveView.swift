@@ -8,24 +8,22 @@
 import SwiftUI
 
 struct SearchActiveView: View {
-
   @EnvironmentObject var router: Router
   @EnvironmentObject var activeService: ActiveService
   @State private var searchText = ""
   @State private var isSearching = false
   @State private var searchResults: [ActiveInfo] = []
-  @State private var showingSuggestions = false
   @State private var hasSearched = false
+  @State private var searchHistory: [String] = []  // 只保留搜索历史
 
   @FocusState private var isFocused: Bool
-  private let searchHistory = SearchHistory()
-  @State private var suggestions: [String] = []
+  private let searchHistoryUtil = SearchHistory()
 
   var body: some View {
     VStack(spacing: 0) {
-      // 优化搜索头部
+      // 搜索头部
       HStack(spacing: 12) {
-        // 优化搜索框
+        // 搜索框
         HStack {
           Image(systemName: "magnifyingglass")
             .foregroundColor(.gray.opacity(0.6))
@@ -36,17 +34,15 @@ struct SearchActiveView: View {
             .font(.system(size: 15))
             .submitLabel(.search)
             .focused($isFocused)
-            .onChange(of: searchText) { newValue in
-              updateSuggestions()
-            }
             .onSubmit {
-              search()
+              executeSearch(keyword: searchText)
             }
 
           if !searchText.isEmpty {
             Button(action: {
               searchText = ""
               searchResults = []
+              hasSearched = false
             }) {
               Image(systemName: "xmark.circle.fill")
                 .foregroundColor(.gray.opacity(0.6))
@@ -59,7 +55,6 @@ struct SearchActiveView: View {
         .background(Color(UIColor.systemGray6))
         .cornerRadius(12)
 
-        // 优化取消按钮
         Button("取消") {
           router.back()
         }
@@ -77,102 +72,46 @@ struct SearchActiveView: View {
           .ignoresSafeArea()
 
         VStack(spacing: 0) {
-          // 搜索历史或建议
-          if !hasSearched {
-            if searchText.isEmpty {
-              // 搜索历史
-              VStack(alignment: .leading, spacing: 16) {
-                HStack {
-                  Text("搜索历史")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color(hex: "#666666"))
-                  Spacer()
-                  if !suggestions.isEmpty {
-                    Button(action: {
-                      searchHistory.clearHistory()
-                      suggestions = []
-                    }) {
-                      HStack(spacing: 4) {
-                        Image(systemName: "trash")
-                        Text("清除")
-                          .font(.system(size: 13))
-                      }
-                      .foregroundColor(Color(hex: "#999999"))
-                    }
+          // 搜索历史
+          if !hasSearched && !isSearching && !searchHistory.isEmpty {
+            VStack(alignment: .leading, spacing: 16) {
+              // 标题和清除按钮
+              HStack {
+                Text("搜索历史")
+                  .font(.system(size: 14, weight: .medium))
+                  .foregroundColor(Color(hex: "#666666"))
+                Spacer()
+                Button(action: {
+                  searchHistoryUtil.clearHistory()
+                  searchHistory = []
+                }) {
+                  HStack(spacing: 4) {
+                    Image(systemName: "trash")
+                    Text("清除")
+                      .font(.system(size: 13))
                   }
+                  .foregroundColor(Color(hex: "#999999"))
                 }
-                .padding(.horizontal)
-                .padding(.top, 12)
+              }
+              .padding(.horizontal)
+              .padding(.top, 12)
 
-                if suggestions.isEmpty {
-                  Text("暂无搜索历史")
-                    .font(.system(size: 14))
-                    .foregroundColor(Color(hex: "#999999"))
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.top, 40)
-                } else {
-                  ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 0) {
-                      ForEach(suggestions, id: \.self) { suggestion in
-                        Button(action: {
-                          searchText = suggestion
-                          performSearch(keyword: suggestion)
-                        }) {
-                          HStack(spacing: 12) {
-                            Image(systemName: "clock")
-                              .font(.system(size: 14))
-                              .foregroundColor(Color(hex: "#999999"))
-                            Text(suggestion)
-                              .font(.system(size: 14))
-                              .foregroundColor(Color(hex: "#333333"))
-                            Spacer()
-                          }
-                          .padding(.horizontal)
-                          .padding(.vertical, 12)
-                          .contentShape(Rectangle())
-                        }
-                        Divider()
-                          .padding(.leading)
-                      }
+              // 搜索历史列表
+              ScrollView {
+                LazyVStack(alignment: .leading, spacing: 0) {
+                  ForEach(searchHistory, id: \.self) { item in
+                    SearchItemRow(
+                      text: item,
+                      icon: "clock"
+                    ) {
+                      executeSearch(keyword: item)
                     }
                   }
                 }
               }
-              .background(Color.white)
-            } else {
-              // 搜索建议
-              VStack {
-                if showingSuggestions {
-                  ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 0) {
-                      ForEach(suggestions, id: \.self) { suggestion in
-                        Button(action: {
-                          searchText = suggestion
-                          performSearch(keyword: suggestion)
-                        }) {
-                          HStack(spacing: 12) {
-                            Image(systemName: "magnifyingglass")
-                              .font(.system(size: 14))
-                              .foregroundColor(Color(hex: "#999999"))
-                            Text(suggestion)
-                              .font(.system(size: 14))
-                              .foregroundColor(Color(hex: "#333333"))
-                            Spacer()
-                          }
-                          .padding(.horizontal)
-                          .padding(.vertical, 12)
-                          .contentShape(Rectangle())
-                        }
-                        Divider()
-                          .padding(.leading)
-                      }
-                    }
-                  }
-                }
-              }
-              .frame(maxWidth: .infinity)
-              .background(Color.white)
             }
+            .frame(maxWidth: .infinity)
+            .background(Color.white)
           }
 
           // 搜索结果或加载状态
@@ -225,44 +164,58 @@ struct SearchActiveView: View {
 
   // 加载搜索历史
   private func loadSearchHistory() {
-    suggestions = searchHistory.getSearchHistory()
+    searchHistory = searchHistoryUtil.getSearchHistory()
   }
 
-  // 更新搜索建议
-  private func updateSuggestions() {
-    if searchText.isEmpty {
-      suggestions = searchHistory.getSearchHistory()
-      hasSearched = false
-      searchResults = []
-    } else {
-      suggestions = searchHistory.getSearchHistory().filter {
-        $0.localizedCaseInsensitiveContains(searchText)
-      }
-      showingSuggestions = !suggestions.isEmpty
-      hasSearched = false  // 重置搜索状态
-    }
-  }
-
-  // 执行搜索
-  private func performSearch(keyword: String) {
+  // 统一的搜索执行方法
+  private func executeSearch(keyword: String) {
     guard !keyword.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
       return
     }
 
-    showingSuggestions = false
-    isSearching = true
-    hasSearched = true
-    searchHistory.addSearchHistory(keyword)
+    Task { @MainActor in
+      // 1. 更新状态
+      searchText = keyword
+      hasSearched = true
+      isSearching = true
+      searchResults = []
 
-    Task {
+      // 2. 添加到历史
+      searchHistoryUtil.addSearchHistory(keyword)
+      searchHistory = searchHistoryUtil.getSearchHistory()
+
+      // 3. 执行搜索
       searchResults = await activeService.searchActive(keyword: keyword)
+
+      // 4. 更新状态
       isSearching = false
     }
   }
+}
 
-  // 搜索方法
-  private func search() {
-    performSearch(keyword: searchText)
+// 抽取搜索项行视图
+private struct SearchItemRow: View {
+  let text: String
+  let icon: String
+  let action: () -> Void
+
+  var body: some View {
+    Button(action: action) {
+      HStack(spacing: 12) {
+        Image(systemName: icon)
+          .font(.system(size: 14))
+          .foregroundColor(Color(hex: "#999999"))
+        Text(text)
+          .font(.system(size: 14))
+          .foregroundColor(Color(hex: "#333333"))
+        Spacer()
+      }
+      .padding(.horizontal)
+      .padding(.vertical, 12)
+      .contentShape(Rectangle())
+    }
+    Divider()
+      .padding(.leading)
   }
 }
 
