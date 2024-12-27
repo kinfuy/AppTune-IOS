@@ -2,6 +2,7 @@ import SwiftUI
 
 struct NoticeListView: View {
     @EnvironmentObject var router: Router
+    @EnvironmentObject var notice: NoticeManager
     @StateObject var viewModel: NoticeViewModel<Notification>
     let title: String
 
@@ -59,7 +60,25 @@ struct NoticeListView: View {
                         }
                     }
                     .foregroundStyle(Color(hex: "#333333"))
-                })
+                }),
+            trailing: Button(
+                action: {
+                    notice.openNotice(
+                        open: .confirm(
+                            title: "确定清空所有消息吗？",
+                            onSuccess: {
+                                Task {
+                                    await viewModel.deleteAllMessages()
+                                }
+                            }))
+
+                },
+                label: {
+                    Text("一键清空")
+                        .font(.system(size: 16))
+                        .foregroundColor(Color(hex: "#333333"))
+                }
+            )
         )
         .task {
             await viewModel.loadInitial()

@@ -35,4 +35,13 @@ class NotificationService: ObservableObject {
       print("标记所有消息已读失败:", error)
     }
   }
+
+  // 删除所有消息
+  func deleteAllMessages(type: NotificationType) async {
+    do {
+      try await API.deleteAllMessages(type: type)
+    } catch {
+      print("删除所有消息失败:", error)
+    }
+  }
 }

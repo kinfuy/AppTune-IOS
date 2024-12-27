@@ -147,7 +147,7 @@ struct ActiveHomeView: View {
   private func largeHeader(progress: CGFloat) -> some View {
     ZStack {
       Rectangle()
-        .fill(.ultraThinMaterial)
+        .fill(.clear)
         .overlay {
           gradientSurface
         }
@@ -159,6 +159,7 @@ struct ActiveHomeView: View {
               .opacity(max(0, min(1, (progress - 0.75) * 4.0)))
               .padding(.bottom, 24)
           }
+          .background(.ultraThinMaterial)
         }
       VStack {
         Spacer()

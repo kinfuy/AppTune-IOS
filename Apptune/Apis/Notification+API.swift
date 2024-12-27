@@ -87,4 +87,14 @@ extension API {
     )
     let _: VoidCodable = try await API.shared.session.data(for: request)
   }
+
+  // 删除所有消息
+  static func deleteAllMessages(type: NotificationType) async throws {
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/notification/deleteAll",
+      method: "POST",
+      body: ["type": type.rawValue]
+    )
+    let _: VoidCodable = try await API.shared.session.data(for: request)
+  }
 }
