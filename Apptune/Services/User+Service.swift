@@ -46,6 +46,17 @@ class UserService: ObservableObject {
     return isLogin && profile.role == "developer"
   }
 
+  var role: String? {
+    switch profile.role {
+    case "admin":
+      return "管理员"
+    case "developer":
+      return "开发者"
+    default:
+      return nil
+    }
+  }
+
   // MARK: - Constants
 
   private let storage = UserDefaults.standard

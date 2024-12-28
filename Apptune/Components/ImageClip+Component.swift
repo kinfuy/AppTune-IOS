@@ -52,20 +52,29 @@ struct CropViewControllerRepresentable: UIViewControllerRepresentable {
     }
 
     func cropViewControllerDidCrop(
-      _ cropViewController: CropViewController, cropped: UIImage, transformation: Transformation,
+      _ cropViewController: CropViewController,
+      cropped: UIImage,
+      transformation: Transformation,
       cropInfo: CropInfo
     ) {
-      completion(cropped)
+      DispatchQueue.main.async {
+        self.completion(cropped)
+      }
     }
 
     func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {
-      completion(nil)
+      DispatchQueue.main.async {
+        self.completion(nil)
+      }
     }
 
     func cropViewControllerDidFailToCrop(
-      _ cropViewController: CropViewController, original: UIImage
+      _ cropViewController: CropViewController,
+      original: UIImage
     ) {
-      completion(nil)
+      DispatchQueue.main.async {
+        self.completion(nil)
+      }
     }
 
     func cropViewControllerDidBeginResize(_ cropViewController: CropViewController) {

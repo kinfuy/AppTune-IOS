@@ -47,7 +47,6 @@
 		F27C65862CB16F1C0074B608 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F27C65852CB16F1C0074B608 /* Assets.xcassets */; };
 		F27C658A2CB16F1C0074B608 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F27C65892CB16F1C0074B608 /* Preview Assets.xcassets */; };
 		F283B0452D0DD4370051FBF1 /* ImageClip+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F283B0442D0DD4370051FBF1 /* ImageClip+Component.swift */; };
-		F283B04B2D0E80170051FBF1 /* Mantis in Frameworks */ = {isa = PBXBuildFile; productRef = F283B04A2D0E80170051FBF1 /* Mantis */; };
 		F283B04D2D0EBC900051FBF1 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F283B04C2D0EBC8F0051FBF1 /* Localizable.xcstrings */; };
 		F288297C2CF20D37002D012A /* Product+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F288297B2CF20D37002D012A /* Product+Service.swift */; };
 		F288297E2CF20EDD002D012A /* Active+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F288297D2CF20EDD002D012A /* Active+Service.swift */; };
@@ -76,6 +75,7 @@
 		F2AE42852CB97162009E72C3 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = F2AE42842CB97162009E72C3 /* Kingfisher */; };
 		F2AE42872CB97814009E72C3 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AE42862CB97814009E72C3 /* View+Extension.swift */; };
 		F2AE42892CB97917009E72C3 /* CornerRadius+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AE42882CB97917009E72C3 /* CornerRadius+Component.swift */; };
+		F2AE6A432D2001AD0002212F /* Mantis in Frameworks */ = {isa = PBXBuildFile; productRef = F2AE6A422D2001AD0002212F /* Mantis */; };
 		F2B269722CB57233001230B4 /* SwiftDate in Frameworks */ = {isa = PBXBuildFile; productRef = F2B269712CB57233001230B4 /* SwiftDate */; };
 		F2B269752CB57260001230B4 /* ScreenManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269742CB57260001230B4 /* ScreenManage.swift */; };
 		F2B269772CB574B0001230B4 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269762CB574B0001230B4 /* LoginView.swift */; };
@@ -240,7 +240,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F283B04B2D0E80170051FBF1 /* Mantis in Frameworks */,
+				F2AE6A432D2001AD0002212F /* Mantis in Frameworks */,
 				F2AE42852CB97162009E72C3 /* Kingfisher in Frameworks */,
 				F2B269722CB57233001230B4 /* SwiftDate in Frameworks */,
 				F26F15AD2CC6A92B00848715 /* SwiftyJSON in Frameworks */,
@@ -598,7 +598,7 @@
 				F2AE42842CB97162009E72C3 /* Kingfisher */,
 				F2A0D5FA2CC360EA00536C58 /* ScalingHeaderScrollView */,
 				F26F15AC2CC6A92B00848715 /* SwiftyJSON */,
-				F283B04A2D0E80170051FBF1 /* Mantis */,
+				F2AE6A422D2001AD0002212F /* Mantis */,
 			);
 			productName = Apptune;
 			productReference = F27C65792CB16F1B0074B608 /* Apptune.app */;
@@ -634,7 +634,7 @@
 				F2AE42832CB97162009E72C3 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				F2A0D5F92CC360EA00536C58 /* XCRemoteSwiftPackageReference "ScalingHeaderScrollView" */,
 				F26F15AB2CC6A92B00848715 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
-				F283B0492D0E80170051FBF1 /* XCRemoteSwiftPackageReference "Mantis" */,
+				F2AE6A412D2001AD0002212F /* XCRemoteSwiftPackageReference "Mantis" */,
 			);
 			productRefGroup = F27C657A2CB16F1B0074B608 /* Products */;
 			projectDirPath = "";
@@ -807,7 +807,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -868,10 +868,11 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -898,11 +899,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Apptune/Preview Content\"";
 				DEVELOPMENT_TEAM = TK4NKP2XJG;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = AppTune;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Apptune needs permission to access photos on your device";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -945,11 +946,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Apptune/Preview Content\"";
 				DEVELOPMENT_TEAM = TK4NKP2XJG;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = AppTune;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Apptune needs permission to access photos on your device";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -968,10 +969,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				OTHER_LDFLAGS = (
-					"-Xlinker",
-					"-interposable",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = kinfuy.Apptune;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1014,14 +1012,6 @@
 				minimumVersion = 5.0.2;
 			};
 		};
-		F283B0492D0E80170051FBF1 /* XCRemoteSwiftPackageReference "Mantis" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/guoyingtao/Mantis";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.7.5;
-			};
-		};
 		F2A0D5F92CC360EA00536C58 /* XCRemoteSwiftPackageReference "ScalingHeaderScrollView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/exyte/ScalingHeaderScrollView";
@@ -1036,6 +1026,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 8.0.3;
+			};
+		};
+		F2AE6A412D2001AD0002212F /* XCRemoteSwiftPackageReference "Mantis" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/guoyingtao/Mantis";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.7.5;
 			};
 		};
 		F2B269702CB57232001230B4 /* XCRemoteSwiftPackageReference "SwiftDate" */ = {
@@ -1054,11 +1052,6 @@
 			package = F26F15AB2CC6A92B00848715 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
 		};
-		F283B04A2D0E80170051FBF1 /* Mantis */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F283B0492D0E80170051FBF1 /* XCRemoteSwiftPackageReference "Mantis" */;
-			productName = Mantis;
-		};
 		F2A0D5FA2CC360EA00536C58 /* ScalingHeaderScrollView */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F2A0D5F92CC360EA00536C58 /* XCRemoteSwiftPackageReference "ScalingHeaderScrollView" */;
@@ -1068,6 +1061,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F2AE42832CB97162009E72C3 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		F2AE6A422D2001AD0002212F /* Mantis */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F2AE6A412D2001AD0002212F /* XCRemoteSwiftPackageReference "Mantis" */;
+			productName = Mantis;
 		};
 		F2B269712CB57233001230B4 /* SwiftDate */ = {
 			isa = XCSwiftPackageProductDependency;

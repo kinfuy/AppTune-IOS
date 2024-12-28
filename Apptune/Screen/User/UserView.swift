@@ -37,9 +37,11 @@ struct UserView: View {
                 }
               }
             HStack {
-              //                            Text("社区创始人")
-              //                                .font(.system(size: 12))
-              //                                .colorTag(.theme)
+              if let role = userService.role {
+                Text(role)
+                  .font(.system(size: 12))
+                  .colorTag(.theme)
+              }
             }
             HStack(spacing: 32) {
               VStack(alignment: .leading) {

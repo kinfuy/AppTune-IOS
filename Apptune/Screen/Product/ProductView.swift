@@ -64,7 +64,7 @@ struct ProductView: View {
         icon: "cube.fill",
         color: Color.purple,
         count: productService.totalMyProducts,
-        roles: ["developer", "admin"]
+        roles: ["user", "developer", "admin"]
       ),
       (
         tab: ProductTab.myEvents,
@@ -297,6 +297,7 @@ struct ProductView: View {
 #Preview {
   ProductView()
     .environmentObject(Router())
+    .environmentObject(NoticeManager())
     .environmentObject(ProductService())
     .environmentObject(ActiveService())
     .environmentObject(UserService())

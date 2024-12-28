@@ -132,11 +132,4 @@ class Router: ObservableObject {
       paths.removeLast()
     }
   }
-
-  #if DEBUG
-    func printNavigationState() {
-      print("当前导航路径数量: \(path.count)")
-      print("当前路由堆栈: \(paths)")
-    }
-  #endif
 }

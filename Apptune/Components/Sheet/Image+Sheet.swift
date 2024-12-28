@@ -50,12 +50,16 @@ struct ImageSheet: View {
     } else if showImageEditor, let image = selectedImage {
       ImageClipComponent(
         selectedImage: image,
-        onSelect: { image in
-          selectedImage = image
-          showImageEditor = false
+        onSelect: { croppedImage in
+          DispatchQueue.main.async {
+            selectedImage = croppedImage
+            showImageEditor = false
+          }
         },
         onCancel: {
-          showImageEditor = false
+          DispatchQueue.main.async {
+            showImageEditor = false
+          }
         })
     } else {
       if let image = selectedImage {
@@ -85,7 +89,7 @@ struct ImageSheet: View {
 
               Spacer()
 
-              // 右侧按��组
+              // 右侧按钮组
               HStack(spacing: 20) {
                 ToolbarButton(
                   icon: "arrow.counterclockwise",

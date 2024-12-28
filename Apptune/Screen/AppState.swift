@@ -36,7 +36,7 @@ class AppState: ObservableObject {
     
     func checkForUpdate(ignoreSkin:Bool = false, completion: @escaping (Bool) -> Void = { _ in }) {
         self.currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-        let urlString = "https://itunes.apple.com/lookup?bundleId=kinfuy.SuKa"
+        let urlString = "https://itunes.apple.com/lookup?bundleId=kinfuy.Apptune"
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
             completion(false)
