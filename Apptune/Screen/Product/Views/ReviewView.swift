@@ -189,10 +189,13 @@ struct ActivityReviewCard: View {
 
         // 描述
         if !activity.description.isEmpty {
-          Text(activity.description)
-            .font(.subheadline)
-            .foregroundColor(.gray)
-            .lineLimit(3)
+          HStack {
+            Text(activity.description)
+              .font(.subheadline)
+              .foregroundColor(.gray)
+              .lineLimit(3)
+            Spacer()
+          }
         }
       }
       .onTapGesture {

@@ -3,6 +3,7 @@ import SwiftUI
 struct SheetConfig {
   var fullScreen: Bool
   var dismissible: Bool
+  var height: CGFloat?
 }
 
 enum SheetType: Identifiable {
@@ -32,11 +33,13 @@ enum SheetType: Identifiable {
   )
 
   case activeShare(active: ActiveInfo)
-    
+
   case preCodePicker(
     productId: String,
-    onSelect: ((_ codes:[PromotionCode]) -> Void)? = nil,
-    onCancel: (() -> Void)? = nil
+    selectedGroups: [String],
+    onSelect: ((_ groups: [String]) -> Void)? = nil,
+    onCancel: (() -> Void)? = nil,
+    config: ProCodeSheetConfig
   )
 
   var id: String {
@@ -54,9 +57,11 @@ enum SheetType: Identifiable {
   func config() -> SheetConfig {
     switch self {
     case .imagePicker:
-        return SheetConfig(fullScreen: true, dismissible: true)
+      return SheetConfig(fullScreen: true, dismissible: true)
     case .imageShare:
       return SheetConfig(fullScreen: false, dismissible: true)
+    case .preCodePicker:
+      return SheetConfig(fullScreen: false, dismissible: true, height: 0.68)
     default:
       return SheetConfig(fullScreen: false, dismissible: true)
     }
@@ -90,8 +95,16 @@ enum SheetType: Identifiable {
       return AnyView(ActiveShareView(active: active))
     case let .imageShare(shareImage, title, onSave):
       return AnyView(ImageShareSheet(shareImage: shareImage, title: title, onSave: onSave))
-    case .preCodePicker(let productId, let onSelect, let onCancel):
-        return AnyView(PreCodePickerSheet(productId:productId, onSelect: onSelect, onCancel: onCancel))
+    case .preCodePicker(let productId, let selectedGroups, let onSelect, let onCancel, let config):
+      return AnyView(
+        PreCodePickerSheet(
+          productId: productId,
+          selectedGroups: selectedGroups,
+          onSelect: onSelect,
+          onCancel: onCancel,
+          config: config
+        )
+      )
     }
   }
 }

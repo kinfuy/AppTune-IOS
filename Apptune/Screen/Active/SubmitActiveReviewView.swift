@@ -35,6 +35,7 @@ struct SubmitActiveReviewView: View {
   @State private var isLoading = false
   @State private var dragOffset: CGFloat = 0
   @State private var isDragging = false
+  @State private var auditLoaing = false
 
   // 上传图片
   private func uploadImage(_ image: UIImage) async -> String? {
@@ -59,6 +60,57 @@ struct SubmitActiveReviewView: View {
     }
   }
 
+  @MainActor
+  private func confirmReward(desc: String?, extra: SubmitExtraParams? = nil) async {
+    notice.openNotice(
+      open: .confirm(
+        title: "确定通过审核吗？",
+        desc: desc ?? "",
+        onSuccess: {
+          Task {
+            reviewStatus = .approved
+            await submitAuditResult(extra: extra)
+          }
+        }))
+  }
+
+  // 检查奖励
+  private func checkRewardValidity() async {
+    if active.rewardType == .promoCode {
+      // rewardPromoCodes 多个需要用户选择
+      if active.rewardPromoCodes?.count ?? 0 > 1 {
+        sheet.show(
+          .preCodePicker(
+            productId: active.productId,
+            selectedGroups: [],
+            onSelect: { groups in
+              Task {
+                let group = groups[0]
+                let desc = "审核通过将奖励用户\(group)优惠码"
+                await confirmReward(
+                  desc: desc, extra: SubmitExtraParams(userId: userId, group: group))
+              }
+            },
+            onCancel: nil,
+            config: ProCodeSheetConfig(allowMultipleSelection: true, title: "绑定优惠码分组")))
+      } else {
+        await confirmReward(desc: "审核通过将奖励用户 \(active.rewardPromoCodes?.first ?? "") 优惠码")
+      }
+    }
+
+    if active.rewardType == .points {
+      if let points = active.rewardPoints {
+        await confirmReward(desc: "审核通过将奖励用户 \(points.description) 积分")
+      } else {
+        await confirmReward(desc: "审核通过将奖励用户")
+      }
+    }
+    if active.rewardType == .selfManaged {
+      await confirmReward(desc: "审核通过将奖励用户")
+    }
+
+  }
+
   var auditButtons: some View {
     VStack(spacing: 0) {
       Divider()
@@ -66,20 +118,15 @@ struct SubmitActiveReviewView: View {
       HStack(spacing: 12) {
         // 主按钮 - 通过
         Button(action: {
-          notice.openNotice(
-            open: .confirm(
-              title: "确定通过审核吗？",
-              onSuccess: {
-                Task {
-                  reviewStatus = .approved
-                  await submitAuditResult()
-                }
-              }))
+          Task {
+            await checkRewardValidity()
+          }
         }) {
           HStack(spacing: 8) {
             Image(systemName: "checkmark.circle.fill")
             Text("通过审核")
           }
+          .loadingButton(loading: isLoading)
           .buttonStyle(.black)
           .frame(height: 44)
         }
@@ -298,7 +345,7 @@ struct SubmitActiveReviewView: View {
   }
 
   // 提交审核结果
-  private func submitAuditResult() async {
+  private func submitAuditResult(extra: SubmitExtraParams? = nil) async {
     if userId == nil {
       return
     }
@@ -309,6 +356,7 @@ struct SubmitActiveReviewView: View {
       userId: userId!,
       status: reviewStatus,
       reason: reviewReason,
+      extra: extra,
       success: {
         isSubmitting = false
         notice.openNotice(open: .toast("审核完成"))
@@ -359,7 +407,7 @@ struct SubmitActiveReviewView: View {
         .font(.headline)
         .padding(.horizontal)
 
-      ForEach(historyReviews, id: \.reviewerId) { record in
+      ForEach(historyReviews, id: \.reviewTime) { record in
         ReviewRecordCard(record: record)
       }
 
@@ -571,6 +619,7 @@ private let mockActive = ActiveInfo(
   cover: "https://picsum.photos/200",
   startAt: Date(),
   endAt: Date().addingTimeInterval(86400),
+  isAutoEnd: true,
   limit: 100,
   rewardType: .points,
   joinCount: 10,

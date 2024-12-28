@@ -279,12 +279,13 @@ class ActiveService: ObservableObject {
 
   func submitAuditResult(
     activeId: String, userId: String, status: ReviewStatus, reason: String,
+    extra: SubmitExtraParams?,
     success: @escaping () -> Void
   ) async {
     // 实现审核结果提交的API调用
     do {
       try await API.submitAuditResult(
-        activeId: activeId, userId: userId, status: status.rawValue, reason: reason)
+        activeId: activeId, userId: userId, status: status.rawValue, reason: reason, extra: extra)
       success()
     } catch {
       print(error)

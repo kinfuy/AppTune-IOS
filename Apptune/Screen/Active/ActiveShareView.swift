@@ -328,6 +328,7 @@ private struct ConfigItemContainer: View {
                     cover: "https://picsum.photos/800/400",
                     startAt: Date(),
                     endAt: Date().addingTimeInterval(7 * 24 * 60 * 60),
+                    isAutoEnd: true,
                     limit: 1000,
                     rewardType: .selfManaged,
                     joinCount: 128,

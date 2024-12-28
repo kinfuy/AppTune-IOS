@@ -32,7 +32,7 @@ final class PublishActivityViewModel: ObservableObject {
   @Published var rewardType: RewardType = .selfManaged  // 奖励类型
   @Published var rewardDesc: String = ""  // 奖励说明
   @Published var points: Int = 0
-  @Published var promoCodes: [String] = []
+  @Published var promoGroups: [String] = []
 
   // 添加步骤状态
   @Published var step: PublishStep = .selectProduct
@@ -42,7 +42,7 @@ final class PublishActivityViewModel: ObservableObject {
   @Published var isAutoEnd: Bool = false {
     didSet {
       if isAutoEnd && endAt == nil {
-        endAt = Calendar.current.date(byAdding: .hour, value: 24, to: Date())
+        endAt = Calendar.current.date(byAdding: .day, value: 7, to: Date())
       }
     }
   }
@@ -73,6 +73,15 @@ final class PublishActivityViewModel: ObservableObject {
     if description.isEmpty {
       return Toast(msg: "请输入活动描述")
     }
+
+    if rewardType == .promoCode && promoGroups.isEmpty {
+      return Toast(msg: "请选择促销码")
+    }
+
+    if rewardType == .points && points == 0 {
+      return Toast(msg: "请设置积分奖励")
+    }
+
     return nil
   }
 
@@ -84,6 +93,7 @@ final class PublishActivityViewModel: ObservableObject {
       cover: (images.first ?? cover) ?? "",
       startAt: startAt,
       endAt: endAt,
+      isAutoEnd: isAutoEnd,
       limit: limit,
       rewardType: rewardType,
       joinCount: nil,
@@ -98,7 +108,7 @@ final class PublishActivityViewModel: ObservableObject {
       link: nil,
       reward: rewardDesc,
       rewardPoints: points,
-      rewardPromoCodes: promoCodes,
+      rewardPromoCodes: promoGroups,
       userId: "",
       isTop: false,
       recommendTag: nil,
@@ -138,11 +148,12 @@ final class PublishActivityViewModel: ObservableObject {
     images = []
     startAt = Date()
     endAt = nil
+    isAutoEnd = false
     limit = nil
     rewardType = .selfManaged
     rewardDesc = ""
     points = 0
-    promoCodes = []
+    promoGroups = []
     isAutoEnd = false
   }
 
@@ -182,12 +193,13 @@ final class PublishActivityViewModel: ObservableObject {
     images = active.images
     startAt = active.startAt
     endAt = active.endAt
+    isAutoEnd = active.isAutoEnd
     limit = active.limit
     publishMode = active.pubMode
     rewardType = active.rewardType
     rewardDesc = active.reward ?? ""
     points = active.rewardPoints ?? 0
-    promoCodes = active.rewardPromoCodes ?? []
+    promoGroups = active.rewardPromoCodes ?? []
   }
 
   func hasUnsavedChanges() -> Bool {
@@ -202,5 +214,24 @@ final class PublishActivityViewModel: ObservableObject {
     // 如果是新建模式,检查是否填写了内容
     return !title.isEmpty || !description.isEmpty || !images.isEmpty || !rewardDesc.isEmpty
       || limit != nil || isAutoEnd
+  }
+
+  /// 从专业模式切换到快速模式时重置相关表单
+  func switchToQuickMode(_ mode: PublishMode) {
+    if mode == .quick {
+      // 重置奖励相关设置
+      rewardType = .selfManaged
+      rewardDesc = ""
+      points = 0
+      promoGroups = []
+
+      // 重置高级配置
+      limit = nil
+      isAutoEnd = false
+      endAt = nil
+    }
+
+    // 设置发布模式为快速模式
+    publishMode = mode
   }
 }

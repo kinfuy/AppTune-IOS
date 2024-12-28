@@ -61,15 +61,6 @@ class NoticeViewModel<T: Identifiable & Decodable>: ObservableObject {
         notificationService = service
     }
 
-    func delete(_ id: String) async {
-        do {
-            try await API.deleteMessage(id: id)
-            await loadInitial()
-        } catch {
-            print("删除通知失败：\(error)")
-        }
-    }
-
     func deleteAllMessages() async {
         do {
             try await API.deleteAllMessages(type: type)

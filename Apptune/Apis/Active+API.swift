@@ -26,6 +26,7 @@ struct ActiveInfo: Codable, Identifiable, Hashable {
   let cover: String
   let startAt: Date
   let endAt: Date?  // 结束时间
+  let isAutoEnd: Bool
   let limit: Int?  // 人数限制
   let rewardType: RewardType  // 奖励类型
   let joinCount: Int?
@@ -82,6 +83,17 @@ struct RegistrationStats: Codable {
   let pendingReviews: Int
   let approvedReviews: Int
   let rejectedReviews: Int
+}
+
+struct SubmitExtraParams: Codable {
+  let userId: String?
+  let group: String?
+  let coin: Int?
+  init(userId: String? = nil, group: String? = nil, coin: Int? = nil) {
+    self.group = group
+    self.coin = coin
+    self.userId = userId
+  }
 }
 
 // MARK: - API Methods
@@ -280,12 +292,19 @@ extension API {
 
   // 提交审核结果
   static func submitAuditResult(
-    activeId: String, userId: String, status: Int, reason: String?
+    activeId: String, userId: String, status: Int, reason: String?, extra: SubmitExtraParams? = nil
   ) async throws {
+    var body =
+      ["activeId": activeId, "userId": userId, "status": status, "reason": reason ?? ""]
+      as [String: Any]
+    if let extra = extra {
+      body["group"] = extra.group
+      body["coin"] = extra.coin
+    }
     let request = try API.shared.createRequest(
       url: "\(BASR_SERVE_URL)/active/submission/submit",
       method: "POST",
-      body: ["activeId": activeId, "userId": userId, "status": status, "reason": reason ?? ""]
+      body: body
     )
     let _: VoidCodable = try await API.shared.session.data(for: request)
   }

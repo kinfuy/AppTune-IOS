@@ -25,8 +25,7 @@ class PromotionService: ObservableObject {
   var groupedPromotions: [String: [PromotionCode]] {
     Dictionary(grouping: promotions) { $0.productId }
   }
-    
-    
+
   func getProductPromotions(productId: String) -> [PromotionCode] {
     groupedPromotions[productId] ?? []
   }
@@ -47,7 +46,7 @@ class PromotionService: ObservableObject {
     }
   }
 
-  // 创建促销码
+  // 创建促��码
   @MainActor
   func createPromotion(productId: String, codes: [String], group: String) async {
     do {
@@ -69,6 +68,14 @@ class PromotionService: ObservableObject {
     } catch {
       print(error)
     }
+  }
+
+  // 加载促销码
+  func loadCodes(productId: String) async -> [PromotionCode] {
+    if promotions.isEmpty {
+      await loadPromotions()
+    }
+    return groupedPromotions[productId] ?? []
   }
 
 }
