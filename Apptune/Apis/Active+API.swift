@@ -71,6 +71,7 @@ struct ActiveTemplateInfo: Codable, Identifiable {
   let createTime: Date
   let images: [String]
   let tags: [TagEntity]
+  let pubMode: PublishMode?
 }
 
 struct ActiveStatus: Codable {

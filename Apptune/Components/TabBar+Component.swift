@@ -9,9 +9,10 @@ import SwiftUI
 
 enum TabbedItems: Int, CaseIterable {
   case home = 0
-  case product = 1
-  case message = 2
-  case person = 3
+  // case community = 1
+  case product = 2
+  case message = 3
+  case person = 4
 
   static func isWhiteListTabbar(to: TabbedItems) -> Bool {
     return !to.requiresAuth
@@ -21,6 +22,8 @@ enum TabbedItems: Int, CaseIterable {
     switch self {
     case .home:
       return "活动"
+    // case .community:
+    //   return "社区"
     case .product:
       return "空间"
     case .message:
@@ -34,12 +37,14 @@ enum TabbedItems: Int, CaseIterable {
     switch self {
     case .home:
       return SFSymbol.card
+    // case .community:
+    //   return SFSymbol.community
     case .product:
       return SFSymbol.folder
-    case .person:
-      return SFSymbol.person
     case .message:
       return SFSymbol.message
+    case .person:
+      return SFSymbol.person
     }
   }
 
@@ -47,12 +52,8 @@ enum TabbedItems: Int, CaseIterable {
     switch self {
     case .home:
       return false
-    case .product:
-      return true
-    case .message:
-      return true
-    case .person:
-      return true
+    default:
+      return false
     }
   }
 }
@@ -80,6 +81,8 @@ struct MainTabbedView: View {
       TabView(selection: $router.currentTab) {
         ActiveHomeView()
           .tag(TabbedItems.home)
+        // CommunityView()
+        //   .tag(TabbedItems.community)
         ProductView()
           .tag(TabbedItems.product)
         UserView()

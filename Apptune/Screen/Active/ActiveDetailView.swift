@@ -150,7 +150,7 @@ struct ActiveDetailView: View {
       HStack(spacing: 8) {
         // 分享活动
         Button(action: {
-          sheet.show(.activeShare(active: active))
+          router.navigate(to: .activeShare(active: active))
         }) {
           VStack {
             Image(systemName: "square.and.arrow.up")

@@ -51,6 +51,7 @@ enum SFSymbol: String, Codable {
   case task = "star.circle"
   case shop = "cart.circle"
   case message = "message"
+  case community = "lasso.badge.sparkles"
 }
 
 extension SFSymbol: View {

@@ -55,6 +55,43 @@ struct RequiredFieldModifier: ViewModifier {
   }
 }
 
+// 添加导航栏样式的 ViewModifier
+struct CustomNavigationBarModifier: ViewModifier {
+  let title: String
+  let router: Router
+  var leadingItem: (() -> AnyView)? = nil
+  var trailingItem: (() -> AnyView)? = nil
+
+  func body(content: Content) -> some View {
+    content
+      .background(Color(hex: "#f4f4f4"))
+      .navigationBarBackButtonHidden()
+      .navigationTitle(title)
+      .navigationBarTitleDisplayMode(.inline)
+      .navigationBarItems(
+        leading: leadingItem?() ?? defaultBackButton,
+        trailing: trailingItem?()
+      )
+  }
+
+  @MainActor
+  private var defaultBackButton: AnyView {
+    AnyView(
+      Button(
+        action: {
+          router.back()
+        },
+        label: {
+          HStack {
+            SFSymbol.back
+          }
+          .foregroundStyle(Color(hex: "#333333"))
+        }
+      )
+    )
+  }
+}
+
 // View 的扩展，添加水印方法
 extension View {
   func createdBy(
@@ -69,6 +106,23 @@ extension View {
   /// 添加必填标记（小红心）
   func required() -> some View {
     modifier(RequiredFieldModifier())
+  }
+
+  /// 添加自定义导航栏样式
+  func customNavigationBar(
+    title: String,
+    router: Router,
+    leadingItem: (() -> AnyView)? = nil,
+    trailingItem: (() -> AnyView)? = nil
+  ) -> some View {
+    modifier(
+      CustomNavigationBarModifier(
+        title: title,
+        router: router,
+        leadingItem: leadingItem,
+        trailingItem: trailingItem
+      )
+    )
   }
 }
 

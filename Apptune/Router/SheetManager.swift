@@ -32,8 +32,6 @@ enum SheetType: Identifiable {
     onSave: (() -> Void)? = nil
   )
 
-  case activeShare(active: ActiveInfo)
-
   case preCodePicker(
     productId: String,
     selectedGroups: [String],
@@ -48,7 +46,6 @@ enum SheetType: Identifiable {
     case .activityTemplates: return "activityTemplates"
     case .activityPreview: return "activityPreview"
     case .imagePicker: return "imagePicker"
-    case .activeShare: return "activeShare"
     case .imageShare: return "imageShare"
     case .preCodePicker: return "preCodePicker"
     }
@@ -91,8 +88,6 @@ enum SheetType: Identifiable {
       return AnyView(ActivityPreviewSheet(active: active))
     case .imagePicker(let onSelect, let onCancel):
       return AnyView(ImageSheet(onSelect: onSelect, onCancel: onCancel))
-    case let .activeShare(active):
-      return AnyView(ActiveShareView(active: active))
     case let .imageShare(shareImage, title, onSave):
       return AnyView(ImageShareSheet(shareImage: shareImage, title: title, onSave: onSave))
     case .preCodePicker(let productId, let selectedGroups, let onSelect, let onCancel, let config):

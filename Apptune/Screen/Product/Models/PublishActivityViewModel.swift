@@ -168,6 +168,17 @@ final class PublishActivityViewModel: ObservableObject {
     rewardDesc = template.reward ?? ""
     limit = template.limit
     isAutoEnd = false
+    if let  pubMode = template.pubMode {
+      publishMode = pubMode
+    } else {
+      var pubMode: PublishMode = .quick
+      if template.rewardType == .promoCode || template.rewardType == .points
+            || template.limit != nil  || template.reward != nil
+      {
+        pubMode = .pro
+      }
+      publishMode = pubMode
+    }
   }
 
   func editActivity(active: ActiveInfo) {

@@ -76,6 +76,7 @@
 		F2AE42872CB97814009E72C3 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AE42862CB97814009E72C3 /* View+Extension.swift */; };
 		F2AE42892CB97917009E72C3 /* CornerRadius+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AE42882CB97917009E72C3 /* CornerRadius+Component.swift */; };
 		F2AE6A432D2001AD0002212F /* Mantis in Frameworks */ = {isa = PBXBuildFile; productRef = F2AE6A422D2001AD0002212F /* Mantis */; };
+		F2AE6A472D20F6900002212F /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AE6A462D20F6900002212F /* CommunityView.swift */; };
 		F2B269722CB57233001230B4 /* SwiftDate in Frameworks */ = {isa = PBXBuildFile; productRef = F2B269712CB57233001230B4 /* SwiftDate */; };
 		F2B269752CB57260001230B4 /* ScreenManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269742CB57260001230B4 /* ScreenManage.swift */; };
 		F2B269772CB574B0001230B4 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B269762CB574B0001230B4 /* LoginView.swift */; };
@@ -190,6 +191,7 @@
 		F2AE42812CB97118009E72C3 /* Image+Componet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Componet.swift"; sourceTree = "<group>"; };
 		F2AE42862CB97814009E72C3 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		F2AE42882CB97917009E72C3 /* CornerRadius+Component.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CornerRadius+Component.swift"; sourceTree = "<group>"; };
+		F2AE6A462D20F6900002212F /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
 		F2B269742CB57260001230B4 /* ScreenManage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenManage.swift; sourceTree = "<group>"; };
 		F2B269762CB574B0001230B4 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		F2B269792CB578DD001230B4 /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
@@ -494,9 +496,18 @@
 			path = Notice;
 			sourceTree = "<group>";
 		};
+		F2AE6A452D20F6760002212F /* Community */ = {
+			isa = PBXGroup;
+			children = (
+				F2AE6A462D20F6900002212F /* CommunityView.swift */,
+			);
+			path = Community;
+			sourceTree = "<group>";
+		};
 		F2B269732CB57252001230B4 /* Screen */ = {
 			isa = PBXGroup;
 			children = (
+				F2AE6A452D20F6760002212F /* Community */,
 				F2C5B4E62D16A306007E3916 /* Notification */,
 				F21CFCFA2CD6911600CAB613 /* Coin */,
 				F26F15962CC5130500848715 /* Common */,
@@ -685,6 +696,7 @@
 				F21CFD122CD7247300CAB613 /* PublishProductViewModel.swift in Sources */,
 				F27C657D2CB16F1B0074B608 /* ApptuneApp.swift in Sources */,
 				F21CFD0D2CD7245700CAB613 /* PublishActivityView.swift in Sources */,
+				F2AE6A472D20F6900002212F /* CommunityView.swift in Sources */,
 				F2C5B4E82D16A31C007E3916 /* NotificationView.swift in Sources */,
 				F2AE427E2CB96D6B009E72C3 /* Tap+Extension.swift in Sources */,
 				F20D194E2CD783F5006296D0 /* AppStoreSearch+Sheet.swift in Sources */,

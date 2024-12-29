@@ -22,6 +22,7 @@ enum GeneralRouterDestination: Hashable {
   case submitActiveReview(active: ActiveInfo, mode: ReviewMode, userId: String?)
   case registration(active: ActiveInfo)  // 添加报名管理路由
   case searchActive  // 搜索活动
+  case activeShare(active: ActiveInfo)  // 活动分享
 
   static func isWhiteListRoute(to: GeneralRouterDestination) -> Bool {
     switch to {
@@ -83,6 +84,8 @@ extension GeneralRouterDestination {
       RegistrationView(active: active)
     case .searchActive:
       SearchActiveView()
+    case let .activeShare(active):
+      ActiveShareView(active: active)
     }
   }
 }
