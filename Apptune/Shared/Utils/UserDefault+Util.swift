@@ -9,6 +9,20 @@ public class Defaults: ObservableObject {
   @AppStorage("loginEmail") public var isLogin: String = ""
   @AppStorage("accessToken") public var token: String = ""
   @AppStorage("refreshToken") public var refreshToken: String = ""
+  @AppStorage("lastProductNoticeDismissDate") public var lastProductNoticeDismissTimestamp: Double =
+    0
+
+  public var lastProductNoticeDismissDate: Date? {
+    get {
+      if lastProductNoticeDismissTimestamp == 0 {
+        return nil
+      }
+      return Date(timeIntervalSince1970: lastProductNoticeDismissTimestamp)
+    }
+    set {
+      lastProductNoticeDismissTimestamp = newValue?.timeIntervalSince1970 ?? 0
+    }
+  }
 
   public static let shared = Defaults()
 }

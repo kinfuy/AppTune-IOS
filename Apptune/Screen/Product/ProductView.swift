@@ -27,9 +27,78 @@ struct ProductView: View {
   @EnvironmentObject var activeService: ActiveService
   @EnvironmentObject var promotionService: PromotionService
   @EnvironmentObject var userService: UserService
+  @Default(\.lastProductNoticeDismissDate) var lastProductNoticeDismissDate
 
   private let titleBarHeight: CGFloat = 60
   let tabBarHeight: CGFloat = 70
+
+  // 将模块定义拆分成独立的类型
+  private struct ModuleDefinition {
+    let tab: ProductTab
+    let icon: String
+    let color: Color
+    let count: Int
+    let roles: [String]
+  }
+
+  // 将baseModules定义为一个方法
+  private func createBaseModules() -> [ModuleDefinition] {
+    [
+      ModuleDefinition(
+        tab: .joinedEvents,
+        icon: "person.2.fill",
+        color: .orange,
+        count: activeService.totalJoinedActive,
+        roles: ["user", "developer", "admin"]
+      ),
+      ModuleDefinition(
+        tab: .myProducts,
+        icon: "cube.fill",
+        color: .purple,
+        count: productService.totalMyProducts,
+        roles: ["user", "developer", "admin"]
+      ),
+      ModuleDefinition(
+        tab: .myEvents,
+        icon: "calendar.badge.plus",
+        color: .theme,
+        count: activeService.totalSelfActive,
+        roles: ["developer", "admin"]
+      ),
+      ModuleDefinition(
+        tab: .promotion,
+        icon: "tag.fill",
+        color: .indigo,
+        count: promotionService.promotions.count,
+        roles: ["developer", "admin"]
+      ),
+      ModuleDefinition(
+        tab: .review,
+        icon: "checkmark.seal.fill",
+        color: .blue,
+        count: productService.pendingProductReviews.count
+          + activeService.pendingActiveReviews.count,
+        roles: ["admin"]
+      ),
+    ]
+  }
+
+  // 修改modules计算属性
+  var modules: [(tab: ProductTab, icon: String, color: Color, count: Int, roles: [String])] {
+    let definitions = createBaseModules()
+    return
+      definitions
+      .filter { $0.roles.contains(userService.profile.role) }
+      .map { def in
+        (
+          tab: def.tab,
+          icon: def.icon,
+          color: def.color,
+          count: def.count,
+          roles: def.roles
+        )
+      }
+  }
 
   // 加载模块数据
   @MainActor
@@ -46,51 +115,6 @@ struct ProductView: View {
       await activeService.loadSelfActives(refresh: true)
     case .joinedEvents:
       await activeService.loadJoinedActives(refresh: true)
-    }
-  }
-
-  // 将模块数据改为计算属性
-  var modules: [(tab: ProductTab, icon: String, color: Color, count: Int, roles: [String])] {
-    let baseModules = [
-      (
-        tab: ProductTab.joinedEvents,
-        icon: "person.2.fill",
-        color: Color.orange,
-        count: activeService.totalJoinedActive,
-        roles: ["user", "developer", "admin"]
-      ),
-      (
-        tab: ProductTab.myProducts,
-        icon: "cube.fill",
-        color: Color.purple,
-        count: productService.totalMyProducts,
-        roles: ["user", "developer", "admin"]
-      ),
-      (
-        tab: ProductTab.myEvents,
-        icon: "calendar.badge.plus",
-        color: Color.theme,
-        count: activeService.totalSelfActive,
-        roles: ["developer", "admin"]
-      ),
-      (
-        tab: ProductTab.promotion,
-        icon: "tag.fill",
-        color: Color.indigo,
-        count: promotionService.promotions.count,
-        roles: ["developer", "admin"]
-      ),
-      (
-        tab: ProductTab.review,
-        icon: "checkmark.seal.fill",
-        color: Color.blue,
-        count: productService.pendingProductReviews.count
-          + activeService.pendingActiveReviews.count,
-        roles: ["admin"]
-      ),
-    ]
-    return baseModules.filter { module in
-      module.roles.contains(userService.profile.role)
     }
   }
 
@@ -212,6 +236,19 @@ struct ProductView: View {
     }
   }
 
+  @MainActor
+  private func checkFirstProduct() {
+    if userService.profile.role == "user" {
+      if let dismissDate = lastProductNoticeDismissDate {
+        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        if dismissDate > sevenDaysAgo {
+          return
+        }
+      }
+      notice.openNotice(open: .firstProduct(FIRST_PRODUCT_NOTICE_ID))
+    }
+  }
+
   var body: some View {
     ZStack {
       if !router.isShowModules {
@@ -291,6 +328,9 @@ struct ProductView: View {
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .padding(.bottom, 32)
     .background(Color(hex: "#f4f4f4"))
+    .onAppear {
+      checkFirstProduct()
+    }
   }
 }
 

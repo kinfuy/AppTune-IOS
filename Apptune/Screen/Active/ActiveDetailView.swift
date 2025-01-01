@@ -297,7 +297,7 @@ struct ActiveDetailView: View {
     await activeService.joinActive(
       id: active.id,
       success: {
-        notice.openNotice(open: .toast("报名成功"))
+        notice.openNotice(open: .joinSuccess(JOIN_SUCCESS_NOTICE_ID))
         hasJoined = true
       }
     )

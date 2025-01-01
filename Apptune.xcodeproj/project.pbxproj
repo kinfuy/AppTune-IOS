@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F20398302D25311400FB2434 /* Join+Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F203982F2D25311400FB2434 /* Join+Modal.swift */; };
+		F20398322D25313D00FB2434 /* FirshProduct+Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20398312D25313D00FB2434 /* FirshProduct+Modal.swift */; };
 		F20D194B2CD78269006296D0 /* SheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20D194A2CD78269006296D0 /* SheetManager.swift */; };
 		F20D194E2CD783F5006296D0 /* AppStoreSearch+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20D194D2CD783F5006296D0 /* AppStoreSearch+Sheet.swift */; };
 		F21CFCD52CD6462400CAB613 /* ActiveCard+Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD02CD6462300CAB613 /* ActiveCard+Components.swift */; };
@@ -124,6 +126,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F203982F2D25311400FB2434 /* Join+Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Join+Modal.swift"; sourceTree = "<group>"; };
+		F20398312D25313D00FB2434 /* FirshProduct+Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirshProduct+Modal.swift"; sourceTree = "<group>"; };
 		F20D194A2CD78269006296D0 /* SheetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
 		F20D194D2CD783F5006296D0 /* AppStoreSearch+Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppStoreSearch+Sheet.swift"; sourceTree = "<group>"; };
 		F21CFCD02CD6462300CAB613 /* ActiveCard+Components.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ActiveCard+Components.swift"; sourceTree = "<group>"; };
@@ -489,7 +493,9 @@
 			children = (
 				F2A0D60B2CC3A28D00536C58 /* Version+Modal.swift */,
 				F2A0D60D2CC40AAA00536C58 /* Agreement+Modal.swift */,
+				F20398312D25313D00FB2434 /* FirshProduct+Modal.swift */,
 				F26F15972CC513C300848715 /* Confirm+Modal.swift */,
+				F203982F2D25311400FB2434 /* Join+Modal.swift */,
 				F2A0D60F2CC49FD800536C58 /* Toast+Modal.swift */,
 				F2FAEAFA2CE04C03007BD6D8 /* Message+Modal.swift */,
 			);
@@ -702,6 +708,7 @@
 				F20D194E2CD783F5006296D0 /* AppStoreSearch+Sheet.swift in Sources */,
 				F2C5B4F42D18483F007E3916 /* AuditNoticeView.swift in Sources */,
 				F2EEE3A32D05A9B800D7777C /* PromotionView.swift in Sources */,
+				F20398322D25313D00FB2434 /* FirshProduct+Modal.swift in Sources */,
 				F2EEE39D2D048AF600D7777C /* Codeable+Extension.swift in Sources */,
 				F26F159D2CC538CE00848715 /* User+Service.swift in Sources */,
 				F21CFD072CD691BB00CAB613 /* CoinShopViewModel.swift in Sources */,
@@ -770,6 +777,7 @@
 				F21CFD0E2CD7245700CAB613 /* PublishActivityViewModel.swift in Sources */,
 				F283B0452D0DD4370051FBF1 /* ImageClip+Component.swift in Sources */,
 				F2C5B4FB2D184CB4007E3916 /* NoticeListView.swift in Sources */,
+				F20398302D25311400FB2434 /* Join+Modal.swift in Sources */,
 				F22377E12CC6ABBB00F780AE /* UrlSession+Extension.swift in Sources */,
 				F28829842CF2EB3D002D012A /* ActivityTemplates+Sheet.swift in Sources */,
 				F237E5A02CCE6BFB00CC1074 /* AboutAuthorView.swift in Sources */,

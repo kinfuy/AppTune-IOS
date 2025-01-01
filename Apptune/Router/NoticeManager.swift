@@ -57,6 +57,8 @@ enum NoticeDestiantion {
   case confirm(Confirm)  // 确认弹窗
   case message(Message)  // 新增 message 类型
   case imagePreview(ImagePreview)  // 新增图片预览类型
+  case firstProduct(String)  // 添加产品创建引导类型
+  case joinSuccess(String)  // 添加报名成功类型
 
   var id: String {
     switch self {
@@ -67,12 +69,14 @@ enum NoticeDestiantion {
     case let .confirm(ctx): ctx.id.uuidString
     case let .message(ctx): ctx.id.uuidString
     case let .imagePreview(ctx): ctx.id.uuidString
+    case let .firstProduct(id): id
+    case let .joinSuccess(id): id
     }
   }
 
   var config: NoticeConfig {
     switch self {
-    case .version:
+    case .version, .firstProduct, .joinSuccess:
       NoticeConfig(maskHiden: false, mask: true, blockInteraction: true)
     case .toast, .loading, .message:
       NoticeConfig.transparent
@@ -160,27 +164,17 @@ class NoticeManager: ObservableObject {
   @discardableResult
   @MainActor
   func openNotice(open: NoticeDestiantion) -> String {
-    if case NoticeDestiantion.toast = open {
-      noticeStack = noticeStack.filter {
-        if case NoticeDestiantion.toast = $0 {
-          return false
-        }
-        return true
+    if noticeStack.contains(where: { $0.id == open.id }) {
+      return open.id
+    }
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+      self.noticeStack.append(open)
+      withAnimation(.easeIn(duration: 0.38)) {
+        self.currentNotice = open
       }
     }
 
-    noticeStack.append(open)
-    withAnimation(.easeIn(duration: 0.38)) {
-      currentNotice = open
-    }
-
-    if case let NoticeDestiantion.toast(ctx) = open {
-      if ctx.autoClose {
-        DispatchQueue.main.asyncAfter(deadline: .now() + Double(ctx.time)) {
-          self.closeNotice(id: ctx.id.uuidString)
-        }
-      }
-    }
     return open.id
   }
 
@@ -265,6 +259,10 @@ class NoticeManager: ObservableObject {
           imageType: preview.imageType,
           id: preview.id.uuidString
         )
+      case .firstProduct:
+        FirshProduct_Modal()
+      case .joinSuccess:
+        Join_Modal()
       }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
