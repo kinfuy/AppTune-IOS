@@ -53,7 +53,7 @@ enum TabbedItems: Int, CaseIterable {
     case .home:
       return false
     default:
-      return false
+      return true
     }
   }
 }
