@@ -92,7 +92,10 @@ struct CreatePostView: View {
             await communityService.createPost(
               post,
               success: {
-                router.back()
+                Task {
+                  await communityService.loadPendingPostReviews()
+                  router.back()
+                }
               })
           }
         }

@@ -94,7 +94,9 @@ struct SubmitActiveReviewView: View {
             onCancel: nil,
             config: ProCodeSheetConfig(allowMultipleSelection: true, title: "绑定优惠码分组")))
       } else {
-        await confirmReward(desc: "审核通过将奖励用户 \(active.rewardPromoCodes?.first ?? "") 优惠码")
+        await confirmReward(
+          desc: "审核通过将奖励用户 \(active.rewardPromoCodes?.first ?? "") 优惠码",
+          extra: SubmitExtraParams(userId: userId, group: active.rewardPromoCodes?.first ?? ""))
       }
     }
 

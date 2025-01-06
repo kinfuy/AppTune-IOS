@@ -24,6 +24,7 @@ enum GeneralRouterDestination: Hashable {
   case searchActive  // 搜索活动
   case activeShare(active: ActiveInfo)  // 活动分享
   case createPost  // 创建帖子
+  case webView(url: String, title: String?)  // 网页视图
 
   static func isWhiteListRoute(to: GeneralRouterDestination) -> Bool {
     switch to {
@@ -33,12 +34,6 @@ enum GeneralRouterDestination: Hashable {
       return false
     }
   }
-}
-
-enum SheetDestination: Hashable {
-}
-
-enum FullScreenDestination: Hashable {
 }
 
 // MARK: - 视图构建器
@@ -89,6 +84,8 @@ extension GeneralRouterDestination {
       ActiveShareView(active: active)
     case .createPost:
       CreatePostView()
+    case let .webView(url, title):
+      WebView(url: url, title: title)
     }
   }
 }

@@ -217,6 +217,7 @@ extension API {
       method: "POST",
       body: body
     )
+    print(body)
     let _: VoidCodable = try await API.shared.session.data(for: request)
   }
 

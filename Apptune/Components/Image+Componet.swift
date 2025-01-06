@@ -40,6 +40,7 @@ struct ImgLoader: View {
   private let contentMode: SwiftUI.ContentMode
   private let canPreview: Bool
   @State private var imageRatio: CGFloat = 1.0
+  @State private var loadFailed: Bool = false
 
   // MARK: - Init
   init(_ img: String, contentMode: SwiftUI.ContentMode = .fill, canPreview: Bool = false) {
@@ -51,13 +52,20 @@ struct ImgLoader: View {
   // MARK: - Body
   var body: some View {
     Group {
-      switch getImageType(url) {
-      case .remote:
-        remoteImage
-      case .assets:
-        assetImage
-      case .local:
-        localImage
+      if loadFailed {
+        Image(systemName: "photo")
+          .resizable()
+          .aspectRatio(contentMode: .fit)
+          .foregroundColor(.gray)
+      } else {
+        switch getImageType(url) {
+        case .remote:
+          remoteImage
+        case .assets:
+          assetImage
+        case .local:
+          localImage
+        }
       }
     }
     .aspectRatio(imageRatio, contentMode: contentMode)
@@ -98,8 +106,13 @@ struct ImgLoader: View {
           .loading(true, size: 1)
       }
       .onSuccess { result in
+        loadFailed = false
         let size = result.image.size
         imageRatio = size.width / size.height
+      }
+      .onFailure { error in
+        loadFailed = true
+        imageRatio = 1.0
       }
       .resizable()
       .loadDiskFileSynchronously()
