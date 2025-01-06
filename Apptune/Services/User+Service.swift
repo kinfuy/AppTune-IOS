@@ -184,7 +184,7 @@ class UserService: ObservableObject {
         }
       }
       DispatchQueue.main.async {
-        NoticeManager.shared.openNotice(open: .toast("刷新失败"))
+        NoticeManager.shared.open(open: .toast("刷新失败"))
       }
     }
   }

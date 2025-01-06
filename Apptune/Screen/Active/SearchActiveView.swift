@@ -118,8 +118,8 @@ struct SearchActiveView: View {
           if hasSearched {
             if isSearching {
               Spacer()
-              ProgressView()
-                .scaleEffect(0.8)
+              LoadingComponent()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
               Spacer()
             } else {
               if searchResults.isEmpty {

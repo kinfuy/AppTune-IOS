@@ -50,14 +50,14 @@ extension URLSession {
     var loadId: String?
     do {
       if loading {
-        loadId = await NoticeManager.shared.openNotice(
+        loadId = await NoticeManager.shared.open(
           open: .loading("", theme: .custom(background: .clear, textColor: .gray)))
       }
 
       // 检查网络连接
       let isConnected = await CheckInternetConnection.checkConnection()
       guard isConnected else {
-        await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "网络连接失败")))
+        await NoticeManager.shared.open(open: .toast(Toast(msg: "网络连接失败")))
         throw APIError.systemError(message: "网络连接失败")
       }
 
@@ -71,13 +71,13 @@ extension URLSession {
       }
 
       guard let response = response as? HTTPURLResponse else {
-        await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "无效的请求")))
+        await NoticeManager.shared.open(open: .toast(Toast(msg: "无效的请求")))
         throw APIError.systemError(message: "无效的请求")
       }
 
       guard 200...299 ~= response.statusCode else {
         print("🌍 API Response Status Code: \(response.statusCode)")
-        await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "服务异常，请稍后重试")))
+        await NoticeManager.shared.open(open: .toast(Toast(msg: "服务异常，请稍后重试")))
         throw APIError.systemError(message: "请求失败")
       }
 
@@ -97,16 +97,16 @@ extension URLSession {
             return try await self.data(for: newRequest, retrying: true)
           }
           await Router.shared.navigate(to: .login)
-          await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "登录已过期")))
+          await NoticeManager.shared.open(open: .toast(Toast(msg: "登录已过期")))
           throw APIError.serveError(code: baseResponse.code, message: "登录已过期")
 
         case "100006":  // 需要重新登录
           await Router.shared.navigate(to: .login)
-          await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "请重新登录")))
+          await NoticeManager.shared.open(open: .toast(Toast(msg: "请重新登录")))
           throw APIError.serveError(code: baseResponse.code, message: "请重新登录")
 
         default:
-          await NoticeManager.shared.openNotice(open: .toast(Toast(msg: baseResponse.message)))
+          await NoticeManager.shared.open(open: .toast(Toast(msg: baseResponse.message)))
           throw APIError.serveError(code: baseResponse.code, message: baseResponse.message)
         }
       }
@@ -114,7 +114,7 @@ extension URLSession {
       guard let responseData = baseResponse.data else {
         if T.self == VoidCodable.self {
           if loadId != "" {
-            await NoticeManager.shared.closeNotice(id: loadId)
+            await NoticeManager.shared.close(id: loadId)
           }
           return VoidCodable() as! T
         }
@@ -138,30 +138,30 @@ extension URLSession {
           }
         }
       } catch {
-        await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "数据解析失败")))
+        await NoticeManager.shared.open(open: .toast(Toast(msg: "数据解析失败")))
         throw APIError.systemError(message: "数据解析失败\(urlRequest.url!)")
       }
 
       if loadId != "" {
-        await NoticeManager.shared.closeNotice(id: loadId)
+        await NoticeManager.shared.close(id: loadId)
       }
 
       return responseObject
 
     } catch {
       if let loading = loadId {
-        await NoticeManager.shared.closeNotice(id: loading)
+        await NoticeManager.shared.close(id: loading)
       }
 
       // 处理超时错误
       if (error as NSError).code == NSURLErrorTimedOut {
-        await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "请求超时，请稍后重试")))
+        await NoticeManager.shared.open(open: .toast(Toast(msg: "请求超时，请稍后重试")))
         throw APIError.systemError(message: "请求超时")
       }
 
       // 处理其他网络错误
       if (error as NSError).domain == NSURLErrorDomain {
-        await NoticeManager.shared.openNotice(open: .toast(Toast(msg: "网络请求失败")))
+        await NoticeManager.shared.open(open: .toast(Toast(msg: "网络请求失败")))
         throw APIError.systemError(message: "网络请求失败")
       }
 

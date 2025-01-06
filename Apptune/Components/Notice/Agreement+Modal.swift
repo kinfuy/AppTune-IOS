@@ -10,7 +10,7 @@ import SwiftUI
 struct Agreement_Model: View {
   @EnvironmentObject var appState: AppState
   @EnvironmentObject var router: Router
-    @EnvironmentObject var notice: NoticeManager
+  @EnvironmentObject var notice: NoticeManager
   @Default(\.isAgreeMent) var isAgree: Bool
   var body: some View {
     VStack {
@@ -37,7 +37,7 @@ struct Agreement_Model: View {
           .frame(height: 48)
           .onTapGesture {
             isAgree = true
-            notice.closeNotice(id: AGGREEMENT_NOTICE_ID)
+            notice.close(id: AGGREEMENT_NOTICE_ID)
           }
       }
       .padding()

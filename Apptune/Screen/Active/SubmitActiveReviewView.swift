@@ -44,7 +44,7 @@ struct SubmitActiveReviewView: View {
       let url = try await API.uploadAvatar(imageData, loading: true)
       return url
     } catch {
-      notice.openNotice(open: .toast("图片上传失败"))
+      notice.open(open: .toast("图片上传失败"))
       return nil
     }
   }
@@ -62,7 +62,7 @@ struct SubmitActiveReviewView: View {
 
   @MainActor
   private func confirmReward(desc: String?, extra: SubmitExtraParams? = nil) async {
-    notice.openNotice(
+    notice.open(
       open: .confirm(
         title: "确定通过审核吗？",
         desc: desc ?? "",
@@ -133,7 +133,7 @@ struct SubmitActiveReviewView: View {
 
         // 辅助按钮 - 驳回
         Button(action: {
-          notice.openNotice(
+          notice.open(
             open: .confirm(
               title: "确定驳回审核吗？",
               onSuccess: {
@@ -177,7 +177,8 @@ struct SubmitActiveReviewView: View {
   var body: some View {
     VStack {
       if isLoading {
-        ProgressView()
+        LoadingComponent()
+          .frame(maxWidth: .infinity, maxHeight: .infinity)
       } else {
         ScrollView {
           VStack(alignment: .leading, spacing: 20) {
@@ -308,7 +309,7 @@ struct SubmitActiveReviewView: View {
         text: $reviewReason,
         placeholder: "请输入审核意见",
         isMultiline: true,
-        padding: 0,
+        verticalPadding: 0,
         maxLength: 200
       )
     }
@@ -359,7 +360,7 @@ struct SubmitActiveReviewView: View {
       extra: extra,
       success: {
         isSubmitting = false
-        notice.openNotice(open: .toast("审核完成"))
+        notice.open(open: .toast("审核完成"))
         Task {
           await loadHistoryReviews(userId: userId)
         }
@@ -376,7 +377,7 @@ struct SubmitActiveReviewView: View {
       images: images,
       success: {
         isSubmitting = false
-        notice.openNotice(open: .toast("提交成功"))
+        notice.open(open: .toast("提交成功"))
         router.back()
       }
     )
@@ -392,10 +393,24 @@ struct SubmitActiveReviewView: View {
     }
     isLoadingHistory = false
 
-    // 检查是否有已通过的审核记录
-    if historyReviews.first(where: { $0.status == .approved }) != nil {
-      mode = .view
-    } else if mode != .review {
+    // 检查审核状态
+    if let lastReview = historyReviews.first {
+      switch lastReview.status {
+      case .approved:
+        mode = .view
+      case .rejected:
+        // 被拒绝时，如果不是审核模式，则设置为编辑模式
+        if mode != .review {
+          mode = .edit
+        }
+      case .pending:
+        // 待审核状态
+        if mode != .review {
+          mode = .view
+        }
+      }
+    } else {
+      // 没有审核记录时
       mode = hasSubmitted ? .view : .edit
     }
   }
@@ -414,7 +429,8 @@ struct SubmitActiveReviewView: View {
       if isLoadingHistory {
         HStack {
           Spacer()
-          ProgressView()
+          LoadingComponent()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
           Spacer()
         }
         .padding()

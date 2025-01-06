@@ -163,7 +163,7 @@ class NoticeManager: ObservableObject {
 
   @discardableResult
   @MainActor
-  func openNotice(open: NoticeDestiantion) -> String {
+  func open(open: NoticeDestiantion) -> String {
     if noticeStack.contains(where: { $0.id == open.id }) {
       return open.id
     }
@@ -175,11 +175,19 @@ class NoticeManager: ObservableObject {
       }
     }
 
+    if case let NoticeDestiantion.toast(ctx) = open {
+      if ctx.autoClose {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Double(ctx.time)) {
+          self.close(id: ctx.id.uuidString)
+        }
+      }
+    }
+
     return open.id
   }
 
   @MainActor
-  func closeNotice(id: String? = nil) {
+  func close(id: String? = nil) {
     if let noticeId = id {
       noticeStack = noticeStack.filter { $0.id != noticeId }
     } else {
@@ -208,7 +216,7 @@ class NoticeManager: ObservableObject {
           .ignoresSafeArea(.all)
           .onTapGesture {
             if notice.config.maskHiden {
-              self.closeNotice(id: notice.id)
+              self.close(id: notice.id)
             }
           }
       }
@@ -268,5 +276,9 @@ class NoticeManager: ObservableObject {
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     // 只在需要阻止交互的情况下阻止
     .allowsHitTesting(notice.config.blockInteraction)
+  }
+
+  func hide(id: String) {
+    // 移除指定 id 的消息
   }
 }

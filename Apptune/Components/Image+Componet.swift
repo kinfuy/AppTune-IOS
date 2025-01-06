@@ -22,7 +22,7 @@ private struct PreviewTapModifier: ViewModifier {
         Color.clear
           .contentShape(Rectangle())
           .onTapGesture {
-            notice.openNotice(
+            notice.open(
               open: .imagePreview(url: url, imageType: imageType)
             )
           }
@@ -150,7 +150,7 @@ struct ImagePreviewView: View {
       .background(Color.black.opacity(0.9))
       .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
       .onTapGesture {
-        notice.closeNotice(id: id)
+        notice.close(id: id)
       }
     }
   }

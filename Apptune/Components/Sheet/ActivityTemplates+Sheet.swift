@@ -29,8 +29,7 @@ struct ActivityTemplatesSheet: View {
       .padding(.bottom, 16)
 
       if activeService.isTemplatesLoading {
-        ProgressView()
-          .progressViewStyle(.circular)
+        LoadingComponent()
           .frame(maxWidth: .infinity, maxHeight: .infinity)
       } else if activeService.templates.isEmpty {
         VStack(spacing: 12) {
@@ -96,7 +95,7 @@ struct ActiveTemplateCard: View {
       }
 
       // 添加标签显示
-        if template.tags.count > 0 {
+      if template.tags.count > 0 {
         ScrollView(.horizontal, showsIndicators: false) {
           HStack(spacing: 8) {
             ForEach(template.tags, id: \.name) { tag in

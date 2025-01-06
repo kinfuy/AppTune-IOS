@@ -37,7 +37,7 @@ struct FirshProduct_Modal: View {
         // 创建按钮
         Button(action: {
           // TODO: 跳转到创建产品页面
-          notice.closeNotice(id: FIRST_PRODUCT_NOTICE_ID)
+          notice.close(id: FIRST_PRODUCT_NOTICE_ID)
           router.navigate(to: .publishProduct)
         }) {
           Text("立即创建")
@@ -55,7 +55,7 @@ struct FirshProduct_Modal: View {
             Tap.shared.play(.light)
             // 记录关闭时间
             lastProductNoticeDismissDate = Date()
-            notice.closeNotice(id: FIRST_PRODUCT_NOTICE_ID)
+            notice.close(id: FIRST_PRODUCT_NOTICE_ID)
           }
       }
       .padding(24)

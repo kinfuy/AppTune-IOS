@@ -248,7 +248,7 @@ struct ActiveDetailView: View {
             Button(
               role: .destructive,
               action: {
-                notice.openNotice(
+                notice.open(
                   open: .confirm(
                     Confirm(
                       title: "确定删除此活动吗",
@@ -297,7 +297,7 @@ struct ActiveDetailView: View {
     await activeService.joinActive(
       id: active.id,
       success: {
-        notice.openNotice(open: .joinSuccess(JOIN_SUCCESS_NOTICE_ID))
+        notice.open(open: .joinSuccess(JOIN_SUCCESS_NOTICE_ID))
         hasJoined = true
       }
     )
@@ -308,7 +308,7 @@ struct ActiveDetailView: View {
     await activeService.deleteActive(
       id: active.id,
       success: {
-        notice.openNotice(open: .toast("删除成功"))
+        notice.open(open: .toast("删除成功"))
         Task {
           await activeService.loadSelfActives(refresh: true)
         }

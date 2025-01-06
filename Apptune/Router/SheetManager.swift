@@ -40,6 +40,11 @@ enum SheetType: Identifiable {
     config: ProCodeSheetConfig
   )
 
+  case linkPicker(
+    onConfirm: ((_ link:PostLink) -> Void)? = nil,
+    onCancel: (() -> Void)? = nil
+  )
+
   var id: String {
     switch self {
     case .appStoreSearch: return "appStoreSearch"
@@ -48,6 +53,7 @@ enum SheetType: Identifiable {
     case .imagePicker: return "imagePicker"
     case .imageShare: return "imageShare"
     case .preCodePicker: return "preCodePicker"
+    case .linkPicker: return "linkPicker"
     }
   }
 
@@ -59,6 +65,8 @@ enum SheetType: Identifiable {
       return SheetConfig(fullScreen: false, dismissible: true)
     case .preCodePicker:
       return SheetConfig(fullScreen: false, dismissible: true, height: 0.68)
+    case .linkPicker:
+      return SheetConfig(fullScreen: false, dismissible: true, height: 0.5)
     default:
       return SheetConfig(fullScreen: false, dismissible: true)
     }
@@ -72,6 +80,8 @@ enum SheetType: Identifiable {
     case let .activityTemplates(_, onCancel):
       return onCancel
     case let .imagePicker(_, onCancel):
+      return onCancel
+    case let .linkPicker(_, onCancel):
       return onCancel
     default:
       return nil
@@ -100,6 +110,8 @@ enum SheetType: Identifiable {
           config: config
         )
       )
+    case .linkPicker(let onConfirm, let onCancel):
+        return AnyView(Link_Sheet(onConfirm: onConfirm, onCancel: onCancel))
     }
   }
 }

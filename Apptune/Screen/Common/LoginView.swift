@@ -22,7 +22,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, ASAuthorizationControllerDel
     if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
       // 获取身份令牌
       guard let identityToken = appleIDCredential.identityToken,
-            let identityTokenString = String(data: identityToken, encoding: .utf8) else {
+        let identityTokenString = String(data: identityToken, encoding: .utf8)
+      else {
         onLoginError?()
         return
       }
@@ -30,7 +31,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, ASAuthorizationControllerDel
       // 组合姓名
       let name = [
         appleIDCredential.fullName?.familyName,
-        appleIDCredential.fullName?.givenName
+        appleIDCredential.fullName?.givenName,
       ].compactMap { $0 }.joined(separator: "")
 
       // 直接传递 Apple 提供的原始信息给服务器
@@ -79,7 +80,7 @@ struct LoginView: View {
     AppDelegate.shared.onLoginSuccess = { idToken, email, name in
       Task {
         do {
-          let loading = notice.openNotice(
+          let loading = notice.open(
             open: .toast(Toast(msg: "登录中...", autoClose: false, loading: true))
           )
 
@@ -87,11 +88,11 @@ struct LoginView: View {
           let response = try await API.signApple(
             idToken: idToken,
             email: email,
-            name: name // 直接传递组合后的姓名
+            name: name  // 直接传递组合后的姓名
           )
 
           userService.login(response: response)
-          notice.closeNotice(id: loading)
+          notice.close(id: loading)
           router.toTabBar(.home)
 
         } catch {
@@ -101,7 +102,7 @@ struct LoginView: View {
     }
 
     AppDelegate.shared.onLoginError = {
-      notice.openNotice(open: .toast("Apple 授权失败"))
+      notice.open(open: .toast("Apple 授权失败"))
       isLoading = false
     }
 
@@ -143,7 +144,7 @@ struct LoginView: View {
           if self.isAgree {
             router.navigate(to: .emailLogin)
           } else {
-            notice.openNotice(open: .agreement(AGGREEMENT_NOTICE_ID))
+            notice.open(open: .agreement(AGGREEMENT_NOTICE_ID))
           }
         }
 
@@ -162,7 +163,7 @@ struct LoginView: View {
             isLoading = true
             self.appleAuthLogin()
           } else {
-            notice.openNotice(open: .agreement(AGGREEMENT_NOTICE_ID))
+            notice.open(open: .agreement(AGGREEMENT_NOTICE_ID))
           }
         }
       }

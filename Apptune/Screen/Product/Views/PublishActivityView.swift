@@ -22,7 +22,7 @@ struct PublishActivityView: View {
       let url = try await API.uploadAvatar(imageData, loading: true)
       return url
     } catch {
-      notice.openNotice(open: .toast("图片上传失败"))
+      notice.open(open: .toast("图片上传失败"))
       return nil
     }
   }
@@ -54,7 +54,7 @@ struct PublishActivityView: View {
         action: {
           if viewModel.step == .editActivity {
             if viewModel.hasUnsavedChanges() {
-              notice.openNotice(
+              notice.open(
                 open: .confirm(
                   Confirm(
                     title: "温馨提示",
@@ -342,7 +342,7 @@ struct PublishActivityView: View {
           Button(action: {
             if viewModel.isLoading { return }
             if let error = viewModel.checkValid() {
-              NoticeManager.shared.openNotice(open: .toast(error))
+              NoticeManager.shared.open(open: .toast(error))
               return
             }
             Task {
@@ -350,7 +350,7 @@ struct PublishActivityView: View {
                 Task {
                   await activeService.loadPendingActiveReviews()
                   await productService.loadProducts(refresh: true)
-                  notice.openNotice(
+                  notice.open(
                     open: .toast(Toast(msg: "活动发布成功"))
                   )
                   router.back()
@@ -508,7 +508,7 @@ struct PublishActivityView: View {
                       )
                     ))
                 } else {
-                  notice.openNotice(open: .toast(Toast(msg: "请先选择产品")))
+                  notice.open(open: .toast(Toast(msg: "请先选择产品")))
                 }
               }
               if !viewModel.promoGroups.isEmpty {
@@ -549,7 +549,8 @@ struct PublishActivityView: View {
             text: $viewModel.rewardDesc,
             placeholder: "说一下有什么奖励，更容易获得参与者",
             isMultiline: true,
-            padding: 0,
+            verticalPadding: 16,
+            horizontalPadding: 16,
             maxLength: 200
           )
         }
@@ -659,8 +660,10 @@ struct CustomTextField: View {
   let placeholder: String
   var isMultiline: Bool = false
   var height: CGFloat = 180
-  var padding: CGFloat = 12
+  var verticalPadding: CGFloat = 8
+  var horizontalPadding: CGFloat = 12
   var maxLength: Int? = nil
+  var hideCount: Bool = false
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
@@ -679,32 +682,32 @@ struct CustomTextField: View {
             )
           )
           .frame(height: height)
-          .padding(.horizontal, padding)
+          .padding(.horizontal, horizontalPadding)
           .cornerRadius(8)
 
           if text.isEmpty {
             Text(placeholder)
               .foregroundColor(Color(hex: "#999999"))
-              .padding(.horizontal, padding)
-              .padding(.vertical, 8)
+              .padding(.horizontal, horizontalPadding)
+              .padding(.vertical, verticalPadding)
           }
         }
         // 字符计数显示
-        if let maxLength = maxLength {
+        if let maxLength = maxLength, !hideCount {
           HStack {
             Spacer()
             Text("\(text.count)/\(maxLength)")
               .font(.system(size: 12))
               .foregroundColor(Color(hex: "#999999"))
           }
-          .padding(.horizontal, padding)
+          .padding(.horizontal, horizontalPadding)
         }
       } else {
         ZStack(alignment: .leading) {
           if text.isEmpty {
             Text(placeholder)
               .foregroundColor(Color(hex: "#999999"))
-              .padding(.horizontal, padding)
+              .padding(.horizontal, horizontalPadding)
           }
 
           TextField(
@@ -720,7 +723,7 @@ struct CustomTextField: View {
               }
             )
           )
-          .padding(.horizontal, padding)
+          .padding(.horizontal, horizontalPadding)
           // 如果有字符限制，添加右侧padding给计数器留位置
           .padding(.trailing, maxLength != nil ? 60 : 0)
         }

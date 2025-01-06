@@ -35,7 +35,7 @@ struct Join_Modal: View {
 
         // 确认按钮
         Button(action: {
-          notice.closeNotice(id: JOIN_SUCCESS_NOTICE_ID)
+          notice.close(id: JOIN_SUCCESS_NOTICE_ID)
         }) {
           Text("我知道了")
             .font(.system(size: 16))

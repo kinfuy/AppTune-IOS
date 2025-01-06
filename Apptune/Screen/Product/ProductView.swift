@@ -26,6 +26,7 @@ struct ProductView: View {
   @EnvironmentObject var productService: ProductService
   @EnvironmentObject var activeService: ActiveService
   @EnvironmentObject var promotionService: PromotionService
+  @EnvironmentObject var communityService: CommunityService
   @EnvironmentObject var userService: UserService
   @Default(\.lastProductNoticeDismissDate) var lastProductNoticeDismissDate
 
@@ -77,7 +78,8 @@ struct ProductView: View {
         icon: "checkmark.seal.fill",
         color: .blue,
         count: productService.pendingProductReviews.count
-          + activeService.pendingActiveReviews.count,
+          + activeService.pendingActiveReviews.count
+          + communityService.pendingPostReviews.count,
         roles: ["admin"]
       ),
     ]
@@ -109,6 +111,7 @@ struct ProductView: View {
     case .review:
       await productService.loadPendingProductReviews()
       await activeService.loadPendingActiveReviews()
+      await communityService.loadPendingPostReviews()
     case .myProducts:
       await productService.loadProducts(refresh: true)
     case .myEvents:
@@ -245,7 +248,7 @@ struct ProductView: View {
           return
         }
       }
-      notice.openNotice(open: .firstProduct(FIRST_PRODUCT_NOTICE_ID))
+      notice.open(open: .firstProduct(FIRST_PRODUCT_NOTICE_ID))
     }
   }
 

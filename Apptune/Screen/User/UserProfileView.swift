@@ -8,158 +8,160 @@
 import SwiftUI
 
 struct UserProfileView: View {
-    @EnvironmentObject var router: Router
-    @EnvironmentObject var notice: NoticeManager
-    @EnvironmentObject var userService: UserService
-    @EnvironmentObject private var sheet: SheetManager
-    @State private var name: String = ""
+  @EnvironmentObject var router: Router
+  @EnvironmentObject var notice: NoticeManager
+  @EnvironmentObject var userService: UserService
+  @EnvironmentObject private var sheet: SheetManager
+  @State private var name: String = ""
 
-    var body: some View {
-        ScrollView {
-            VStack(spacing: 32) {
-                VStack(spacing: 12) {
-                    ImgLoader(userService.profile.avatar)
-                        .frame(width: 100, height: 100)
-                        .clipShape(.circle)
-                        .overlay(
-                            Circle()
-                                .stroke(Color.gray.opacity(0.1), lineWidth: 1)
-                        )
-                        .shadow(color: .black.opacity(0.05), radius: 8, y: 4)
-
-                    Text("点击更换头像")
-                        .font(.system(size: 14))
-                        .foregroundColor(.gray)
-                }
-                .padding(.top, 20)
-                .onTapGesture {
-                    sheet.show(.imagePicker(onSelect: { image in
-                        Task{
-                            if let url = await uploadImage(image) {
-                                await updateUserInfo(["avatar": url])
-                            }
-                        }
-                    }, onCancel: {}))
-                }
-
-                // 个人信息表单
-                VStack(spacing: 0) {
-                    // 昵称
-                    FormField(
-                        title: "昵称",
-                        text: $name,
-                        placeholder: "设置你的昵称"
-                    )
-
-                    // 邮箱（只读）
-                    FormField(
-                        title: "邮箱",
-                        text: .constant(userService.profile.email),
-                        isEditable: false
-                    )
-                }
-                .background(Color.white)
-                .cornerRadius(12)
-                .shadow(color: .black.opacity(0.03), radius: 8, y: 4)
-                .padding(.horizontal)
-
-                // 保存按钮
-                Button(action: {
-                    Task {
-                        await saveUserInfo()
-                    }
-                }) {
-                    Text("保存修改")
-                        .buttonStyle(.black)
-                        .frame(height: 38)
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, 20)
-            }
-            .padding(.vertical)
-        }
-        .onAppear {
-            name = userService.profile.name
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(hex: "#f4f4f4"))
-        .navigationBarBackButtonHidden()
-        .navigationBarTitle("编辑资料")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarItems(
-            leading: Button(
-                action: { router.back() },
-                label: {
-                    HStack {
-                        SFSymbol.back
-                    }
-                    .foregroundStyle(Color(hex: "#333333"))
-                }
+  var body: some View {
+    ScrollView {
+      VStack(spacing: 32) {
+        VStack(spacing: 12) {
+          ImgLoader(userService.profile.avatar)
+            .frame(width: 100, height: 100)
+            .clipShape(.circle)
+            .overlay(
+              Circle()
+                .stroke(Color.gray.opacity(0.1), lineWidth: 1)
             )
-        )
-    }
+            .shadow(color: .black.opacity(0.05), radius: 8, y: 4)
 
-    // 上传图片
-    private func uploadImage(_ image: UIImage) async -> String? {
-        guard let imageData = image.jpegData(compressionQuality: 0.6) else { return nil }
-        do {
-            let url = try await API.uploadAvatar(imageData)
-            return url
-        } catch {
-            notice.openNotice(open: .toast("图片上传失败"))
-            return nil
+          Text("点击更换头像")
+            .font(.system(size: 14))
+            .foregroundColor(.gray)
         }
-    }
-
-    // 更新用户信息
-    private func updateUserInfo(_ info: [String: Any]) async {
-        do {
-            let _ = try await API.updateUserInfo(info)
-            notice.openNotice(open: .toast("更新成功"))
-            router.back()
-        } catch {
-            notice.openNotice(open: .toast("更新失败"))
+        .padding(.top, 20)
+        .onTapGesture {
+          sheet.show(
+            .imagePicker(
+              onSelect: { image in
+                Task {
+                  if let url = await uploadImage(image) {
+                    await updateUserInfo(["avatar": url])
+                  }
+                }
+              }, onCancel: {}))
         }
-    }
 
-    // 保存用户信息
-    private func saveUserInfo() async {
-        let info: [String: Any] = [
-            "name": name,
-        ]
-        await updateUserInfo(info)
+        // 个人信息表单
+        VStack(spacing: 0) {
+          // 昵称
+          FormField(
+            title: "昵称",
+            text: $name,
+            placeholder: "设置你的昵称"
+          )
+
+          // 邮箱（只读）
+          FormField(
+            title: "邮箱",
+            text: .constant(userService.profile.email),
+            isEditable: false
+          )
+        }
+        .background(Color.white)
+        .cornerRadius(12)
+        .shadow(color: .black.opacity(0.03), radius: 8, y: 4)
+        .padding(.horizontal)
+
+        // 保存按钮
+        Button(action: {
+          Task {
+            await saveUserInfo()
+          }
+        }) {
+          Text("保存修改")
+            .buttonStyle(.black)
+            .frame(height: 38)
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 20)
+      }
+      .padding(.vertical)
     }
+    .onAppear {
+      name = userService.profile.name
+    }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(Color(hex: "#f4f4f4"))
+    .navigationBarBackButtonHidden()
+    .navigationBarTitle("编辑资料")
+    .navigationBarTitleDisplayMode(.inline)
+    .navigationBarItems(
+      leading: Button(
+        action: { router.back() },
+        label: {
+          HStack {
+            SFSymbol.back
+          }
+          .foregroundStyle(Color(hex: "#333333"))
+        }
+      )
+    )
+  }
+
+  // 上传图片
+  private func uploadImage(_ image: UIImage) async -> String? {
+    guard let imageData = image.jpegData(compressionQuality: 0.6) else { return nil }
+    do {
+      let url = try await API.uploadAvatar(imageData)
+      return url
+    } catch {
+      notice.open(open: .toast("图片上传失败"))
+      return nil
+    }
+  }
+
+  // 更新用户信息
+  private func updateUserInfo(_ info: [String: Any]) async {
+    do {
+      let _ = try await API.updateUserInfo(info)
+      notice.open(open: .toast("更新成功"))
+      router.back()
+    } catch {
+      notice.open(open: .toast("更新失败"))
+    }
+  }
+
+  // 保存用户信息
+  private func saveUserInfo() async {
+    let info: [String: Any] = [
+      "name": name
+    ]
+    await updateUserInfo(info)
+  }
 }
 
 // 表单项组件
 struct FormField: View {
-    let title: String
-    @Binding var text: String
-    var placeholder: String = ""
-    var isEditable: Bool = true
+  let title: String
+  @Binding var text: String
+  var placeholder: String = ""
+  var isEditable: Bool = true
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .foregroundColor(.gray)
-                .font(.system(size: 14))
+  var body: some View {
+    VStack(alignment: .leading, spacing: 8) {
+      Text(title)
+        .foregroundColor(.gray)
+        .font(.system(size: 14))
 
-            TextField(placeholder, text: $text)
-                .textFieldStyle(.plain)
-                .disabled(!isEditable)
-                .foregroundColor(isEditable ? .black : .gray)
-        }
-        .padding()
-        .background(Color.white)
-
-        Divider()
-            .padding(.horizontal)
+      TextField(placeholder, text: $text)
+        .textFieldStyle(.plain)
+        .disabled(!isEditable)
+        .foregroundColor(isEditable ? .black : .gray)
     }
+    .padding()
+    .background(Color.white)
+
+    Divider()
+      .padding(.horizontal)
+  }
 }
 
 #Preview {
-    UserProfileView()
-        .environmentObject(Router())
-        .environmentObject(UserService())
-        .environmentObject(SheetManager())
+  UserProfileView()
+    .environmentObject(Router())
+    .environmentObject(UserService())
+    .environmentObject(SheetManager())
 }

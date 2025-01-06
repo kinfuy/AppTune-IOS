@@ -9,7 +9,7 @@ import SwiftUI
 
 struct UserAccountView: View {
   @EnvironmentObject var router: Router
-    @EnvironmentObject var notice: NoticeManager
+  @EnvironmentObject var notice: NoticeManager
   @EnvironmentObject var appState: AppState
   @EnvironmentObject var userService: UserService
 
@@ -42,7 +42,7 @@ struct UserAccountView: View {
       .padding(.bottom, 8)
 
       Button(action: {
-        notice.openNotice(
+        notice.open(
           open: .confirm(
             Confirm(
               title: "确认注销",

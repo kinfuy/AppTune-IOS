@@ -282,7 +282,7 @@ struct TagSelectView: View {
         .sheet(isPresented: $isEdit, content: {
             TagEditView(tag: $newStatus, onSave: {
                 if tagService.isExitName(name: newStatus.name) != nil {
-                    notice.openNotice(open: .toast(Toast(msg: "标签已存在!")))
+                    notice.open(open: .toast(Toast(msg: "标签已存在!")))
                 } else {
                     tagService.add(tag: newStatus)
                     isEdit = false

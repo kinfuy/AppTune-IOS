@@ -24,17 +24,17 @@ struct EmailLoginView: View {
 
   func validata() -> Bool {
     if email.isEmpty {
-      notice.openNotice(open: .toast("请输入邮箱"))
+      notice.open(open: .toast("请输入邮箱"))
       return false
     }
     if isLoginEmail {
       if code.isEmpty && password.isEmpty {
-        notice.openNotice(open: .toast("请输入验证码和密码"))
+        notice.open(open: .toast("请输入验证码和密码"))
         return false
       }
     } else {
       if password.isEmpty {
-        notice.openNotice(open: .toast("请输入密码"))
+        notice.open(open: .toast("请输入密码"))
         return false
       }
     }
@@ -103,11 +103,11 @@ struct EmailLoginView: View {
                     .onTapGesture {
                       Tap.shared.play(.light)
                       if email.isEmpty {
-                        notice.openNotice(open: .toast(Toast(msg: "请先填写邮箱")))
+                        notice.open(open: .toast(Toast(msg: "请先填写邮箱")))
                         return
                       }
 
-                      let loading = notice.openNotice(
+                      let loading = notice.open(
                         open: .toast(
                           Toast(
                             msg: "请求中",
@@ -121,10 +121,10 @@ struct EmailLoginView: View {
                       Task {
                         do {
                           try await API.sendCode(email: email)
-                          notice.closeNotice(id: loading)
+                          notice.close(id: loading)
                           initTimer()
                         } catch {
-                          notice.closeNotice(id: loading)
+                          notice.close(id: loading)
                         }
                       }
                     }

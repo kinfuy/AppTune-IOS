@@ -151,16 +151,16 @@ struct PublishProductView: View {
               return
             }
             if let error = viewModel.checkValid() {
-              notice.openNotice(open: .toast(error))
+              notice.open(open: .toast(error))
               return
             }
             Tap.shared.play(.light)
             Task {
               await viewModel.publishProduct(success: {
-                  Task{
-                      await productService.loadPendingProductReviews()
-                      await productService.loadProducts(refresh: true)
-                  }
+                Task {
+                  await productService.loadPendingProductReviews()
+                  await productService.loadProducts(refresh: true)
+                }
                 router.toTabBar(.product, isShowModules: true)
               })
             }

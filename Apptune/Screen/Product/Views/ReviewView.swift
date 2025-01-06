@@ -3,7 +3,15 @@ import SwiftUI
 struct ReviewView: View {
   @EnvironmentObject var productService: ProductService
   @EnvironmentObject var activeService: ActiveService
+  @EnvironmentObject var communityService: CommunityService
   @EnvironmentObject var userService: UserService
+
+
+  var isEmpty: Bool {
+    productService.pendingProductReviews.isEmpty
+      && activeService.pendingActiveReviews.isEmpty
+      && communityService.pendingPostReviews.isEmpty
+  }
 
   var body: some View {
     ScrollView {
@@ -58,11 +66,32 @@ struct ReviewView: View {
           }
           .padding(.horizontal)
         }
+        // 待审核帖子列表
+        if !communityService.pendingPostReviews.isEmpty {
+          VStack(alignment: .leading, spacing: 12) {
+            HStack {
+              Text("待审核帖子")
+                .font(.headline)
+              Text("\(communityService.pendingPostReviews.count)")
+                .font(.caption)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(Color.red.opacity(0.1))
+                .foregroundColor(.red)
+                .cornerRadius(12)
+            }
+
+            ForEach(communityService.pendingPostReviews) { post in
+              PostReviewCard(post: post) { status in
+                await communityService.auditPost(id: post.id, status: status)
+                await communityService.loadPendingPostReviews()
+              }
+            }
+          }
+        }
 
         // 空状态展示
-        if productService.pendingProductReviews.isEmpty
-          && activeService.pendingActiveReviews.isEmpty
-        {
+        if isEmpty {
           VStack(spacing: 16) {
             Image(systemName: "checkmark.circle")
               .font(.system(size: 48))
@@ -215,6 +244,94 @@ struct ActivityReviewCard: View {
 
           Button(role: .destructive) {
             Task { await onReview(3) }
+          } label: {
+            Label("拒绝", systemImage: "xmark.circle")
+          }
+        } label: {
+          Label("审核操作", systemImage: "ellipsis.circle")
+            .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.bordered)
+      }
+    }
+    .padding()
+    .background(Color.white)
+    .cornerRadius(16)
+    .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+  }
+}
+
+struct PostReviewCard: View {
+  let post: Post
+  let onReview: (_ status: Int) async -> Void
+  @State private var isExpanded = false  // 控制内容展开收起
+
+  // 定义最大显示行数
+  private let collapsedLineLimit = 3
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 12) {
+      // 用户信息栏
+      HStack(spacing: 12) {
+        ImgLoader(post.avatar)
+          .frame(width: 32, height: 32)
+          .clipShape(Circle())
+
+        VStack(alignment: .leading, spacing: 2) {
+          Text(post.author)
+            .font(.system(size: 14, weight: .medium))
+          Text("\(post.updateTime.formatted(.dateTime.year().month().day().hour().minute()))")
+            .font(.system(size: 12))
+            .foregroundColor(.secondary)
+        }
+        Spacer()
+      }
+
+      // 内容部分
+      VStack(alignment: .leading, spacing: 4) {
+        Text(post.content)
+          .font(.system(size: 14))
+          .lineSpacing(4)
+          .lineLimit(isExpanded ? nil : collapsedLineLimit)
+
+        // 仅当文本超过3行时显示展开/收起按钮
+        if post.content.count > 50 {
+          Button(action: {
+            withAnimation {
+              isExpanded.toggle()
+            }
+          }) {
+            Text(isExpanded ? "收起" : "展开")
+              .font(.system(size: 12))
+              .foregroundColor(.theme)
+          }
+        }
+      }
+
+      // 图片网格
+      if !post.images.isEmpty {
+        ImageGridView(images: post.images)
+          .frame(maxWidth: 200)
+      }
+
+      // 链接预览
+      if let link = post.link {
+        LinkPreview(link: link)
+      }
+
+      Divider()
+
+      // 审核操作按钮
+      HStack(spacing: 12) {
+        Menu {
+          Button {
+            Task { await onReview(1) }
+          } label: {
+            Label("通过审核", systemImage: "checkmark.circle")
+          }
+
+          Button(role: .destructive) {
+            Task { await onReview(2) }
           } label: {
             Label("拒绝", systemImage: "xmark.circle")
           }

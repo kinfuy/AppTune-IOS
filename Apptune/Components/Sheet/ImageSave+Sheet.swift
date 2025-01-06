@@ -32,12 +32,12 @@ struct ImageShareSheet: View {
             let request = PHAssetChangeRequest.creationRequestForAsset(from: shareImage)
             request.creationDate = Date()
           }
-          notice.openNotice(open: .toast("图片已经保存的相册"))
+          notice.open(open: .toast("图片已经保存的相册"))
           if let save = onSave {
             save()
           }
         case .denied, .restricted:
-          notice.openNotice(
+          notice.open(
             open: .confirm(
               Confirm(
                 title: "请允许保存图片权限",
@@ -55,7 +55,7 @@ struct ImageShareSheet: View {
           break
         }
       } catch {
-        notice.openNotice(open: .toast("保存图片失败: \(error.localizedDescription)"))
+        notice.open(open: .toast("保存图片失败: \(error.localizedDescription)"))
       }
     }
   }

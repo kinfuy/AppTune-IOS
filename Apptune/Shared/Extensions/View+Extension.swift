@@ -143,10 +143,3 @@ extension TextField {
     self.keyboardType(.default)
   }
 }
-
-// 扩展 TextEditor 添加默认键盘设置
-extension TextEditor {
-  func useSystemKeyboard() -> some View {
-    self.keyboardType(.default)
-  }
-}

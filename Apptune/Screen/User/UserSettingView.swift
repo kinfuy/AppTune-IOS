@@ -96,7 +96,7 @@ struct UserSettingView: View {
         .frame(height: 38)
         .onTapGesture {
           Tap.shared.play(.light)
-          notice.openNotice(
+          notice.open(
             open: .confirm(
               Confirm(
                 title: "确认退出登录？",

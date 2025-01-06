@@ -49,18 +49,18 @@ struct Version_Modal: View {
             .padding(.horizontal, 30)
 
         }
-          
-          HStack {
-            Text("跳过次版本")
-              .font(.system(size: 14))
-              .color(Color(hex: "#999999"))
-              .onTapGesture {
-                Tap.shared.play(.light)
-                skinVersion = appState.latestVersion
-                notice.closeNotice(id: VERSION_NOTICE_ID)
-              }
-          }
-          .padding(.top, 8)
+
+        HStack {
+          Text("跳过次版本")
+            .font(.system(size: 14))
+            .color(Color(hex: "#999999"))
+            .onTapGesture {
+              Tap.shared.play(.light)
+              skinVersion = appState.latestVersion
+              notice.close(id: VERSION_NOTICE_ID)
+            }
+        }
+        .padding(.top, 8)
       }
       .padding(24)
       .frame(width: UIScreen.main.bounds.width * 0.78, height: 230)
@@ -71,8 +71,8 @@ struct Version_Modal: View {
 }
 
 #Preview {
-    Version_Modal()
-        .environmentObject(AppState())
-        .environmentObject(Router())
-        .environmentObject(NoticeManager())
+  Version_Modal()
+    .environmentObject(AppState())
+    .environmentObject(Router())
+    .environmentObject(NoticeManager())
 }
