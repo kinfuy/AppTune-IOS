@@ -78,6 +78,8 @@ struct CoinShopItem: View {
 
 struct CoinShopView: View {
   @EnvironmentObject var router: Router
+  @EnvironmentObject var notice: NoticeManager
+  @EnvironmentObject var sheet: SheetManager
   @StateObject private var viewModel = CoinShopViewModel()
 
   let columns = [
@@ -101,11 +103,11 @@ struct CoinShopView: View {
           Spacer()
 
           Button {
-            router.navigate(to: .coinTasks)
+              sheet.show(.coinBuy(onConfirm: nil, onCancel: nil))
           } label: {
             HStack(spacing: 4) {
               Image(systemName: "plus.circle.fill")
-              Text("赚积分")
+              Text("充值")
             }
             .font(.system(size: 14, weight: .medium))
             .foregroundColor(.white)
@@ -142,10 +144,10 @@ struct CoinShopView: View {
         .cornerRadius(20)
         .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 4)
         .padding(.horizontal)
-          
-          if viewModel.items.isEmpty {
-              EmptyView(text: "敬请期待", image: "nodata", size: 200)
-          }
+
+        if viewModel.items.isEmpty {
+          EmptyView(text: "敬请期待", image: "nodata", size: 200)
+        }
 
         // 商品列表
         LazyVGrid(columns: columns, spacing: 16) {

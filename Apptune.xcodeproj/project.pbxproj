@@ -20,6 +20,7 @@
 		F215B3762D2BB169003829BF /* Link+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F215B3752D2BB169003829BF /* Link+Sheet.swift */; };
 		F215B37A2D2BE7F1003829BF /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F215B3792D2BE7F1003829BF /* WebView.swift */; };
 		F215B37C2D2C0CA3003829BF /* UIPasteboard+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = F215B37B2D2C0CA3003829BF /* UIPasteboard+Util.swift */; };
+		F215B37E2D2C2E13003829BF /* CoinBuy+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F215B37D2D2C2E13003829BF /* CoinBuy+Sheet.swift */; };
 		F21CFCD52CD6462400CAB613 /* ActiveCard+Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD02CD6462300CAB613 /* ActiveCard+Components.swift */; };
 		F21CFCD62CD6462400CAB613 /* ModuleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD12CD6462300CAB613 /* ModuleCard.swift */; };
 		F21CFCD72CD6462400CAB613 /* ProductCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD22CD6462300CAB613 /* ProductCard.swift */; };
@@ -148,6 +149,7 @@
 		F215B3752D2BB169003829BF /* Link+Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Link+Sheet.swift"; sourceTree = "<group>"; };
 		F215B3792D2BE7F1003829BF /* WebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		F215B37B2D2C0CA3003829BF /* UIPasteboard+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPasteboard+Util.swift"; sourceTree = "<group>"; };
+		F215B37D2D2C2E13003829BF /* CoinBuy+Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoinBuy+Sheet.swift"; sourceTree = "<group>"; };
 		F21CFCD02CD6462300CAB613 /* ActiveCard+Components.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ActiveCard+Components.swift"; sourceTree = "<group>"; };
 		F21CFCD12CD6462300CAB613 /* ModuleCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleCard.swift; sourceTree = "<group>"; };
 		F21CFCD22CD6462300CAB613 /* ProductCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCard.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 				F20D194D2CD783F5006296D0 /* AppStoreSearch+Sheet.swift */,
 				F2EEE3A02D04A24700D7777C /* ActivityPreview+Sheet.swift */,
 				F215B3752D2BB169003829BF /* Link+Sheet.swift */,
+				F215B37D2D2C2E13003829BF /* CoinBuy+Sheet.swift */,
 				F2C5B4E92D17AF25007E3916 /* PreCodePicker+Sheet.swift */,
 				F28829892CF309F5002D012A /* Image+Sheet.swift */,
 				F2EEE3B82D0D5B1400D7777C /* ImageSave+Sheet.swift */,
@@ -740,6 +743,7 @@
 				F21CFCDD2CD6463A00CAB613 /* ProductTab.swift in Sources */,
 				F2EEE3AB2D05DE5000D7777C /* CreatePromotionView.swift in Sources */,
 				F2A0D60C2CC3A28D00536C58 /* Version+Modal.swift in Sources */,
+				F215B37E2D2C2E13003829BF /* CoinBuy+Sheet.swift in Sources */,
 				F2EEE3B32D0B2F9900D7777C /* ActiveShareView.swift in Sources */,
 				F2A0D6042CC3887800536C58 /* Toast+Component.swift in Sources */,
 				F20D194B2CD78269006296D0 /* SheetManager.swift in Sources */,

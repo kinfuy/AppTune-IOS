@@ -58,6 +58,9 @@ class ActiveService: ObservableObject {
   private let pageManager = PageManager()
   private let pageSize = 150
 
+  // 添加数据加载状态追踪
+  @Published private var hasLoadedInitialData = false
+
   // 获取对应类型的状态
   private func getState(for type: ActiveType) -> (
     actives: Binding<[ActiveInfo]>,
@@ -105,11 +108,15 @@ class ActiveService: ObservableObject {
 
     guard !state.isLoading.wrappedValue else { return }
 
+    // 只在真正需要显示 loading 时才设置
+    let shouldShowLoading = !hasLoadedInitialData || refresh
+    if shouldShowLoading {
+      state.isLoading.wrappedValue = true
+    }
+
     // 使用 actor 安全地管理页码
     await pageManager.updatePage(for: type, refresh: refresh)
     let currentPage = await pageManager.getCurrentPage(for: type)
-
-    state.isLoading.wrappedValue = true
 
     do {
       let response = try await {
@@ -144,6 +151,10 @@ class ActiveService: ObservableObject {
         state.actives.wrappedValue.append(contentsOf: response.items)
       }
       state.total.wrappedValue = response.total
+      state.isLoading.wrappedValue = false
+
+      // 设置已加载标志
+      hasLoadedInitialData = true
       state.isLoading.wrappedValue = false
 
     } catch {
@@ -319,5 +330,10 @@ class ActiveService: ObservableObject {
       print(error)
       return []
     }
+  }
+
+  // 添加一个检查方法
+  func needsInitialLoad() -> Bool {
+    return !hasLoadedInitialData
   }
 }

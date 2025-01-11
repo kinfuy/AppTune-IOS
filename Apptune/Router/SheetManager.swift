@@ -41,7 +41,12 @@ enum SheetType: Identifiable {
   )
 
   case linkPicker(
-    onConfirm: ((_ link:PostLink) -> Void)? = nil,
+    onConfirm: ((_ link: PostLink) -> Void)? = nil,
+    onCancel: (() -> Void)? = nil
+  )
+
+  case coinBuy(
+    onConfirm: ((_ product: CoinProduct) -> Void)? = nil,
     onCancel: (() -> Void)? = nil
   )
 
@@ -54,6 +59,7 @@ enum SheetType: Identifiable {
     case .imageShare: return "imageShare"
     case .preCodePicker: return "preCodePicker"
     case .linkPicker: return "linkPicker"
+    case .coinBuy: return "coinBuy"
     }
   }
 
@@ -66,6 +72,8 @@ enum SheetType: Identifiable {
     case .preCodePicker:
       return SheetConfig(fullScreen: false, dismissible: true, height: 0.68)
     case .linkPicker:
+      return SheetConfig(fullScreen: false, dismissible: true, height: 0.5)
+    case .coinBuy:
       return SheetConfig(fullScreen: false, dismissible: true, height: 0.5)
     default:
       return SheetConfig(fullScreen: false, dismissible: true)
@@ -82,6 +90,8 @@ enum SheetType: Identifiable {
     case let .imagePicker(_, onCancel):
       return onCancel
     case let .linkPicker(_, onCancel):
+      return onCancel
+    case let .coinBuy(_, onCancel):
       return onCancel
     default:
       return nil
@@ -111,7 +121,9 @@ enum SheetType: Identifiable {
         )
       )
     case .linkPicker(let onConfirm, let onCancel):
-        return AnyView(Link_Sheet(onConfirm: onConfirm, onCancel: onCancel))
+      return AnyView(Link_Sheet(onConfirm: onConfirm, onCancel: onCancel))
+    case .coinBuy(let onConfirm, let onCancel):
+      return AnyView(CoinBuy_Sheet(onConfirm: onConfirm, onCancel: onCancel))
     }
   }
 }
