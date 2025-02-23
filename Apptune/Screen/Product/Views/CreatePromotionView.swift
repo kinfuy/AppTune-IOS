@@ -118,7 +118,6 @@ struct CreatePromotionView: View {
             Tap.shared.play(.light)
             Task {
               await viewModel.createPromotion(success: {
-                router.toTabBar(.product, isShowModules: true)
                 notice.open(open: .toast("促销码创建成功"))
                 Task {
                   await promotionService.loadPromotions()

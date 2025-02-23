@@ -1,5 +1,5 @@
 {
-  "originHash" : "80c08dfef2bb44c685cdff9610ca0303c2d4807d702b630cb69719d64e0996aa",
+  "originHash" : "a59440e06c1c762ef5b35bb98414ee4f87721b65850922c0b714e3775086927e",
   "pins" : [
     {
       "identity" : "kingfisher",
@@ -26,6 +26,15 @@
       "state" : {
         "revision" : "57631d0885bc55991126b932c106540273d6131c",
         "version" : "1.1.4"
+      }
+    },
+    {
+      "identity" : "sheetkit?&utm_source=fatbobman%20blog&utm_medium=web&utm_campaign=fatbobman%20blog",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/fatbobman/SheetKit?&utm_source=Fatbobman%20Blog&utm_medium=web&utm_campaign=Fatbobman%20Blog",
+      "state" : {
+        "revision" : "daadabc0f142e2e96a210d19c436b8e2c4bdeb46",
+        "version" : "0.1.0"
       }
     },
     {

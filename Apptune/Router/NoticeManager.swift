@@ -156,9 +156,10 @@ class NoticeManager: ObservableObject {
   static let shared = NoticeManager()
   @Published var noticeStack: [NoticeDestiantion] = []
   @Published var currentNotice: NoticeDestiantion?
+  @Published private(set) var _isNotice: Bool = false
 
   var isNotice: Bool {
-    return currentNotice != nil
+    return _isNotice
   }
 
   @discardableResult

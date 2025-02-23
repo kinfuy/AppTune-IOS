@@ -25,6 +25,8 @@ enum GeneralRouterDestination: Hashable {
   case activeShare(active: ActiveInfo)  // 活动分享
   case createPost  // 创建帖子
   case webView(url: String, title: String?)  // 网页视图
+  case community  // 社区
+  case activeCenter  // 活动中心
 
   static func isWhiteListRoute(to: GeneralRouterDestination) -> Bool {
     switch to {
@@ -86,6 +88,10 @@ extension GeneralRouterDestination {
       CreatePostView()
     case let .webView(url, title):
       WebView(url: url, title: title)
+    case .community:
+      CommunityView()
+    case .activeCenter:
+      ActiveHomeView()
     }
   }
 }

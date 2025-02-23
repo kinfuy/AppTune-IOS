@@ -93,10 +93,6 @@ struct ActiveHomeView: View {
   @EnvironmentObject var activeService: ActiveService
 
   @State private var isLoading: Bool = false
-  @State var progress: CGFloat = 0
-
-  private let minHeight = 100.0
-  private let maxHeight = 120.0
 
   var GroupView: some View {
     VStack(alignment: .leading) {
@@ -130,57 +126,7 @@ struct ActiveHomeView: View {
       }
       .frame(height: 32)
     }
-  }
 
-  private var smallHeader: some View {
-    HStack {
-      Spacer()
-      Text("活动")
-        .font(.system(size: 18))
-        .fontWeight(.bold)
-      Spacer()
-    }
-    .padding(.horizontal)
-  }
-
-  private func largeHeader(progress: CGFloat) -> some View {
-    ZStack {
-      Rectangle()
-        .fill(.clear)
-        .overlay {
-          gradientSurface
-        }
-        .overlay {
-          VStack {
-            Spacer()
-            smallHeader
-              .opacity(progress)
-              .opacity(max(0, min(1, (progress - 0.75) * 4.0)))
-              .padding(.bottom, 24)
-          }
-          .background(.ultraThinMaterial)
-        }
-      VStack {
-        Spacer()
-        HStack {
-          Text("活动")
-            .font(.system(size: 28))
-            .fontWeight(.bold)
-          Spacer()
-          SFSymbol.search
-            .font(.system(size: 24))
-            .onTapGesture {
-              Tap.shared.play(.light)
-              router.navigate(to: .searchActive)
-            }
-        }
-      }
-      .padding(.horizontal)
-      .frame(height: maxHeight)
-      .padding(.bottom, 24)
-      .edgesIgnoringSafeArea(.all)
-      .opacity(1 - progress)
-    }
   }
 
   @State private var offset: CGFloat = -24
@@ -190,38 +136,20 @@ struct ActiveHomeView: View {
   let spacing: CGFloat = 12
 
   var body: some View {
-    ScalingHeaderScrollView {
-      ZStack {
-        largeHeader(progress: progress)
-      }
-    } content: {
-      Group {
-        if activeService.isAllLoading && activeService.needsInitialLoad() {
-          VStack {
-            Spacer()
-            LoadingComponent()
-            Spacer()
-          }
-          .frame(maxWidth: .infinity, minHeight: 400)
-        } else {
-          mainContent
+    ScrollView {
+      if activeService.isAllLoading && activeService.needsInitialLoad() {
+        VStack {
+          Spacer()
+          LoadingComponent()
+          Spacer()
         }
-      }
-      .animation(.easeInOut(duration: 0.3), value: activeService.isAllLoading)
-    }
-    .pullToRefresh(isLoading: $isLoading) {
-      Task {
-        await activeService.loadAllActives(refresh: true)
-        await activeService.loadTopActives(refresh: true)
-        isLoading = false
+        .frame(maxWidth: .infinity, minHeight: 400)
+      } else {
+        mainContent
       }
     }
-    .height(min: minHeight, max: maxHeight)
-    .collapseProgress($progress)
-    .hideScrollIndicators()
-    .ignoresSafeArea()
+    .animation(.easeInOut(duration: 0.3), value: activeService.isAllLoading)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .padding(.bottom, 32)
     .background(Color(hex: "#f4f4f4"))
     .onAppear {
       if activeService.needsInitialLoad() {
@@ -231,6 +159,18 @@ struct ActiveHomeView: View {
         }
       }
     }
+    .customNavigationBar(
+      title: "活动中心", router: router,
+      trailingItem: {
+        AnyView(
+          SFSymbol.search
+            .font(.system(size: 18))
+            .onTapGesture {
+              Tap.shared.play(.light)
+              router.navigate(to: .searchActive)
+            }
+        )
+      })
   }
 
   private var mainContent: some View {
@@ -298,29 +238,27 @@ struct ActiveHomeView: View {
             Spacer()
           }
           .padding(.horizontal)
-          ScrollView {
-            ForEach(activeService.allActives, id: \.id) { active in
-              ActiveCard(
-                title: active.title,
-                description: active.description,
-                startAt: active.startAt,
-                endAt: active.endAt,
-                joinCount: active.joinCount ?? 0,
-                status: active.status,
-                cover: active.cover,
-                productName: active.productName,
-                productLogo: active.productLogo
-              )
-              .padding(.bottom, 16)
-              .contentShape(Rectangle())
-              .onTapGesture {
-                withAnimation {
-                  router.navigate(to: .activeDetail(active: active))
-                }
+          ForEach(activeService.allActives, id: \.id) { active in
+            ActiveCard(
+              title: active.title,
+              description: active.description,
+              startAt: active.startAt,
+              endAt: active.endAt,
+              joinCount: active.joinCount ?? 0,
+              status: active.status,
+              cover: active.cover,
+              productName: active.productName,
+              productLogo: active.productLogo
+            )
+            .padding(.bottom, 16)
+            .contentShape(Rectangle())
+            .onTapGesture {
+              withAnimation {
+                router.navigate(to: .activeDetail(active: active))
               }
             }
-            .padding(.horizontal)
           }
+          .padding(.horizontal)
         }
       } else {
         EmptyView(text: "还没有人发布活动", image: "empty")
@@ -338,4 +276,5 @@ extension Collection {
 #Preview {
   ActiveHomeView()
     .environmentObject(ActiveService())
+    .environmentObject(Router())
 }

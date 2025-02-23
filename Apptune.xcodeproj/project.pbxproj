@@ -25,7 +25,6 @@
 		F21CFCD62CD6462400CAB613 /* ModuleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD12CD6462300CAB613 /* ModuleCard.swift */; };
 		F21CFCD72CD6462400CAB613 /* ProductCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD22CD6462300CAB613 /* ProductCard.swift */; };
 		F21CFCD82CD6462400CAB613 /* TitleBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD32CD6462300CAB613 /* TitleBar.swift */; };
-		F21CFCDD2CD6463A00CAB613 /* ProductTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD92CD6463A00CAB613 /* ProductTab.swift */; };
 		F21CFCDE2CD6463A00CAB613 /* ContentViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCDB2CD6463A00CAB613 /* ContentViews.swift */; };
 		F21CFCF22CD647C300CAB613 /* ScrollPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCF12CD647C300CAB613 /* ScrollPreference.swift */; };
 		F21CFCF42CD64E7100CAB613 /* File+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCF32CD64E7100CAB613 /* File+API.swift */; };
@@ -68,6 +67,17 @@
 		F28829882CF30053002D012A /* Tag+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28829872CF30053002D012A /* Tag+Service.swift */; };
 		F288298A2CF309F5002D012A /* Image+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28829892CF309F5002D012A /* Image+Sheet.swift */; };
 		F288298C2CF32228002D012A /* Tag+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F288298B2CF32228002D012A /* Tag+API.swift */; };
+		F29395412D6A02CA007693EA /* ProductTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29395402D6A02CA007693EA /* ProductTab.swift */; };
+		F29395452D6A02D9007693EA /* ProductGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29395422D6A02D9007693EA /* ProductGridView.swift */; };
+		F29395462D6A02D9007693EA /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29395432D6A02D9007693EA /* BadgeView.swift */; };
+		F29395472D6A02D9007693EA /* ModuleCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29395442D6A02D9007693EA /* ModuleCardView.swift */; };
+		F293954A2D6A02E7007693EA /* ProductModules.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29395482D6A02E7007693EA /* ProductModules.swift */; };
+		F293954C2D6A02F1007693EA /* BadgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F293954B2D6A02F1007693EA /* BadgeType.swift */; };
+		F293954E2D6A0322007693EA /* ModuleDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F293954D2D6A0322007693EA /* ModuleDefinitions.swift */; };
+		F29395512D6A035A007693EA /* ProductConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F293954F2D6A035A007693EA /* ProductConstants.swift */; };
+		F29395522D6A035A007693EA /* ProductModuleDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29395502D6A035A007693EA /* ProductModuleDefinition.swift */; };
+		F29395552D6A0B76007693EA /* SheetKit in Frameworks */ = {isa = PBXBuildFile; productRef = F29395542D6A0B76007693EA /* SheetKit */; };
+		F29395572D6A1243007693EA /* CreateType+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29395562D6A1243007693EA /* CreateType+Sheet.swift */; };
 		F299FE592CC94D2F0009C956 /* MD5+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = F299FE582CC94D2F0009C956 /* MD5+Util.swift */; };
 		F2A0D5FB2CC360EA00536C58 /* ScalingHeaderScrollView in Frameworks */ = {isa = PBXBuildFile; productRef = F2A0D5FA2CC360EA00536C58 /* ScalingHeaderScrollView */; };
 		F2A0D5FE2CC3862700536C58 /* UserDefault+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A0D5FD2CC3862700536C58 /* UserDefault+Util.swift */; };
@@ -154,7 +164,6 @@
 		F21CFCD12CD6462300CAB613 /* ModuleCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleCard.swift; sourceTree = "<group>"; };
 		F21CFCD22CD6462300CAB613 /* ProductCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCard.swift; sourceTree = "<group>"; };
 		F21CFCD32CD6462300CAB613 /* TitleBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleBar.swift; sourceTree = "<group>"; };
-		F21CFCD92CD6463A00CAB613 /* ProductTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductTab.swift; sourceTree = "<group>"; };
 		F21CFCDB2CD6463A00CAB613 /* ContentViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViews.swift; sourceTree = "<group>"; };
 		F21CFCF12CD647C300CAB613 /* ScrollPreference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollPreference.swift; sourceTree = "<group>"; };
 		F21CFCF32CD64E7100CAB613 /* File+API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "File+API.swift"; sourceTree = "<group>"; };
@@ -198,6 +207,16 @@
 		F28829872CF30053002D012A /* Tag+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+Service.swift"; sourceTree = "<group>"; };
 		F28829892CF309F5002D012A /* Image+Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Sheet.swift"; sourceTree = "<group>"; };
 		F288298B2CF32228002D012A /* Tag+API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+API.swift"; sourceTree = "<group>"; };
+		F29395402D6A02CA007693EA /* ProductTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductTab.swift; sourceTree = "<group>"; };
+		F29395422D6A02D9007693EA /* ProductGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductGridView.swift; sourceTree = "<group>"; };
+		F29395432D6A02D9007693EA /* BadgeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BadgeView.swift; sourceTree = "<group>"; };
+		F29395442D6A02D9007693EA /* ModuleCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleCardView.swift; sourceTree = "<group>"; };
+		F29395482D6A02E7007693EA /* ProductModules.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductModules.swift; sourceTree = "<group>"; };
+		F293954B2D6A02F1007693EA /* BadgeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BadgeType.swift; sourceTree = "<group>"; };
+		F293954D2D6A0322007693EA /* ModuleDefinitions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleDefinitions.swift; sourceTree = "<group>"; };
+		F293954F2D6A035A007693EA /* ProductConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductConstants.swift; sourceTree = "<group>"; };
+		F29395502D6A035A007693EA /* ProductModuleDefinition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductModuleDefinition.swift; sourceTree = "<group>"; };
+		F29395562D6A1243007693EA /* CreateType+Sheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CreateType+Sheet.swift"; sourceTree = "<group>"; };
 		F299FE582CC94D2F0009C956 /* MD5+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MD5+Util.swift"; sourceTree = "<group>"; };
 		F2A0D5FD2CC3862700536C58 /* UserDefault+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefault+Util.swift"; sourceTree = "<group>"; };
 		F2A0D6012CC386DF00536C58 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
@@ -271,6 +290,7 @@
 				F2B269722CB57233001230B4 /* SwiftDate in Frameworks */,
 				F26F15AD2CC6A92B00848715 /* SwiftyJSON in Frameworks */,
 				F2A0D5FB2CC360EA00536C58 /* ScalingHeaderScrollView in Frameworks */,
+				F29395552D6A0B76007693EA /* SheetKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,6 +304,7 @@
 				F20D194D2CD783F5006296D0 /* AppStoreSearch+Sheet.swift */,
 				F2EEE3A02D04A24700D7777C /* ActivityPreview+Sheet.swift */,
 				F215B3752D2BB169003829BF /* Link+Sheet.swift */,
+				F29395562D6A1243007693EA /* CreateType+Sheet.swift */,
 				F215B37D2D2C2E13003829BF /* CoinBuy+Sheet.swift */,
 				F2C5B4E92D17AF25007E3916 /* PreCodePicker+Sheet.swift */,
 				F28829892CF309F5002D012A /* Image+Sheet.swift */,
@@ -332,8 +353,11 @@
 			children = (
 				F21CFD0B2CD7245700CAB613 /* PublishActivityViewModel.swift */,
 				F2EEE3AC2D05DE8500D7777C /* CreatePromotionModel.swift */,
+				F293954F2D6A035A007693EA /* ProductConstants.swift */,
+				F29395502D6A035A007693EA /* ProductModuleDefinition.swift */,
+				F293954D2D6A0322007693EA /* ModuleDefinitions.swift */,
+				F293954B2D6A02F1007693EA /* BadgeType.swift */,
 				F21CFD112CD7247300CAB613 /* PublishProductViewModel.swift */,
-				F21CFCD92CD6463A00CAB613 /* ProductTab.swift */,
 				F21CFCF12CD647C300CAB613 /* ScrollPreference.swift */,
 			);
 			path = Models;
@@ -344,6 +368,9 @@
 			children = (
 				F21CFD0F2CD7246A00CAB613 /* PublishProductView.swift */,
 				F2EEE3AA2D05DE5000D7777C /* CreatePromotionView.swift */,
+				F29395432D6A02D9007693EA /* BadgeView.swift */,
+				F29395442D6A02D9007693EA /* ModuleCardView.swift */,
+				F29395422D6A02D9007693EA /* ProductGridView.swift */,
 				F21CFD0A2CD7245700CAB613 /* PublishActivityView.swift */,
 				F2EEE3A22D05A9B800D7777C /* PromotionView.swift */,
 				F2B34CCE2CF35EE1009023B8 /* ReviewView.swift */,
@@ -475,10 +502,12 @@
 		F27A94812CC00AD9002A2BEA /* Product */ = {
 			isa = PBXGroup;
 			children = (
+				F29395492D6A02E7007693EA /* Data */,
 				F21CFCDA2CD6463A00CAB613 /* Models */,
 				F21CFCDC2CD6463A00CAB613 /* Views */,
 				F21CFCD42CD6462300CAB613 /* Components */,
 				F27A94822CC00AEC002A2BEA /* ProductView.swift */,
+				F29395402D6A02CA007693EA /* ProductTab.swift */,
 			);
 			path = Product;
 			sourceTree = "<group>";
@@ -523,6 +552,14 @@
 				F27C65892CB16F1C0074B608 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F29395492D6A02E7007693EA /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				F29395482D6A02E7007693EA /* ProductModules.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 		F2A0D5FC2CC3860B00536C58 /* Utils */ = {
@@ -670,6 +707,7 @@
 				F2A0D5FA2CC360EA00536C58 /* ScalingHeaderScrollView */,
 				F26F15AC2CC6A92B00848715 /* SwiftyJSON */,
 				F2AE6A422D2001AD0002212F /* Mantis */,
+				F29395542D6A0B76007693EA /* SheetKit */,
 			);
 			productName = Apptune;
 			productReference = F27C65792CB16F1B0074B608 /* Apptune.app */;
@@ -706,6 +744,7 @@
 				F2A0D5F92CC360EA00536C58 /* XCRemoteSwiftPackageReference "ScalingHeaderScrollView" */,
 				F26F15AB2CC6A92B00848715 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				F2AE6A412D2001AD0002212F /* XCRemoteSwiftPackageReference "Mantis" */,
+				F29395532D6A0B76007693EA /* XCRemoteSwiftPackageReference "SheetKit" */,
 			);
 			productRefGroup = F27C657A2CB16F1B0074B608 /* Products */;
 			projectDirPath = "";
@@ -740,7 +779,6 @@
 				F2C5B4F22D18482F007E3916 /* FollowNoticeView.swift in Sources */,
 				F288297E2CF20EDD002D012A /* Active+Service.swift in Sources */,
 				F2C5B5032D1DA737007E3916 /* SearchHistory+Util.swift in Sources */,
-				F21CFCDD2CD6463A00CAB613 /* ProductTab.swift in Sources */,
 				F2EEE3AB2D05DE5000D7777C /* CreatePromotionView.swift in Sources */,
 				F2A0D60C2CC3A28D00536C58 /* Version+Modal.swift in Sources */,
 				F215B37E2D2C2E13003829BF /* CoinBuy+Sheet.swift in Sources */,
@@ -757,6 +795,7 @@
 				F237E5A22CCE892600CC1074 /* UserProfileView.swift in Sources */,
 				F2AE42892CB97917009E72C3 /* CornerRadius+Component.swift in Sources */,
 				F21CFD122CD7247300CAB613 /* PublishProductViewModel.swift in Sources */,
+				F293954C2D6A02F1007693EA /* BadgeType.swift in Sources */,
 				F27C657D2CB16F1B0074B608 /* ApptuneApp.swift in Sources */,
 				F21CFD0D2CD7245700CAB613 /* PublishActivityView.swift in Sources */,
 				F2AE6A472D20F6900002212F /* CommunityView.swift in Sources */,
@@ -768,14 +807,17 @@
 				F20398322D25313D00FB2434 /* FirshProduct+Modal.swift in Sources */,
 				F2EEE39D2D048AF600D7777C /* Codeable+Extension.swift in Sources */,
 				F26F159D2CC538CE00848715 /* User+Service.swift in Sources */,
+				F293954A2D6A02E7007693EA /* ProductModules.swift in Sources */,
 				F21CFD072CD691BB00CAB613 /* CoinShopViewModel.swift in Sources */,
 				F2C5B4EE2D18355F007E3916 /* Notification+Service.swift in Sources */,
+				F29395412D6A02CA007693EA /* ProductTab.swift in Sources */,
 				F2C5B4F02D184820007E3916 /* JoinNoticeView.swift in Sources */,
 				F28829802CF21328002D012A /* Active+API.swift in Sources */,
 				F21CFCD72CD6462400CAB613 /* ProductCard.swift in Sources */,
 				F2B2697A2CB578DD001230B4 /* Color+Extension.swift in Sources */,
 				F2A0D60E2CC40AAA00536C58 /* Agreement+Modal.swift in Sources */,
 				F2EEE3A72D05BD0700D7777C /* Promotion+Service.swift in Sources */,
+				F293954E2D6A0322007693EA /* ModuleDefinitions.swift in Sources */,
 				F21CFCFB2CD6911600CAB613 /* CoinShopView.swift in Sources */,
 				F2EEE3B92D0D5B1400D7777C /* ImageSave+Sheet.swift in Sources */,
 				F288298A2CF309F5002D012A /* Image+Sheet.swift in Sources */,
@@ -795,6 +837,7 @@
 				F2A0D6102CC49FD800536C58 /* Toast+Modal.swift in Sources */,
 				F299FE592CC94D2F0009C956 /* MD5+Util.swift in Sources */,
 				F2FAEAFB2CE04C03007BD6D8 /* Message+Modal.swift in Sources */,
+				F29395522D6A035A007693EA /* ProductModuleDefinition.swift in Sources */,
 				F2AE42802CB96DFF009E72C3 /* TextColor+Component.swift in Sources */,
 				F2B34CCF2CF35EE1009023B8 /* ReviewView.swift in Sources */,
 				F2C5B4F62D18484F007E3916 /* OfficeNoticeView.swift in Sources */,
@@ -809,12 +852,16 @@
 				F288298C2CF32228002D012A /* Tag+API.swift in Sources */,
 				F2B26A002CB6D764008C46B8 /* GudieView.swift in Sources */,
 				F21CFD142CD75F9C00CAB613 /* Product+API.swift in Sources */,
+				F29395472D6A02D9007693EA /* ModuleCardView.swift in Sources */,
+				F29395572D6A1243007693EA /* CreateType+Sheet.swift in Sources */,
 				F2AE427C2CB96CBA009E72C3 /* Tool+Extension.swift in Sources */,
+				F29395462D6A02D9007693EA /* BadgeView.swift in Sources */,
 				F2FC0F412CCAA49400CF8ACE /* Base+API.swift in Sources */,
 				F2B269F72CB6C58C008C46B8 /* Text+Extension.swift in Sources */,
 				F215B37A2D2BE7F1003829BF /* WebView.swift in Sources */,
 				F26F15982CC513C300848715 /* Confirm+Modal.swift in Sources */,
 				F2B269772CB574B0001230B4 /* LoginView.swift in Sources */,
+				F29395452D6A02D9007693EA /* ProductGridView.swift in Sources */,
 				F288297C2CF20D37002D012A /* Product+Service.swift in Sources */,
 				F2C5B4F82D1849BE007E3916 /* NoticeViewModel.swift in Sources */,
 				F2A0D6142CC4D37000536C58 /* UserAccountView.swift in Sources */,
@@ -836,6 +883,7 @@
 				F2EEE3BD2D0D874C00D7777C /* View+Modify.swift in Sources */,
 				F2EEE3AD2D05DE8500D7777C /* CreatePromotionModel.swift in Sources */,
 				F21CFD1B2CD7778D00CAB613 /* RouterDestination.swift in Sources */,
+				F29395512D6A035A007693EA /* ProductConstants.swift in Sources */,
 				F21CFD0E2CD7245700CAB613 /* PublishActivityViewModel.swift in Sources */,
 				F283B0452D0DD4370051FBF1 /* ImageClip+Component.swift in Sources */,
 				F2C5B4FB2D184CB4007E3916 /* NoticeListView.swift in Sources */,
@@ -1096,6 +1144,14 @@
 				minimumVersion = 5.0.2;
 			};
 		};
+		F29395532D6A0B76007693EA /* XCRemoteSwiftPackageReference "SheetKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fatbobman/SheetKit?&utm_source=Fatbobman%20Blog&utm_medium=web&utm_campaign=Fatbobman%20Blog";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
 		F2A0D5F92CC360EA00536C58 /* XCRemoteSwiftPackageReference "ScalingHeaderScrollView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/exyte/ScalingHeaderScrollView";
@@ -1135,6 +1191,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F26F15AB2CC6A92B00848715 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		F29395542D6A0B76007693EA /* SheetKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F29395532D6A0B76007693EA /* XCRemoteSwiftPackageReference "SheetKit" */;
+			productName = SheetKit;
 		};
 		F2A0D5FA2CC360EA00536C58 /* ScalingHeaderScrollView */ = {
 			isa = XCSwiftPackageProductDependency;

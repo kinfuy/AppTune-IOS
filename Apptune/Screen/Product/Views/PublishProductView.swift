@@ -161,7 +161,6 @@ struct PublishProductView: View {
                   await productService.loadPendingProductReviews()
                   await productService.loadProducts(refresh: true)
                 }
-                router.toTabBar(.product, isShowModules: true)
               })
             }
           }

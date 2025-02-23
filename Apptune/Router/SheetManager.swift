@@ -1,9 +1,12 @@
+import Combine
+import SheetKit
 import SwiftUI
 
 struct SheetConfig {
   var fullScreen: Bool
   var dismissible: Bool
-  var height: CGFloat?
+  var height: CGFloat?  // 这里的值应该是 0-1 之间的比例
+  var showDragIndicator: Bool?
 }
 
 enum SheetType: Identifiable {
@@ -50,6 +53,8 @@ enum SheetType: Identifiable {
     onCancel: (() -> Void)? = nil
   )
 
+  case createType
+
   var id: String {
     switch self {
     case .appStoreSearch: return "appStoreSearch"
@@ -60,6 +65,7 @@ enum SheetType: Identifiable {
     case .preCodePicker: return "preCodePicker"
     case .linkPicker: return "linkPicker"
     case .coinBuy: return "coinBuy"
+    case .createType: return "createType"
     }
   }
 
@@ -75,6 +81,8 @@ enum SheetType: Identifiable {
       return SheetConfig(fullScreen: false, dismissible: true, height: 0.5)
     case .coinBuy:
       return SheetConfig(fullScreen: false, dismissible: true, height: 0.5)
+    case .createType:
+        return SheetConfig(fullScreen: false, dismissible: true, height: 0.68,showDragIndicator: true)
     default:
       return SheetConfig(fullScreen: false, dismissible: true)
     }
@@ -93,6 +101,8 @@ enum SheetType: Identifiable {
       return onCancel
     case let .coinBuy(_, onCancel):
       return onCancel
+    case .createType:
+      return nil
     default:
       return nil
     }
@@ -124,14 +134,20 @@ enum SheetType: Identifiable {
       return AnyView(Link_Sheet(onConfirm: onConfirm, onCancel: onCancel))
     case .coinBuy(let onConfirm, let onCancel):
       return AnyView(CoinBuy_Sheet(onConfirm: onConfirm, onCancel: onCancel))
+    case .createType:
+      return AnyView(CreateTypeSheet())
     }
   }
 }
 
-struct SheetItem: Identifiable {
+struct SheetItem: Identifiable, Equatable {
   let id = UUID()
   let type: SheetType
   let config: SheetConfig
+
+  static func == (lhs: SheetItem, rhs: SheetItem) -> Bool {
+    lhs.id == rhs.id
+  }
 
   // 关闭时自动触发回调
   func handleClose() {
@@ -143,69 +159,158 @@ struct SheetItem: Identifiable {
 class SheetManager: ObservableObject {
   static let shared = SheetManager()
 
-  @Published private(set) var sheetStack: [SheetItem] = []
+  @Published var sheetStack = [SheetItem]()
+  @Published private var noticeUpdateTrigger = false
+  @Published var forceUpdate = UUID()
 
-  var isPresented: Bool {
-    !sheetStack.isEmpty
+  private var cancellables = Set<AnyCancellable>()
+
+  init() {
+    // 合并观察两个状态的变化
+    Publishers.Merge(
+      NoticeManager.shared.$currentNotice,
+      NoticeManager.shared.$_isNotice.map { _ in NoticeManager.shared.currentNotice }
+    )
+    .receive(on: DispatchQueue.main)
+    .sink { [weak self] _ in
+      self?.forceUpdate = UUID()
+    }
+    .store(in: &cancellables)
   }
 
-  var presentedSheet: SheetType? {
-    sheetStack.last?.type
+  // 存储环境变量
+  private var appState: AppState?
+  private var router: Router?
+  private var notice: NoticeManager?
+  private var userService: UserService?
+  private var sheet: SheetManager?
+  private var productService: ProductService?
+  private var promotionService: PromotionService?
+  private var activeService: ActiveService?
+  private var tagService: TagService?
+  private var notificationService: NotificationService?
+  private var communityService: CommunityService?
+
+  // 设置环境变量的方法
+  func setEnvironmentObjects(
+    appState: AppState,
+    router: Router,
+    notice: NoticeManager,
+    userService: UserService,
+    sheet: SheetManager,
+    productService: ProductService,
+    promotionService: PromotionService,
+    activeService: ActiveService,
+    tagService: TagService,
+    notificationService: NotificationService,
+    communityService: CommunityService
+  ) {
+    self.appState = appState
+    self.router = router
+    self.notice = notice
+    self.userService = userService
+    self.sheet = self
+    self.productService = productService
+    self.promotionService = promotionService
+    self.activeService = activeService
+    self.tagService = tagService
+    self.notificationService = notificationService
+    self.communityService = communityService
   }
 
-  var currentConfig: SheetConfig? {
-    sheetStack.last?.config
-  }
-
-  // 判断当前显示的 sheet 是否是全屏
-  var hasFullScreenSheet: Bool {
-    sheetStack.last?.config.fullScreen == true
-  }
-
-  // 判断当前显示的 sheet 是否是非全屏
-  var hasNormalSheet: Bool {
-    sheetStack.last?.config.fullScreen == false
-  }
-
-  var dismissible: Bool {
-    sheetStack.last?.config.dismissible == false
+  // 注入环境变量的私有方法
+  private func injectEnvironmentObjects<T: View>(_ view: T) -> some View {
+    view
+      .environmentObject(self.appState ?? AppState.shared)
+      .environmentObject(self.router ?? Router.shared)
+      .environmentObject(self.notice ?? NoticeManager.shared)
+      .environmentObject(self.userService ?? UserService())
+      .environmentObject(self.sheet ?? SheetManager.shared)
+      .environmentObject(self.productService ?? ProductService())
+      .environmentObject(self.promotionService ?? PromotionService())
+      .environmentObject(self.activeService ?? ActiveService())
+      .environmentObject(self.tagService ?? TagService())
+      .environmentObject(self.notificationService ?? NotificationService())
+      .environmentObject(self.communityService ?? CommunityService())
   }
 
   func show(_ sheet: SheetType) {
     let config = sheet.config()
-    let sheetItem = SheetItem(type: sheet, config: config)
-    sheetStack.append(sheetItem)
+    sheetStack.append(SheetItem(type: sheet, config: config))
+
+    let bottomSheetConfig = SheetKit.BottomSheetConfiguration(
+      detents: (config.height != nil)
+        ? [
+          UISheetPresentationController.Detent.custom(resolver: { _ in
+            config.height! * UIScreen.main.bounds.height
+          })
+        ] : [.large()],
+      largestUndimmedDetentIdentifier: nil,
+      prefersGrabberVisible: config.showDragIndicator ?? false,
+      prefersScrollingExpandsWhenScrolledToEdge: true,
+      prefersEdgeAttachedInCompactHeight: true,
+      widthFollowsPreferredContentSizeWhenEdgeAttached: true,
+      preferredCornerRadius: nil
+    )
+
+    SheetKit().present(
+      with: config.fullScreen ? .fullScreenCover : .customBottomSheet,
+      onDisappear: {
+        self.sheetStack.removeLast()
+      },
+      configuration: bottomSheetConfig
+    ) {
+      ZStack {
+        // Sheet 内容
+        injectEnvironmentObjects(sheet.view)
+          .interactiveDismissDisabled(!config.dismissible)
+
+        // Notice 层
+        NoticeOverlay(notice: notice)
+          .environmentObject(self.appState ?? AppState.shared)
+          .environmentObject(self.router ?? Router.shared)
+          .environmentObject(self.notice ?? NoticeManager.shared)
+          .environmentObject(self.userService ?? UserService())
+          .environmentObject(self.sheet ?? SheetManager.shared)
+          .environmentObject(self.productService ?? ProductService())
+          .environmentObject(self.promotionService ?? PromotionService())
+          .environmentObject(self.activeService ?? ActiveService())
+          .environmentObject(self.tagService ?? TagService())
+          .environmentObject(self.notificationService ?? NotificationService())
+          .environmentObject(self.communityService ?? CommunityService())
+          .id(forceUpdate)  // 使用 UUID 强制更新
+      }
+    }
   }
 
   func close() {
-    if let lastSheet = sheetStack.last {
-      lastSheet.handleClose()
-      sheetStack.removeLast()
-    }
+    SheetKit().dismiss()
   }
 
   func closeAll() {
-    for sheet in sheetStack.reversed() {
-      sheet.handleClose()
-    }
-    withAnimation {
-      sheetStack.removeAll()
-    }
+    SheetKit().dismissAllSheets()
   }
 
-  @ViewBuilder
-  func buildSheetView() -> some View {
-    if let sheet = presentedSheet {
-      ZStack {
-        sheet.view
+  func hasSheet() -> Bool {
+    return sheetStack.count > 0
+  }
+}
 
-        if NoticeManager.shared.isNotice && isPresented {
-          NoticeManager.shared.buildNoticeView(notice: NoticeManager.shared.currentNotice!)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.black.opacity(0.01))
-            .ignoresSafeArea()
-            .transition(.opacity)
-        }
+// 将 Notice 层抽取为单独的视图组件
+private struct NoticeOverlay: View {
+  let notice: NoticeManager?
+  @ObservedObject private var noticeManager = NoticeManager.shared
+
+  var body: some View {
+    Group {
+      if let noticeManager = notice,
+        noticeManager.isNotice,
+        let currentNotice = noticeManager.currentNotice
+      {
+        noticeManager.buildNoticeView(notice: currentNotice)
+          .background(Color.black.opacity(0.01))
+          .ignoresSafeArea()
+          .transition(.opacity)
       }
     }
   }

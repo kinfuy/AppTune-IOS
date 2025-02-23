@@ -15,15 +15,6 @@ struct CommunityView: View {
   var body: some View {
     ZStack {
       VStack(spacing: 0) {
-        HStack {
-          Text("经验")
-            .font(.system(size: 28))
-            .fontWeight(.bold)
-          Spacer()
-        }
-        .padding(.horizontal)
-        .padding(.bottom)
-
         ScrollView {
           LazyVStack(spacing: 12) {
             ForEach(communityService.posts) { post in
@@ -61,7 +52,6 @@ struct CommunityView: View {
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .padding(.top)
-      .padding(.bottom, 32)
       .background(Color(hex: "#f4f4f4"))
 
       VStack {
@@ -87,6 +77,7 @@ struct CommunityView: View {
     .task {
       await communityService.fetchPosts()
     }
+    .customNavigationBar(title: "社区经验", router: router)
   }
 }
 
