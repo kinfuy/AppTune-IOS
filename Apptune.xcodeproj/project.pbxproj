@@ -606,6 +606,13 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
+		F29250E62D6B78430012F5E5 /* Competitors */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Competitors;
+			sourceTree = "<group>";
+		};
 		F29395492D6A02E7007693EA /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -617,6 +624,7 @@
 		F29395622D6B0FFF007693EA /* Apps */ = {
 			isa = PBXGroup;
 			children = (
+				F29250E62D6B78430012F5E5 /* Competitors */,
 				F29395632D6B1009007693EA /* Mind */,
 			);
 			path = Apps;
