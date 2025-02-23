@@ -16,26 +16,21 @@ struct SelectChatView: View {
     ZStack(alignment: .bottom) {
       // 主要内容使用 ScrollView
       ScrollView {
-        VStack(spacing: 24) {
-          Text("选择讨论组")
-            .font(.title2)
-            .bold()
-            .padding(.top, 40)
-
+        VStack(spacing: 16) {
+          // 添加推荐讨论组部分
           RecommendedGroupsSection(viewModel: viewModel)
+
           CustomRolesSection(viewModel: viewModel)
 
           // 添加底部空间，防止内容被按钮遮挡
           Spacer()
             .frame(height: 80)
         }
+        .padding(.top)
       }
 
-      // 固定在底部的按钮
-      if viewModel.customRoles.count >= 1 {
-        StartChatButton(viewModel: viewModel)
-          .shadow(radius: 2)  // 添加阴影效果提升层次感
-      }
+      StartChatButton(viewModel: viewModel)
+        .shadow(radius: 2)  // 添加阴影效果提升层次感
     }
     .customNavigationBar(
       title: "AI 头脑风暴",
@@ -44,32 +39,22 @@ struct SelectChatView: View {
   }
 }
 
-// 推荐组合部分
-private struct RecommendedGroupsSection: View {
-  @EnvironmentObject var router: Router
-  @ObservedObject var viewModel: SelectChatViewModel
+// 角色标签视图
+private struct RoleTag: View {
+  let role: AgentRole
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 16) {
-      Text("推荐组合")
-        .font(.headline)
-        .padding(.horizontal)
-
-      ScrollView(.horizontal, showsIndicators: false) {
-        HStack(spacing: 16) {
-          ForEach(ProductRole.recommendedGroups, id: \.self) { group in
-            RecommendedGroupCard(
-              roles: group.roles,
-              isActive: false
-            ) {
-              let activeRoles = viewModel.getActiveRoles(from: group.roles)
-              router.navigate(to: .mindChat(roles: activeRoles))
-            }
-          }
-        }
-        .padding(.horizontal)
-      }
+    HStack(spacing: 4) {
+      Image(systemName: role.icon)
+        .font(.caption)
+      Text(role.name)
+        .font(.caption)
     }
+    .padding(.horizontal, 8)
+    .padding(.vertical, 4)
+    .background(role.backgroundColor.opacity(0.1))
+    .foregroundColor(role.backgroundColor)
+    .cornerRadius(8)
   }
 }
 
@@ -87,10 +72,11 @@ private struct CustomRolesSection: View {
         columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2),
         spacing: 16
       ) {
-        ForEach(ProductRole.selectableRoles) { role in
+        ForEach(AgentRole.defaultRoles.filter { $0.isSelectable }, id: \.id) { role in
           AgentCard(
             role: role,
-            isActive: viewModel.customRoles.contains(role)
+            isActive: viewModel.customRoles.contains(where: { $0.id == role.id }),
+            isModerator: role.id == viewModel.moderator?.id
           ) {
             viewModel.toggleCustomRole(role)
           }
@@ -106,21 +92,66 @@ private struct StartChatButton: View {
   @EnvironmentObject var router: Router
   @ObservedObject var viewModel: SelectChatViewModel
 
+  private var buttonText: String {
+    if viewModel.selectedGroup != nil {
+      return "开始群组讨论"
+    } else {
+      return "开始讨论 (\(viewModel.customRoles.count)个角色)"
+    }
+  }
+
+  private var isEnabled: Bool {
+    viewModel.selectedGroup != nil || viewModel.customRoles.count >= 1
+  }
+
   var body: some View {
     Button {
-      let activeRoles = viewModel.getActiveRoles(from: Array(viewModel.customRoles))
-      router.navigate(to: .mindChat(roles: activeRoles))
+      let roles =
+        if let group = viewModel.selectedGroup {
+          Set(group.roles)
+        } else {
+          viewModel.customRoles
+        }
+      router.navigate(to: .mindChat(roles: roles))
     } label: {
-      Text("开始讨论 (\(viewModel.customRoles.count)个角色)")
+      Text(buttonText)
         .font(.headline)
         .foregroundColor(.white)
         .frame(maxWidth: .infinity)
         .padding()
-        .background(Color.blue)
+        .background(isEnabled ? Color.blue : Color.gray)
         .cornerRadius(12)
     }
+    .disabled(!isEnabled)
     .padding(.horizontal)
-    .padding(.bottom, 20)  // 调整底部间距
+    .padding(.bottom, 20)
+  }
+}
+
+// 添加推荐讨论组部分
+private struct RecommendedGroupsSection: View {
+  @ObservedObject var viewModel: SelectChatViewModel
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 16) {
+      Text("推荐讨论组")
+        .font(.headline)
+        .padding(.horizontal)
+
+      ScrollView(.horizontal, showsIndicators: false) {
+        HStack(spacing: 16) {
+          ForEach(RoleGroup.recommendedGroups, id: \.id) { group in
+            RecommendedGroupCard(
+              group: group,
+              isActive: viewModel.selectedGroup?.id == group.id
+            ) {
+              viewModel.selectGroup(group)
+            }
+          }
+        }
+        .padding(.horizontal)
+      }
+    }
   }
 }
 
@@ -129,4 +160,13 @@ private struct StartChatButton: View {
     SelectChatView()
       .environmentObject(Router())
   }
+  .preferredColorScheme(.light)
+}
+
+#Preview("Dark Mode") {
+  NavigationStack {
+    SelectChatView()
+      .environmentObject(Router())
+  }
+  .preferredColorScheme(.dark)
 }

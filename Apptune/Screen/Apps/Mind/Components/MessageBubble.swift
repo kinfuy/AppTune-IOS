@@ -6,21 +6,17 @@ struct MessageBubble: View {
   var onEdit: () -> Void = {}
   var onDelete: () -> Void = {}
 
-  private var isUserMessage: Bool {
-    message.role == .user
-  }
-
   var body: some View {
-    VStack(alignment: isUserMessage ? .trailing : .leading, spacing: 4) {
+    VStack(alignment: message.role.isUser ? .trailing : .leading, spacing: 4) {
       // 消息内容
       HStack(alignment: .top, spacing: 12) {
-        if !isUserMessage {
-          Avatar(role: message.role)
+        if !message.role.isUser {
+            Avatar(role: message.role)
         }
 
-        VStack(alignment: isUserMessage ? .trailing : .leading, spacing: 4) {
-          if !isUserMessage {
-            Text(message.role.rawValue)
+        VStack(alignment: message.role.isUser ? .trailing : .leading, spacing: 4) {
+          if !message.role.isUser {
+              Text(message.role.name)
               .font(.caption)
               .foregroundColor(.gray)
           }
@@ -31,18 +27,18 @@ struct MessageBubble: View {
             .background(
               RoundedRectangle(cornerRadius: 20)
                 .fill(
-                  isUserMessage
+                    message.role.isUser
                     ? Color.blue
                     : Color(.systemBackground)
                 )
             )
-            .foregroundColor(isUserMessage ? .white : .primary)
+            .foregroundColor(message.role.isUser ? .white : .primary)
         }
         .frame(
           maxWidth: UIScreen.main.bounds.width * 0.7,
-          alignment: isUserMessage ? .trailing : .leading)
+          alignment: message.role.isUser ? .trailing : .leading)
 
-        if isUserMessage {
+        if message.role.isUser {
           Avatar(role: message.role)
         } else {
           Spacer()
@@ -51,7 +47,7 @@ struct MessageBubble: View {
 
       // 消息工具栏
       MessageToolbar(
-        isUserMessage: isUserMessage,
+        isUserMessage: message.role.isUser,
         onCopy: onCopy,
         onEdit: onEdit,
         onDelete: onDelete
@@ -132,18 +128,27 @@ private struct ChatToolbarButton: View {
 }
 
 private struct Avatar: View {
-  let role: ProductRole
+  let role: AgentRole
 
   var body: some View {
-    Image(systemName: role.icon)
-      .font(.system(size: 16))
-      .foregroundColor(.white)
-      .frame(width: 32, height: 32)
-      .background(
-        Circle()
-          .fill(role.backgroundColor)
-          .shadow(color: role.backgroundColor.opacity(0.3), radius: 4, y: 2)
-      )
+    ZStack {
+      Image(systemName: role.icon)
+        .font(.system(size: 16))
+        .foregroundColor(.white)
+        .frame(width: 32, height: 32)
+        .background(
+          Circle()
+            .fill(role.backgroundColor)
+            .shadow(color: role.backgroundColor.opacity(0.3), radius: 4, y: 2)
+        )
+
+      if role.isModerator {
+        Image(systemName: "star.fill")
+          .font(.system(size: 10))
+          .foregroundColor(.yellow)
+          .offset(x: 12, y: -12)
+      }
+    }
   }
 }
 
@@ -153,7 +158,7 @@ struct MessageBubble_Previews: PreviewProvider {
       MessageBubble(
         message: ChatMessage(
           id: UUID(),
-          role: .user,
+          role: AgentRole.user(),
           content: "这是用户发送的消息",
           timestamp: Date()
         )
@@ -162,7 +167,7 @@ struct MessageBubble_Previews: PreviewProvider {
       MessageBubble(
         message: ChatMessage(
           id: UUID(),
-          role: .productManager,
+          role: AgentRole(id: UUID(), name: "用户", isSelectable: false, isModerator: false, icon: "user", description: "用户", isCustom: false, backgroundColor: .gray, isUser: false,configuration: nil,prompts: nil),
           content: "这是AI助手的回复消息",
           timestamp: Date()
         )

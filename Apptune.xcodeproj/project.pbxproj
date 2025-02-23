@@ -66,6 +66,8 @@
 		F28829882CF30053002D012A /* Tag+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28829872CF30053002D012A /* Tag+Service.swift */; };
 		F288298A2CF309F5002D012A /* Image+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F28829892CF309F5002D012A /* Image+Sheet.swift */; };
 		F288298C2CF32228002D012A /* Tag+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F288298B2CF32228002D012A /* Tag+API.swift */; };
+		F29250DE2D6B3F2B0012F5E5 /* AI+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29250DD2D6B3F2B0012F5E5 /* AI+API.swift */; };
+		F29250E52D6B59470012F5E5 /* RoleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29250E42D6B59470012F5E5 /* RoleData.swift */; };
 		F29395412D6A02CA007693EA /* ProductTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29395402D6A02CA007693EA /* ProductTab.swift */; };
 		F29395452D6A02D9007693EA /* ProductGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29395422D6A02D9007693EA /* ProductGridView.swift */; };
 		F29395462D6A02D9007693EA /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29395432D6A02D9007693EA /* BadgeView.swift */; };
@@ -90,7 +92,6 @@
 		F29395782D6B18D2007693EA /* GroupChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F293956B2D6B18D1007693EA /* GroupChatView.swift */; };
 		F29395792D6B18D2007693EA /* MindViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F293956D2D6B18D1007693EA /* MindViewModel.swift */; };
 		F293957B2D6B18D2007693EA /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29395712D6B18D2007693EA /* ChatMessage.swift */; };
-		F293957C2D6B18D2007693EA /* ProductRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29395722D6B18D2007693EA /* ProductRole.swift */; };
 		F293957F2D6B20E2007693EA /* InputArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = F293957D2D6B20E2007693EA /* InputArea.swift */; };
 		F29395802D6B20E2007693EA /* ChatToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F293957E2D6B20E2007693EA /* ChatToolbar.swift */; };
 		F29395822D6B22C9007693EA /* RoleStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29395812D6B22C9007693EA /* RoleStatusBar.swift */; };
@@ -225,6 +226,8 @@
 		F28829872CF30053002D012A /* Tag+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+Service.swift"; sourceTree = "<group>"; };
 		F28829892CF309F5002D012A /* Image+Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Sheet.swift"; sourceTree = "<group>"; };
 		F288298B2CF32228002D012A /* Tag+API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tag+API.swift"; sourceTree = "<group>"; };
+		F29250DD2D6B3F2B0012F5E5 /* AI+API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AI+API.swift"; sourceTree = "<group>"; };
+		F29250E42D6B59470012F5E5 /* RoleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleData.swift; sourceTree = "<group>"; };
 		F29395402D6A02CA007693EA /* ProductTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductTab.swift; sourceTree = "<group>"; };
 		F29395422D6A02D9007693EA /* ProductGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductGridView.swift; sourceTree = "<group>"; };
 		F29395432D6A02D9007693EA /* BadgeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BadgeView.swift; sourceTree = "<group>"; };
@@ -248,7 +251,6 @@
 		F293956B2D6B18D1007693EA /* GroupChatView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupChatView.swift; sourceTree = "<group>"; };
 		F293956D2D6B18D1007693EA /* MindViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MindViewModel.swift; sourceTree = "<group>"; };
 		F29395712D6B18D2007693EA /* ChatMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
-		F29395722D6B18D2007693EA /* ProductRole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductRole.swift; sourceTree = "<group>"; };
 		F293957D2D6B20E2007693EA /* InputArea.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputArea.swift; sourceTree = "<group>"; };
 		F293957E2D6B20E2007693EA /* ChatToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatToolbar.swift; sourceTree = "<group>"; };
 		F29395812D6B22C9007693EA /* RoleStatusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoleStatusBar.swift; sourceTree = "<group>"; };
@@ -529,6 +531,7 @@
 			children = (
 				F26F15A22CC69D6E00848715 /* User+API.swift */,
 				F21CFD132CD75F9C00CAB613 /* Product+API.swift */,
+				F29250DD2D6B3F2B0012F5E5 /* AI+API.swift */,
 				F215B36E2D2843F5003829BF /* Community+API.swift */,
 				F2C5B4EB2D18354D007E3916 /* Notification+API.swift */,
 				F2EEE3A42D05BB4B00D7777C /* Promotion+API.swift */,
@@ -595,6 +598,14 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		F29250E32D6B59320012F5E5 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				F29250E42D6B59470012F5E5 /* RoleData.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		F29395492D6A02E7007693EA /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -614,6 +625,7 @@
 		F29395632D6B1009007693EA /* Mind */ = {
 			isa = PBXGroup;
 			children = (
+				F29250E32D6B59320012F5E5 /* Data */,
 				F29395642D6B1042007693EA /* MindView.swift */,
 				F29395852D6B244C007693EA /* SelectChatView.swift */,
 				F293956A2D6B18D1007693EA /* Components */,
@@ -660,7 +672,6 @@
 			children = (
 				F29395712D6B18D2007693EA /* ChatMessage.swift */,
 				F293958B2D6B2D2E007693EA /* Role.swift */,
-				F29395722D6B18D2007693EA /* ProductRole.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -900,7 +911,6 @@
 				F215B3762D2BB169003829BF /* Link+Sheet.swift in Sources */,
 				F237E5A22CCE892600CC1074 /* UserProfileView.swift in Sources */,
 				F2AE42892CB97917009E72C3 /* CornerRadius+Component.swift in Sources */,
-				F293957C2D6B18D2007693EA /* ProductRole.swift in Sources */,
 				F21CFD122CD7247300CAB613 /* PublishProductViewModel.swift in Sources */,
 				F29395772D6B18D2007693EA /* RecommendedGroupCard.swift in Sources */,
 				F29395822D6B22C9007693EA /* RoleStatusBar.swift in Sources */,
@@ -919,6 +929,7 @@
 				F293954A2D6A02E7007693EA /* ProductModules.swift in Sources */,
 				F21CFD072CD691BB00CAB613 /* CoinShopViewModel.swift in Sources */,
 				F2C5B4EE2D18355F007E3916 /* Notification+Service.swift in Sources */,
+				F29250DE2D6B3F2B0012F5E5 /* AI+API.swift in Sources */,
 				F29395412D6A02CA007693EA /* ProductTab.swift in Sources */,
 				F2C5B4F02D184820007E3916 /* JoinNoticeView.swift in Sources */,
 				F28829802CF21328002D012A /* Active+API.swift in Sources */,
@@ -976,6 +987,7 @@
 				F2FC0F412CCAA49400CF8ACE /* Base+API.swift in Sources */,
 				F2B269F72CB6C58C008C46B8 /* Text+Extension.swift in Sources */,
 				F215B37A2D2BE7F1003829BF /* WebView.swift in Sources */,
+				F29250E52D6B59470012F5E5 /* RoleData.swift in Sources */,
 				F26F15982CC513C300848715 /* Confirm+Modal.swift in Sources */,
 				F293958C2D6B2D2E007693EA /* Role.swift in Sources */,
 				F2B269772CB574B0001230B4 /* LoginView.swift in Sources */,

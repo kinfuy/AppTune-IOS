@@ -1,75 +1,74 @@
 import SwiftUI
 
 struct RoleStatusBar: View {
-  let activeRoles: Set<ProductRole>
-  let typingRole: ProductRole?
+  var activeRoles: Set<AgentRole>
+  var typingRole: AgentRole?
 
-  // 添加计算属性来排序角色
-  private var sortedRoles: [ProductRole] {
-    Array(activeRoles.filter { $0 != .user }).sorted { role1, role2 in
-      switch (role1 == typingRole, role2 == typingRole) {
-      case (true, false): return true  // typing role comes first
-      case (false, true): return false  // non-typing role comes after
-      default: return role1.rawValue < role2.rawValue  // alphabetical order for same status
+  private var sortedRoles: [AgentRole] {
+    Array(activeRoles).sorted { role1, role2 in
+      switch (role1.id == typingRole?.id, role2.id == typingRole?.id) {
+      case (true, false): return true
+      case (false, true): return false
+      default: return role1.name < role2.name
       }
     }
   }
 
   var body: some View {
-    ScrollView(.horizontal, showsIndicators: false) {
-      HStack(spacing: 8) {
-        ForEach(sortedRoles, id: \.self) { role in
-          RoleStatusTag(
-            role: role,
-            status: getStatusText(for: role),
-            isTyping: role == typingRole
-          )
-          .transition(
-            .asymmetric(
-              insertion: .move(edge: .leading).combined(with: .opacity),
-              removal: .move(edge: .trailing).combined(with: .opacity)
-            ))
+    ScrollViewReader { proxy in
+      ScrollView(.horizontal, showsIndicators: false) {
+        HStack(spacing: 8) {
+          ForEach(sortedRoles, id: \.id) { role in
+            RoleStatusTag(
+              role: role,
+              status: getStatusText(for: role),
+              isTyping: role.id == typingRole?.id,
+              isModerator: role.isModerator
+            )
+          }
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 8)
+        .animation(.spring(duration: 0.5), value: sortedRoles)
+        .animation(.spring(duration: 0.5), value: typingRole)
+        .onChange(of: typingRole) { _ in
+          withAnimation {
+            proxy.scrollTo(sortedRoles.first?.id, anchor: .leading)
+          }
         }
       }
-      .padding(.horizontal)
-      .padding(.vertical, 8)
-      .animation(.spring(duration: 0.5), value: sortedRoles)
-      .animation(.spring(duration: 0.5), value: typingRole)
+      .background(Color(.systemBackground))
     }
-    .background(Color(.systemBackground))
   }
 
-  private func getStatusText(for role: ProductRole) -> String {
-    if role == typingRole {
-      switch role {
-      case .productManager:
-        return "思考中..."
-      case .designer:
-        return "设计中..."
-      case .developer:
-        return "分析中..."
-      case .marketingManager:
-        return "评估中..."
-      default:
-        return "输入中..."
-      }
+  private func getStatusText(for role: AgentRole) -> String {
+    if role.id == typingRole?.id {
+      return "思考中..."
+    } else {
+      return "在线"
     }
-    return "在线"
   }
 }
 
 private struct RoleStatusTag: View {
-  let role: ProductRole
+  let role: AgentRole
   let status: String
   let isTyping: Bool
+  let isModerator: Bool
 
   var body: some View {
     HStack(spacing: 4) {
       Image(systemName: role.icon)
         .font(.system(size: 12))
 
-      Text(role.rawValue)
+      Text(role.name)
         .font(.system(size: 12, weight: .medium))
+
+      if isModerator {
+        Image(systemName: "star.fill")
+          .font(.system(size: 8))
+          .foregroundColor(.yellow)
+      }
 
       Text("·")
         .foregroundColor(.gray)
@@ -91,7 +90,11 @@ private struct RoleStatusTag: View {
 // 添加预览代码
 #Preview {
   RoleStatusBar(
-    activeRoles: [.productManager, .designer, .developer],
-    typingRole: .designer
+    activeRoles: Set([
+      AgentRole.defaultRoles[1],
+      AgentRole.defaultRoles[2],
+      AgentRole.defaultRoles[3],
+    ]),
+    typingRole: AgentRole.defaultRoles[3]
   )
 }

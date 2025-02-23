@@ -30,42 +30,10 @@ struct GroupChatView: View {
         text: $viewModel.messageText,
         isTyping: viewModel.isAITyping,
         isFocused: _isFocused,
-        onSend: sendMessage,
+        onSend: viewModel.sendMessage,
         onInterrupt: viewModel.interruptConversation,
         onNewChat: viewModel.startNewConversation
       )
-    }
-  }
-
-  @MainActor
-  private func sendMessage() {
-    guard !viewModel.messageText.isEmpty else { return }
-    let message = ChatMessage(
-      role: .user,
-      content: viewModel.messageText,
-      timestamp: Date()
-    )
-    viewModel.messages.append(message)
-    viewModel.messageText = ""
-
-    // TODO: 触发AI响应
-    simulateAIResponse()
-  }
-
-  @MainActor
-  private func simulateAIResponse() {
-    viewModel.isAITyping = true
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-      let aiRoles = Array(viewModel.activeRoles.filter { $0 != .user })
-      guard let aiRole = aiRoles.randomElement() else { return }
-
-      let aiMessage = ChatMessage(
-        role: aiRole,
-        content: "这是来自\(aiRole.rawValue)的回复",
-        timestamp: Date()
-      )
-      viewModel.messages.append(aiMessage)
-      viewModel.isAITyping = false
     }
   }
 }
@@ -73,7 +41,7 @@ struct GroupChatView: View {
 // 聊天记录视图
 private struct ChatHistoryView: View {
   let messages: [ChatMessage]
-  let activeRoles: Set<ProductRole>
+  let activeRoles: Set<AgentRole>
   let onMessageDelete: (ChatMessage) -> Void
 
   var body: some View {
@@ -98,12 +66,18 @@ private struct ChatHistoryView: View {
               }
             )
           }
+
+          // 添加一个不可见的锚点视图
+          Color.clear
+            .frame(height: 1)
+            .id("bottom")
         }
         .padding(.vertical)
       }
-      .onChange(of: messages.count) { _ in
+      .onChange(of: messages) { _ in
+        // 当消息数组发生变化时滚动到底部
         withAnimation(.easeOut(duration: 0.3)) {
-          proxy.scrollTo(messages.last?.id, anchor: .bottom)
+          proxy.scrollTo("bottom", anchor: .bottom)
         }
       }
     }
@@ -113,7 +87,7 @@ private struct ChatHistoryView: View {
 
 // 空状态视图
 private struct EmptyStateView: View {
-  let activeRoles: Set<ProductRole>
+  let activeRoles: Set<AgentRole>
 
   var body: some View {
     VStack(spacing: 16) {
@@ -126,11 +100,8 @@ private struct EmptyStateView: View {
           .font(.headline)
 
         // 显示每个AI角色
-        ForEach(
-          Array(activeRoles).filter({ $0 != .user }).sorted(by: { $0.rawValue < $1.rawValue }),
-          id: \.self
-        ) { role in
-          Text("\(role.rawValue)已加入讨论")
+        ForEach(Array(activeRoles).sorted(by: { $0.name < $1.name }), id: \.id) { role in
+          Text("\(role.name)已加入讨论")
             .font(.subheadline)
             .foregroundColor(.gray)
         }

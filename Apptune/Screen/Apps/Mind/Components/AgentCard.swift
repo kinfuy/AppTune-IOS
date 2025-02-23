@@ -1,8 +1,9 @@
 import SwiftUI
 
 struct AgentCard: View {
-  let role: ProductRole
+  let role: AgentRole
   let isActive: Bool
+  let isModerator: Bool
   let action: () -> Void
 
   var body: some View {
@@ -13,6 +14,11 @@ struct AgentCard: View {
             .font(.title2)
             .foregroundColor(isActive ? .white : role.backgroundColor)
           Spacer()
+          if isModerator {
+            Image(systemName: "star.fill")
+              .font(.caption)
+              .foregroundColor(isActive ? .white : .yellow)
+          }
           Text(isActive ? "已选择" : "选择")
             .font(.caption)
             .foregroundColor(isActive ? .white : role.backgroundColor)
@@ -21,7 +27,7 @@ struct AgentCard: View {
         .background(isActive ? role.backgroundColor : role.backgroundColor.opacity(0.1))
         .cornerRadius(12)
 
-        Text(role.rawValue)
+        Text(role.name)
           .font(.headline)
           .foregroundColor(.primary)
 

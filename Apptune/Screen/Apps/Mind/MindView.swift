@@ -12,7 +12,7 @@ struct MindView: View {
   @StateObject private var viewModel: MindViewModel
   @FocusState private var isFocused: Bool
 
-  init(activeRoles: Set<ProductRole>) {
+  init(activeRoles: Set<AgentRole>) {
     _viewModel = StateObject(wrappedValue: MindViewModel(activeRoles: activeRoles))
   }
 

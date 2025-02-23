@@ -1,13 +1,13 @@
 import SwiftUI
 
 struct AgentTag: View {
-  let role: ProductRole
+  let role: AgentRole
   let isSelected: Bool
 
   var body: some View {
     HStack(spacing: 6) {
       Image(systemName: role.icon)
-      Text(role.rawValue)
+      Text(role.name)
     }
     .font(.subheadline)
     .foregroundColor(isSelected ? .white : role.backgroundColor)
