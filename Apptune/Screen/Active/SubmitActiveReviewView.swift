@@ -651,6 +651,7 @@ private let mockActive = ActiveInfo(
   tags: [],
   link: "https://example.com",
   reward: nil,
+  isAudit: false,
   rewardPoints: 100,
   rewardPromoCodes: nil,
   userId: "1",

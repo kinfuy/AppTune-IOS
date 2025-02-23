@@ -66,11 +66,12 @@ struct ScreenManage: View {
           router.handleSwipeBack()
         }
 
-        if notice.isNotice && !sheet.hasSheet() {
-          NoticeManager.shared.buildNoticeView(notice: notice.currentNotice!)
+        if let currentNotice = notice.currentNotice, !sheet.hasSheet() {
+          NoticeManager.shared.buildNoticeView(notice: currentNotice)
             .withAppEnvironment(from: self)
             .ignoresSafeArea()
             .transition(.opacity)
+            .zIndex(99)
         }
 
         // 启动页
@@ -81,7 +82,6 @@ struct ScreenManage: View {
       }
     }
     .onAppear {
-
       sheet.setEnvironmentObjects(
         appState: appState,
         router: router,
@@ -108,4 +108,15 @@ struct ScreenManage: View {
 
 #Preview {
   ScreenManage()
+    .environmentObject(ActiveService())
+    .environmentObject(ProductService())
+    .environmentObject(PromotionService())
+    .environmentObject(TagService())
+    .environmentObject(NotificationService())
+    .environmentObject(CommunityService())
+    .environmentObject(UserService())
+    .environmentObject(SheetManager())
+    .environmentObject(Router())
+    .environmentObject(NoticeManager())
+
 }

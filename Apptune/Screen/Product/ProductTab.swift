@@ -13,6 +13,7 @@ enum ProductTab: Int, CaseIterable {
   case competitorAnalysis = 11
   case communityExperience = 12
   case eventHall = 13
+  case productShow = 14
 
   var title: String {
     switch self {
@@ -44,23 +45,25 @@ enum ProductTab: Int, CaseIterable {
       return "社区经验"
     case .eventHall:
       return "活动大厅"
+    case .productShow:
+      return "产品发布会"
     }
   }
 
   var route: GeneralRouterDestination {
     switch self {
     case .joinedEvents:
-      return .community
+      return .joinedActive
     case .myProducts:
-      return .community
+      return .myProduct
     case .myEvents:
-      return .community
+      return .myActive
     case .review:
-      return .community
+      return .reviewCenter
     case .promotion:
-      return .community
+      return .promotion
     case .brainstormLab:
-      return .community
+      return .selectChat
     case .copywritingFactory:
       return .community
     case .modelManagement:
@@ -77,6 +80,8 @@ enum ProductTab: Int, CaseIterable {
       return .community
     case .eventHall:
       return .activeCenter
+    case .productShow:
+      return .productShow
     }
   }
 }

@@ -152,11 +152,9 @@ struct ActiveHomeView: View {
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Color(hex: "#f4f4f4"))
     .onAppear {
-      if activeService.needsInitialLoad() {
-        Task {
-          await activeService.loadAllActives(refresh: true)
-          await activeService.loadTopActives(refresh: true)
-        }
+      Task {
+        await activeService.loadAllActives(refresh: true)
+        await activeService.loadTopActives(refresh: true)
       }
     }
     .customNavigationBar(

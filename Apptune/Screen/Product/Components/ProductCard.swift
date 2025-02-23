@@ -1,5 +1,10 @@
 import SwiftUI
 
+// 创建一个 ObservableObject 来管理每个卡片的状态
+class ProductCardState: ObservableObject {
+  @Published var showDeveloper = false
+}
+
 struct ProductCard: View {
   let title: String
   let description: String
@@ -7,7 +12,11 @@ struct ProductCard: View {
   let category: Catalog
   let logo: String
   let developer: String
+  let publisher: String
   let status: Int
+
+  // 使用 StateObject 确保每个卡片实例有自己的状态
+  @StateObject private var cardState = ProductCardState()
 
   var statusInfo: (String, Color) {
     switch status {
@@ -36,10 +45,54 @@ struct ProductCard: View {
             .font(.system(size: 16, weight: .medium))
             .lineLimit(1)
 
-          Text(developer)
-            .font(.system(size: 12))
-            .foregroundColor(.gray)
-            .lineLimit(1)
+          if developer == publisher {
+            Text(publisher)
+              .font(.system(size: 12))
+              .foregroundColor(.gray)
+              .lineLimit(1)
+          } else {
+            VStack(alignment: .leading, spacing: 2) {
+              HStack {
+                Text("发布者：")
+                  .font(.system(size: 12))
+                  .foregroundColor(.gray)
+                  .lineLimit(1)
+                Text(publisher)
+                  .font(.system(size: 12))
+                  .foregroundColor(.gray)
+                  .lineLimit(1)
+
+                if !cardState.showDeveloper && developer != "" {
+                  Image(systemName: "chevron.down.circle.fill")
+                    .font(.system(size: 12))
+                    .foregroundColor(.gray.opacity(0.5))
+                }
+              }
+              .onTapGesture {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                  cardState.showDeveloper.toggle()
+                }
+              }
+
+              if cardState.showDeveloper && developer != "" {
+                HStack {
+                  Text("开发者：\(developer)")
+                    .font(.system(size: 12))
+                    .foregroundColor(.gray)
+                    .lineLimit(1)
+
+                  Image(systemName: "chevron.up.circle.fill")
+                    .font(.system(size: 12))
+                    .foregroundColor(.gray.opacity(0.5))
+                }
+                .onTapGesture {
+                  withAnimation(.easeInOut(duration: 0.2)) {
+                    cardState.showDeveloper.toggle()
+                  }
+                }
+              }
+            }
+          }
         }
 
         Spacer()
@@ -77,5 +130,5 @@ struct ProductCard: View {
 #Preview {
   ProductCard(
     title: "suka", description: "测试文案", stars: 11, category: .effect, logo: "user",
-    developer: "杨杨杨", status: 2)
+    developer: "杨杨杨", publisher: "杨杨1杨", status: 2)
 }

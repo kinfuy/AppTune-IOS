@@ -82,7 +82,8 @@ enum SheetType: Identifiable {
     case .coinBuy:
       return SheetConfig(fullScreen: false, dismissible: true, height: 0.5)
     case .createType:
-        return SheetConfig(fullScreen: false, dismissible: true, height: 0.68,showDragIndicator: true)
+      return SheetConfig(
+        fullScreen: false, dismissible: true, height: 0.68, showDragIndicator: true)
     default:
       return SheetConfig(fullScreen: false, dismissible: true)
     }
@@ -303,14 +304,12 @@ private struct NoticeOverlay: View {
 
   var body: some View {
     Group {
-      if let noticeManager = notice,
-        noticeManager.isNotice,
-        let currentNotice = noticeManager.currentNotice
-      {
+      if let currentNotice = noticeManager.currentNotice {
         noticeManager.buildNoticeView(notice: currentNotice)
           .background(Color.black.opacity(0.01))
           .ignoresSafeArea()
           .transition(.opacity)
+          .zIndex(999)  // 添加 zIndex 确保在最上层
       }
     }
   }

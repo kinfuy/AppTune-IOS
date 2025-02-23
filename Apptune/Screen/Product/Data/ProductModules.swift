@@ -15,7 +15,8 @@ struct ProductModules {
           color: .indigo,
           roles: ["developer", "admin"],
           badges: [],
-          order: 1
+          order: 1,
+          isEnabled: false
         ),
         ModuleDefinition(
           tab: .myProducts,
@@ -25,7 +26,19 @@ struct ProductModules {
           color: .purple,
           roles: ["user", "developer", "admin"],
           badges: [],
-          order: 2
+          order: 2,
+          isEnabled: true
+        ),
+        ModuleDefinition(
+          tab: .myEvents,
+          icon: "calendar.badge.plus",
+          title: "我的活动",
+          description: "查看和管理活动",
+          color: .blue,
+          roles: ["developer", "admin"],
+          badges: [],
+          order: 3,
+          isEnabled: true
         ),
         ModuleDefinition(
           tab: .joinedEvents,
@@ -35,7 +48,30 @@ struct ProductModules {
           color: .orange,
           roles: ["user", "developer", "admin"],
           badges: [],
-          order: 3
+          order: 4,
+          isEnabled: true
+        ),
+        ModuleDefinition(
+          tab: .dataCenter,
+          icon: "chart.bar.fill",
+          title: "数据中心",
+          description: "产品数据分析与洞察",
+          color: .teal,
+          roles: ["developer", "admin"],
+          badges: [.new],
+          order: 5,
+          isEnabled: false
+        ),
+        ModuleDefinition(
+          tab: .promotion,
+          icon: "tag.fill",
+          title: "推广中心",
+          description: "管理和优化推广活动",
+          color: .indigo,
+          roles: ["developer", "admin"],
+          badges: [],
+          order: 6,
+          isEnabled: true
         ),
       ]
     ),
@@ -47,12 +83,13 @@ struct ProductModules {
         ModuleDefinition(
           tab: .brainstormLab,
           icon: "brain.head.profile",
-          title: "脑暴实验室",
+          title: "头脑风暴",
           description: "AI驱动的创意激发工具",
           color: .pink,
           roles: ["user", "developer", "admin"],
           badges: [.pro, .beta],
-          order: 1
+          order: 1,
+          isEnabled: true
         ),
         ModuleDefinition(
           tab: .productIncubator,
@@ -62,7 +99,8 @@ struct ProductModules {
           color: .mint,
           roles: ["user", "developer", "admin"],
           badges: [.new, .pro],
-          order: 2
+          order: 2,
+          isEnabled: false
         ),
         ModuleDefinition(
           tab: .copywritingFactory,
@@ -72,7 +110,8 @@ struct ProductModules {
           color: .green,
           roles: ["user", "developer", "admin"],
           badges: [],
-          order: 3
+          order: 3,
+          isEnabled: false
         ),
         ModuleDefinition(
           tab: .competitorAnalysis,
@@ -82,7 +121,8 @@ struct ProductModules {
           color: .orange,
           roles: ["developer", "admin"],
           badges: [.new, .ai],
-          order: 4
+          order: 4,
+          isEnabled: false
         ),
       ]
     ),
@@ -92,36 +132,6 @@ struct ProductModules {
       order: 4,
       modules: [
         ModuleDefinition(
-          tab: .myEvents,
-          icon: "calendar.badge.plus",
-          title: "活动管理",
-          description: "查看和管理活动",
-          color: .blue,
-          roles: ["developer", "admin"],
-          badges: [],
-          order: 1
-        ),
-        ModuleDefinition(
-          tab: .dataCenter,
-          icon: "chart.bar.fill",
-          title: "数据中心",
-          description: "产品数据分析与洞察",
-          color: .teal,
-          roles: ["developer", "admin"],
-          badges: [.new],
-          order: 2
-        ),
-        ModuleDefinition(
-          tab: .promotion,
-          icon: "tag.fill",
-          title: "推广中心",
-          description: "管理和优化推广活动",
-          color: .indigo,
-          roles: ["developer", "admin"],
-          badges: [],
-          order: 3
-        ),
-        ModuleDefinition(
           tab: .review,
           icon: "checkmark.seal.fill",
           title: "审核中心",
@@ -129,8 +139,9 @@ struct ProductModules {
           color: .blue,
           roles: ["admin"],
           badges: [],
-          order: 4
-        ),
+          order: 3,
+          isEnabled: true
+        )
       ]
     ),
     ModuleGroup(
@@ -146,7 +157,8 @@ struct ProductModules {
           color: .blue,
           roles: ["user", "developer", "admin"],
           badges: [.new],
-          order: 1
+          order: 2,
+          isEnabled: true
         ),
         ModuleDefinition(
           tab: .eventHall,
@@ -156,7 +168,19 @@ struct ProductModules {
           color: .purple,
           roles: ["user", "developer", "admin"],
           badges: [],
-          order: 2
+          order: 1,
+          isEnabled: true
+        ),
+        ModuleDefinition(
+          tab: .productShow,
+          icon: "app.badge.fill",
+          title: "产品发布会",
+          description: "浏览社区发布的产品",
+          color: .orange,
+          roles: ["user", "developer", "admin"],
+          badges: [.new],
+          order: 3,
+          isEnabled: true
         ),
       ]
     ),

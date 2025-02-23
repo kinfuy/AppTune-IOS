@@ -21,13 +21,18 @@ struct ProductView: View {
   @EnvironmentObject var userService: UserService
   @Default(\.lastProductNoticeDismissDate) var lastProductNoticeDismissDate
 
-  private func handleModuleTap(_ tab: ProductTab) {
+  private func handleModuleTap(_ tab: ProductTab, isEnabled: Bool) {
+    if !isEnabled {
+      notice.open(open: .toast("敬请期待"))
+      Tap.shared.play(.light)
+      return
+    }
+
     withAnimation(.spring()) {
       selectedTab = tab
       selectedModule = tab
     }
-    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-    // TODO: 处理导航逻辑
+    Tap.shared.play(.light)
     router.navigate(to: tab.route)
   }
 
@@ -54,7 +59,9 @@ struct ProductView: View {
       ProductGridView(
         moduleGroups: ProductModules.groups,
         isAnimating: isAnimating,
-        onModuleTap: handleModuleTap
+        onModuleTap: { tab, isEnabled in
+          handleModuleTap(tab, isEnabled: isEnabled)
+        }
       )
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)

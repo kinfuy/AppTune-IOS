@@ -61,8 +61,7 @@ struct InteractivePopGestureModifier: ViewModifier {
               withAnimation(.easeOut(duration: 0.2)) {
                 dragOffset = 100
               }
-              let generator = UIImpactFeedbackGenerator(style: .medium)
-              generator.impactOccurred()
+              Tap.shared.play(.light)
 
               DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 onTrigger()

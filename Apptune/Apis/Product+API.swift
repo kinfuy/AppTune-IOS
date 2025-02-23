@@ -41,6 +41,7 @@ struct ProductInfo: Codable, Identifiable {
   let createTime: Date
   let status: Int?
   let developer: String?
+  let publisher:String?
 }
 
 struct ListResponse<T: Codable>: Codable {
@@ -105,6 +106,14 @@ extension API {
       method: "GET",
       body: nil
     )
+    return try await API.shared.session.data(for: request)
+  }
+
+  static func getProductList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<
+    ProductInfo
+  > {
+    let urlString = "\(BASR_SERVE_URL)/product/list?page=\(page)&pageSize=\(pageSize)"
+    let request = try API.shared.createRequest(url: urlString, method: "GET", body: nil)
     return try await API.shared.session.data(for: request)
   }
 

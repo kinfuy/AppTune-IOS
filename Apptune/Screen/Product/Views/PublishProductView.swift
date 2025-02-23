@@ -161,23 +161,14 @@ struct PublishProductView: View {
                   await productService.loadPendingProductReviews()
                   await productService.loadProducts(refresh: true)
                 }
+                router.back()
               })
             }
           }
           .frame(height: 38)
       }.padding()
     }
-
-    .background(Color(hex: "#f4f4f4"))
-    .navigationBarBackButtonHidden()
-    .navigationTitle("发布产品")
-    .navigationBarTitleDisplayMode(.inline)
-    .navigationBarItems(
-      leading: Button(action: { router.back() }) {
-        Label("返回", systemImage: "chevron.left")
-          .foregroundStyle(Color(hex: "#333333"))
-      }
-    )
+    .customNavigationBar(title: "发布产品", router: router)
     .overlay(
       Group {
         if viewModel.isLoading {

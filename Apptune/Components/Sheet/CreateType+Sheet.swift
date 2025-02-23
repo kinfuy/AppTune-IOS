@@ -49,21 +49,7 @@ struct CreateTypeSheet: View {
   @EnvironmentObject var router: Router
 
   // 推荐模板数据
-  private let recommendTemplates: [RecommendTemplate] = [
-    RecommendTemplate(
-      title: "新用户注册活动",
-      description: "吸引新用户注册的奖励活动模板",
-      type: .activity,
-      icon: "person.badge.plus"
-    ),
-    RecommendTemplate(
-      title: "限时促销活动",
-      description: "限时折扣促销活动模板",
-      type: .promoCode,
-      icon: "timer"
-    ),
-    // 可以添加更多推荐模板
-  ]
+  private let recommendTemplates: [RecommendTemplate] = []
 
   var body: some View {
     VStack(spacing: 0) {
@@ -90,19 +76,21 @@ struct CreateTypeSheet: View {
             .padding(.horizontal)
           }
 
-          // 推荐模板
-          VStack(alignment: .leading, spacing: 16) {
-            Text("推荐模板")
-              .font(.headline)
-              .padding(.horizontal)
+          if !recommendTemplates.isEmpty {
+            // 推荐模板
+            VStack(alignment: .leading, spacing: 16) {
+              Text("推荐模板")
+                .font(.headline)
+                .padding(.horizontal)
 
-            ForEach(recommendTemplates) { template in
-              TemplateCard(template: template) {
-                handleTemplateSelection(template)
+              ForEach(recommendTemplates) { template in
+                TemplateCard(template: template) {
+                  handleTemplateSelection(template)
+                }
               }
             }
+            .padding(.horizontal)
           }
-          .padding(.horizontal)
         }
         .padding(.vertical)
       }
@@ -114,13 +102,13 @@ struct CreateTypeSheet: View {
     sheet.close()
     switch type {
     case .activity:
-      router.navigate(to: .createPromotion)
+      router.navigate(to: .publishActivity(active: nil))
     case .product:
-      router.navigate(to: .createPromotion)
+      router.navigate(to: .publishProduct)
     case .promoCode:
       router.navigate(to: .createPromotion)
     case .experience:
-      router.navigate(to: .createPromotion)
+      router.navigate(to: .createPost)
     }
   }
 

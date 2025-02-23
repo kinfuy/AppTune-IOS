@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct PromotionCardView: View {
+  @EnvironmentObject var promotionService: PromotionService
+
   var productId: String
   var productName: String
   var productLogo: String
@@ -147,7 +149,7 @@ struct PromotionCardView: View {
 
 struct PromotionView: View {
   @EnvironmentObject var promotionService: PromotionService
-
+  @EnvironmentObject var router: Router
   var body: some View {
     ScrollView {
       LazyVStack(spacing: 20) {
@@ -168,6 +170,12 @@ struct PromotionView: View {
         EmptyView(text: "无数据", image: "nodata", size: 68)
       }
     }
+    .onAppear {
+      Task {
+        await promotionService.loadPromotions()
+      }
+    }
+    .customNavigationBar(title: "促销码", router: router)
   }
 }
 

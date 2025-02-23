@@ -159,7 +159,7 @@ class NoticeManager: ObservableObject {
   @Published private(set) var _isNotice: Bool = false
 
   var isNotice: Bool {
-    return _isNotice
+    return currentNotice != nil
   }
 
   @discardableResult
@@ -173,6 +173,7 @@ class NoticeManager: ObservableObject {
       self.noticeStack.append(open)
       withAnimation(.easeIn(duration: 0.38)) {
         self.currentNotice = open
+        self._isNotice = true
       }
     }
 
@@ -202,8 +203,10 @@ class NoticeManager: ObservableObject {
   private func popNotice() {
     if let last = noticeStack.last {
       currentNotice = last
+      _isNotice = true
     } else {
       currentNotice = nil
+      _isNotice = false
     }
   }
 

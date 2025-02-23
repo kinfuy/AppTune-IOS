@@ -244,13 +244,13 @@ private struct ProductSelectItem: View {
   productService.selfProducts = [
     ProductInfo(
       id: "1", name: "产品1", description: "描述1", icon: "https://picsum.photos/200", link: "",
-      category: .effect, price: nil, createTime: Date(), status: 1, developer: "开发者1"),
+      category: .effect, price: nil, createTime: Date(), status: 1, developer: "开发者1", publisher: ""),
     ProductInfo(
       id: "2", name: "产品2", description: "描述2", icon: "https://picsum.photos/200", link: "",
-      category: .effect, price: nil, createTime: Date(), status: 1, developer: "开发者2"),
+      category: .effect, price: nil, createTime: Date(), status: 1, developer: "开发者2", publisher: ""),
     ProductInfo(
       id: "3", name: "产品3", description: "描述3", icon: "https://picsum.photos/200", link: "",
-      category: .life, price: nil, createTime: Date(), status: 1, developer: "开发者3"),
+      category: .life, price: nil, createTime: Date(), status: 1, developer: "开发者3", publisher: ""),
   ]
 
   return NavigationStack {

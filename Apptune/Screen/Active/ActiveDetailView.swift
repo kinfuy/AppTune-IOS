@@ -348,6 +348,7 @@ struct ActiveDetailView: View {
         ],
         link: nil,
         reward: "活动期间完成任务最高可得1000积分,可用于兑换商城礼品",
+        isAudit: true,
         rewardPoints: 1000,
         rewardPromoCodes: nil,
         userId: "1",

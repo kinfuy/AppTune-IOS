@@ -31,6 +31,7 @@ final class PublishActivityViewModel: ObservableObject {
 
   @Published var rewardType: RewardType = .selfManaged  // 奖励类型
   @Published var rewardDesc: String = ""  // 奖励说明
+  @Published var isAudit: Bool = true  // 是否需要审核
   @Published var points: Int = 0
   @Published var promoGroups: [String] = []
 
@@ -107,6 +108,7 @@ final class PublishActivityViewModel: ObservableObject {
       tags: tags,
       link: nil,
       reward: rewardDesc,
+      isAudit: isAudit,
       rewardPoints: points,
       rewardPromoCodes: promoGroups,
       userId: "",
@@ -168,12 +170,12 @@ final class PublishActivityViewModel: ObservableObject {
     rewardDesc = template.reward ?? ""
     limit = template.limit
     isAutoEnd = false
-    if let  pubMode = template.pubMode {
+    if let pubMode = template.pubMode {
       publishMode = pubMode
     } else {
       var pubMode: PublishMode = .quick
       if template.rewardType == .promoCode || template.rewardType == .points
-            || template.limit != nil  || template.reward != nil
+        || template.limit != nil || template.reward != nil
       {
         pubMode = .pro
       }

@@ -18,4 +18,5 @@ struct ModuleDefinition: Identifiable {
   let roles: [String]
   let badges: [BadgeType]
   let order: Int
+  let isEnabled: Bool
 }

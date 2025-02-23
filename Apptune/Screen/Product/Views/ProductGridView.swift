@@ -3,15 +3,16 @@ import SwiftUI
 struct ProductGridView: View {
   let moduleGroups: [ModuleGroup]
   let isAnimating: Bool
-  let onModuleTap: (ProductTab) -> Void
-  
+  let onModuleTap: (ProductTab, Bool) -> Void
+
   var body: some View {
     ScrollView(showsIndicators: false) {
       VStack(alignment: .leading, spacing: ProductConstants.groupSpacing) {
         ForEach(moduleGroups.sorted(by: { $0.order < $1.order })) { group in
           VStack(alignment: .leading, spacing: 16) {
             GroupHeaderView(title: group.title, description: group.description)
-            ModuleGridView(modules: group.modules, isAnimating: isAnimating, onModuleTap: onModuleTap)
+            ModuleGridView(
+              modules: group.modules, isAnimating: isAnimating, onModuleTap: onModuleTap)
           }
         }
       }
@@ -23,7 +24,7 @@ struct ProductGridView: View {
 private struct GroupHeaderView: View {
   let title: String
   let description: String
-  
+
   var body: some View {
     VStack(alignment: .leading, spacing: 4) {
       Text(title)
@@ -43,8 +44,8 @@ private struct GroupHeaderView: View {
 private struct ModuleGridView: View {
   let modules: [ModuleDefinition]
   let isAnimating: Bool
-  let onModuleTap: (ProductTab) -> Void
-  
+  let onModuleTap: (ProductTab, Bool) -> Void
+
   var body: some View {
     LazyVGrid(
       columns: [

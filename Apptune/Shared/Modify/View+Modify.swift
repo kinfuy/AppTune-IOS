@@ -59,8 +59,24 @@ struct RequiredFieldModifier: ViewModifier {
 struct CustomNavigationBarModifier: ViewModifier {
   let title: String
   let router: Router
-  var leadingItem: (() -> AnyView)? = nil
-  var trailingItem: (() -> AnyView)? = nil
+  var leadingItem: (() -> AnyView)?
+  var trailingItem: (() -> AnyView)?
+
+  init(
+    title: String,
+    router: Router,
+    leadingItem: (() -> any View)? = nil,
+    trailingItem: (() -> any View)? = nil
+  ) {
+    self.title = title
+    self.router = router
+    self.leadingItem = leadingItem.map { view in
+      { AnyView(view()) }
+    }
+    self.trailingItem = trailingItem.map { view in
+      { AnyView(view()) }
+    }
+  }
 
   func body(content: Content) -> some View {
     content
@@ -112,8 +128,8 @@ extension View {
   func customNavigationBar(
     title: String,
     router: Router,
-    leadingItem: (() -> AnyView)? = nil,
-    trailingItem: (() -> AnyView)? = nil
+    leadingItem: (() -> any View)? = nil,
+    trailingItem: (() -> any View)? = nil
   ) -> some View {
     modifier(
       CustomNavigationBarModifier(

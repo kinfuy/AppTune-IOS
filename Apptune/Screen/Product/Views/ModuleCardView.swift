@@ -2,10 +2,10 @@ import SwiftUI
 
 struct ModuleCardView: View {
   let module: ModuleDefinition
-  let onTap: (ProductTab) -> Void
+  let onTap: (ProductTab, Bool) -> Void
 
   var body: some View {
-    Button(action: { onTap(module.tab) }) {
+    Button(action: { onTap(module.tab, module.isEnabled) }) {
       VStack(alignment: .leading, spacing: 12) {
         HStack(alignment: .top) {
           Image(systemName: module.icon)
@@ -24,7 +24,7 @@ struct ModuleCardView: View {
         }
 
         VStack(alignment: .leading, spacing: 6) {
-            Text(module.title)
+          Text(module.title)
             .font(.headline)
             .foregroundColor(.primary)
             .lineLimit(1)

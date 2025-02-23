@@ -348,6 +348,7 @@ private struct ConfigItemContainer: View {
           ],
           link: nil,
           reward: "完成活动即可获得积分奖励",
+          isAudit: true,
           rewardPoints: 1000,
           rewardPromoCodes: nil,
           userId: "1",

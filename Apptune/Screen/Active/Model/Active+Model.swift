@@ -33,6 +33,7 @@ struct ActiveInfo: Codable, Identifiable, Hashable {
   let tags: [TagEntity]
   let link: String?
   let reward: String?  // 奖励说明
+  let isAudit: Bool?  // 是否需要审核
   let rewardPoints: Int?  // 奖励积分
   let rewardPromoCodes: [String]?  // 奖励优惠码
   let userId: String

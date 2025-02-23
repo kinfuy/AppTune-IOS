@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct ReviewView: View {
+  @EnvironmentObject var router: Router
   @EnvironmentObject var productService: ProductService
   @EnvironmentObject var activeService: ActiveService
   @EnvironmentObject var communityService: CommunityService
   @EnvironmentObject var userService: UserService
-
 
   var isEmpty: Bool {
     productService.pendingProductReviews.isEmpty
@@ -104,6 +104,14 @@ struct ReviewView: View {
         }
       }
       .padding(.horizontal)
+    }
+    .customNavigationBar(title: "审核中心", router: router)
+    .onAppear {
+      Task {
+        await productService.loadPendingProductReviews()
+        await activeService.loadPendingActiveReviews()
+        await communityService.loadPendingPostReviews()
+      }
     }
   }
 }
@@ -368,7 +376,8 @@ struct PostReviewCard: View {
       price: 99,
       createTime: Date(),
       status: 1,
-      developer: "开发者工作室"
+      developer: "开发者工作室",
+      publisher: ""
     )
   ) { _ in
     // 预览用空操作

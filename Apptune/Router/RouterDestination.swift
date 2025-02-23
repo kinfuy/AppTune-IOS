@@ -27,6 +27,14 @@ enum GeneralRouterDestination: Hashable {
   case webView(url: String, title: String?)  // 网页视图
   case community  // 社区
   case activeCenter  // 活动中心
+  case reviewCenter  // 审核中心
+  case productShow  // 产品发布会
+  case myProduct  // 我的产品
+  case myActive  // 我的活动
+  case joinedActive  // 参与的活动
+  case promotion  // 促销码
+  case selectChat  // 选择群聊
+  case mindChat(roles: Set<ProductRole>) // 聊天室
 
   static func isWhiteListRoute(to: GeneralRouterDestination) -> Bool {
     switch to {
@@ -92,6 +100,22 @@ extension GeneralRouterDestination {
       CommunityView()
     case .activeCenter:
       ActiveHomeView()
+    case .reviewCenter:
+      ReviewView()
+    case .productShow:
+      ProductShowView()
+    case .myProduct:
+      MyProductsView()
+    case .myActive:
+      MyActivesView()
+    case .joinedActive:
+      JoinedActiveView()
+    case .promotion:
+      PromotionView()
+    case .selectChat:
+      SelectChatView()
+    case let .mindChat(roles):
+      MindView(activeRoles: roles)
     }
   }
 }
