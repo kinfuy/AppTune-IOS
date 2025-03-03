@@ -10,11 +10,12 @@ struct ModuleCardView: View {
         HStack(alignment: .top) {
           Image(systemName: module.icon)
             .font(.title2)
-            .foregroundColor(.white)
+            .foregroundColor(module.isEnabled ? .white : .gray)
             .frame(width: ProductConstants.iconSize, height: ProductConstants.iconSize)
-            .background(module.color)
+            .background(module.isEnabled ? module.color : Color.gray.opacity(0.2))
             .clipShape(RoundedRectangle(cornerRadius: ProductConstants.cornerRadius / 2))
-            .shadow(color: module.color.opacity(0.3), radius: 4, y: 2)
+            .shadow(
+              color: module.isEnabled ? module.color.opacity(0.3) : Color.clear, radius: 4, y: 2)
 
           Spacer()
 
@@ -26,12 +27,12 @@ struct ModuleCardView: View {
         VStack(alignment: .leading, spacing: 6) {
           Text(module.title)
             .font(.headline)
-            .foregroundColor(.primary)
+            .foregroundColor(module.isEnabled ? .primary : .gray)
             .lineLimit(1)
 
           Text(module.description)
             .font(.caption)
-            .foregroundColor(.secondary)
+            .foregroundColor(module.isEnabled ? .secondary : .gray)
             .lineLimit(2)
             .fixedSize(horizontal: false, vertical: true)
         }
@@ -43,5 +44,6 @@ struct ModuleCardView: View {
       .shadow(color: Color.black.opacity(0.05), radius: ProductConstants.shadowRadius, y: 4)
     }
     .buttonStyle(ScaleButtonStyle())
+    .disabled(!module.isEnabled)
   }
 }

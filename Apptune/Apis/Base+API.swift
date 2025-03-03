@@ -17,8 +17,8 @@ class API {
 
   let session: URLSession = {
     let config = URLSessionConfiguration.default
-    config.timeoutIntervalForRequest = 15
-    config.timeoutIntervalForResource = 60
+    config.timeoutIntervalForRequest = 30
+    config.timeoutIntervalForResource = 180
     return URLSession(configuration: config)
   }()
 

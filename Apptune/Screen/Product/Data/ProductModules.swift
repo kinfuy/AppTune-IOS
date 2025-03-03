@@ -14,7 +14,7 @@ struct ProductModules {
           description: "展示您的开发者档案",
           color: .indigo,
           roles: ["developer", "admin"],
-          badges: [],
+          badges: [.pending],
           order: 1,
           isEnabled: false
         ),
@@ -58,7 +58,7 @@ struct ProductModules {
           description: "产品数据分析与洞察",
           color: .teal,
           roles: ["developer", "admin"],
-          badges: [.new],
+          badges: [.pending],
           order: 5,
           isEnabled: false
         ),
@@ -98,7 +98,7 @@ struct ProductModules {
           description: "从创意到产品的孵化工具",
           color: .mint,
           roles: ["user", "developer", "admin"],
-          badges: [.new, .pro],
+          badges: [.pending],
           order: 2,
           isEnabled: false
         ),
@@ -109,7 +109,7 @@ struct ProductModules {
           description: "生成高质量文案的智能工具",
           color: .green,
           roles: ["user", "developer", "admin"],
-          badges: [],
+          badges: [.pending],
           order: 3,
           isEnabled: false
         ),
@@ -120,7 +120,7 @@ struct ProductModules {
           description: "智能竞品分析与对标",
           color: .orange,
           roles: ["developer", "admin"],
-          badges: [.new, .ai],
+          badges: [.pending],
           order: 4,
           isEnabled: false
         ),

@@ -10,7 +10,7 @@ struct MyProductsView: View {
 
   var body: some View {
     Group {
-        if productService.selfPage.loading {
+      if productService.selfPage.loading {
         VStack {
           Spacer()
           LoadingComponent()

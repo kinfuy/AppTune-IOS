@@ -1,57 +1,72 @@
+import MarkdownUI
 import SwiftUI
 
 struct MessageBubble: View {
   let message: ChatMessage
   var onCopy: () -> Void = {}
-  var onEdit: () -> Void = {}
-  var onDelete: () -> Void = {}
+
+  @ViewBuilder
+  private func messageContent() -> some View {
+    if message.isUserMessage {
+      Text(message.content)
+        .color(.white)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(.primary)
+        .cornerRadius(all: 8)
+        .textSelection(.enabled)
+    } else {
+      if message.typingState == .loading {
+        LoadingComponent(color: .gray, size: 12)
+          .padding(.horizontal, 12)
+          .padding(.vertical, 10)
+      } else {
+        Markdown(message.content)
+          .markdownTheme(.gitHub)
+          .padding(12)
+          .background(.white)
+          .cornerRadius(all: 8)
+          .textSelection(.enabled)
+      }
+    }
+  }
 
   var body: some View {
-    VStack(alignment: message.role.isUser ? .trailing : .leading, spacing: 4) {
-      // 消息内容
+    VStack(alignment: message.isUserMessage ? .trailing : .leading, spacing: 4) {
       HStack(alignment: .top, spacing: 12) {
-        if !message.role.isUser {
-            Avatar(role: message.role)
+        if !message.isUserMessage {
+          Avatar(agent: message.agent!)
         }
 
-        VStack(alignment: message.role.isUser ? .trailing : .leading, spacing: 4) {
-          if !message.role.isUser {
-              Text(message.role.name)
+        VStack(alignment: message.isUserMessage ? .trailing : .leading, spacing: 4) {
+          if !message.isUserMessage {
+            Text(message.agent!.name)
               .font(.caption)
               .foregroundColor(.gray)
           }
 
-          Text(message.content)
-            .padding(.horizontal, 16)
+          messageContent()
             .padding(.vertical, 12)
-            .background(
-              RoundedRectangle(cornerRadius: 20)
-                .fill(
-                    message.role.isUser
-                    ? Color.blue
-                    : Color(.systemBackground)
-                )
-            )
-            .foregroundColor(message.role.isUser ? .white : .primary)
         }
         .frame(
-          maxWidth: UIScreen.main.bounds.width * 0.7,
-          alignment: message.role.isUser ? .trailing : .leading)
+          maxWidth: UIScreen.main.bounds.width * 0.75,
+          alignment: message.isUserMessage ? .trailing : .leading
+        )
 
-        if message.role.isUser {
-          Avatar(role: message.role)
+        if message.isUserMessage {
+          ImgLoader("p_1")
+            .cornerRadius(all: 8)
+            .frame(width: 32, height: 32)
         } else {
           Spacer()
         }
       }
-
-      // 消息工具栏
-      MessageToolbar(
-        isUserMessage: message.role.isUser,
-        onCopy: onCopy,
-        onEdit: onEdit,
-        onDelete: onDelete
-      )
+      if !message.isUserMessage && message.typingState == .done {
+        MessageToolbar(
+          isUserMessage: message.isUserMessage,
+          onCopy: onCopy
+        )
+      }
     }
     .padding(.horizontal)
     .padding(.vertical, 4)
@@ -62,45 +77,13 @@ struct MessageBubble: View {
 private struct MessageToolbar: View {
   let isUserMessage: Bool
   let onCopy: () -> Void
-  let onEdit: () -> Void
-  let onDelete: () -> Void
-
-  @State private var isExpanded = false
 
   var body: some View {
     HStack(spacing: 16) {
-      if !isUserMessage {
-        ChatToolbarButton(
-          icon: isExpanded ? "chevron.down" : "ellipsis",
-          color: .gray
-        ) {
-          withAnimation(.spring(response: 0.3)) {
-            isExpanded.toggle()
-          }
-        }
+      Group {
+        ChatToolbarButton(icon: "doc.on.doc", action: onCopy)
       }
-
-      if isExpanded {
-        Group {
-          ChatToolbarButton(icon: "doc.on.doc", action: onCopy)
-          if isUserMessage {
-            ChatToolbarButton(icon: "pencil", action: onEdit)
-            ChatToolbarButton(icon: "trash", color: .red, action: onDelete)
-          }
-        }
-        .transition(.scale.combined(with: .opacity))
-      }
-
-      if isUserMessage {
-        ChatToolbarButton(
-          icon: isExpanded ? "chevron.down" : "ellipsis",
-          color: .gray
-        ) {
-          withAnimation(.spring(response: 0.3)) {
-            isExpanded.toggle()
-          }
-        }
-      }
+      .transition(.scale.combined(with: .opacity))
     }
     .frame(maxWidth: .infinity, alignment: isUserMessage ? .trailing : .leading)
     .padding(.horizontal, isUserMessage ? 52 : 44)
@@ -128,21 +111,14 @@ private struct ChatToolbarButton: View {
 }
 
 private struct Avatar: View {
-  let role: AgentRole
+  let agent: Agent
 
   var body: some View {
     ZStack {
-      Image(systemName: role.icon)
-        .font(.system(size: 16))
-        .foregroundColor(.white)
+      ImgLoader(agent.avatar)
+        .cornerRadius(all: 8)
         .frame(width: 32, height: 32)
-        .background(
-          Circle()
-            .fill(role.backgroundColor)
-            .shadow(color: role.backgroundColor.opacity(0.3), radius: 4, y: 2)
-        )
-
-      if role.isModerator {
+      if agent.isModerator {
         Image(systemName: "star.fill")
           .font(.system(size: 10))
           .foregroundColor(.yellow)
@@ -157,8 +133,7 @@ struct MessageBubble_Previews: PreviewProvider {
     VStack(spacing: 20) {
       MessageBubble(
         message: ChatMessage(
-          id: UUID(),
-          role: AgentRole.user(),
+          role: .user,
           content: "这是用户发送的消息",
           timestamp: Date()
         )
@@ -166,13 +141,48 @@ struct MessageBubble_Previews: PreviewProvider {
 
       MessageBubble(
         message: ChatMessage(
-          id: UUID(),
-          role: AgentRole(id: UUID(), name: "用户", isSelectable: false, isModerator: false, icon: "user", description: "用户", isCustom: false, backgroundColor: .gray, isUser: false,configuration: nil,prompts: nil),
-          content: "这是AI助手的回复消息",
-          timestamp: Date()
+          role: .assistant,
+          content: "#### 这是AI助手的回复消息\n ss",
+          timestamp: Date(),
+          agent: Agent(
+            id: UUID().uuidString, userId: "1", name: "AI", description: "SS", avatar: "p_3",
+            isPublic: true, status: 1, isModerator: false, isCustom: true,
+            configuration: AgentConfiguration(temperature: 0.7, maxTokens: 1000, topP: 1),
+            prompts: AgentPrompt(systemPrompt: "ce", userPrompt: "ss"), type: "ss",
+            createTime: Date(), updateTime: Date())
         )
       )
     }
+    .padding()
+  }
+}
+
+struct MessageBubble_Loading_Previews: PreviewProvider {
+  static var previews: some View {
+    MessageBubble(
+      message: ChatMessage(
+        role: .assistant,
+        content: "",
+        timestamp: Date(),
+        agent: Agent(
+          id: UUID().uuidString,
+          userId: "1",
+          name: "AI",
+          description: "SS",
+          avatar: "p_3",
+          isPublic: true,
+          status: 1,
+          isModerator: false,
+          isCustom: true,
+          configuration: AgentConfiguration(temperature: 0.7, maxTokens: 1000, topP: 1),
+          prompts: AgentPrompt(systemPrompt: "ce", userPrompt: "ss"),
+          type: "ss",
+          createTime: Date(),
+          updateTime: Date()
+        ),
+        typingState: .loading
+      )
+    )
     .padding()
   }
 }

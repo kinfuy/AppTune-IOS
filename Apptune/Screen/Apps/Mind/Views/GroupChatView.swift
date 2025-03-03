@@ -7,17 +7,13 @@ struct GroupChatView: View {
   var body: some View {
     VStack(spacing: 0) {
       // 添加角色状态栏
-      RoleStatusBar(
-        activeRoles: viewModel.activeRoles,
-        typingRole: viewModel.typingRole
-      )
 
       Divider()
 
       // 聊天记录
       ChatHistoryView(
         messages: viewModel.messages,
-        activeRoles: viewModel.activeRoles,
+        agents: viewModel.agents,
         onMessageDelete: { message in
           if let index = viewModel.messages.firstIndex(where: { $0.id == message.id }) {
             viewModel.messages.remove(at: index)
@@ -41,7 +37,7 @@ struct GroupChatView: View {
 // 聊天记录视图
 private struct ChatHistoryView: View {
   let messages: [ChatMessage]
-  let activeRoles: Set<AgentRole>
+  let agents: [Agent]
   let onMessageDelete: (ChatMessage) -> Void
 
   var body: some View {
@@ -49,7 +45,7 @@ private struct ChatHistoryView: View {
       ScrollView {
         LazyVStack(spacing: 8) {
           if messages.isEmpty {
-            EmptyStateView(activeRoles: activeRoles)
+            EmptyStateView(agents: agents)
           }
 
           ForEach(messages) { message in
@@ -57,12 +53,6 @@ private struct ChatHistoryView: View {
               message: message,
               onCopy: {
                 UIPasteboard.general.string = message.content
-              },
-              onEdit: {
-                // TODO: 实现编辑功能
-              },
-              onDelete: {
-                onMessageDelete(message)
               }
             )
           }
@@ -87,7 +77,7 @@ private struct ChatHistoryView: View {
 
 // 空状态视图
 private struct EmptyStateView: View {
-  let activeRoles: Set<AgentRole>
+  let agents: [Agent]
 
   var body: some View {
     VStack(spacing: 16) {
@@ -100,8 +90,8 @@ private struct EmptyStateView: View {
           .font(.headline)
 
         // 显示每个AI角色
-        ForEach(Array(activeRoles).sorted(by: { $0.name < $1.name }), id: \.id) { role in
-          Text("\(role.name)已加入讨论")
+        ForEach(agents.sorted(by: { $0.name < $1.name }), id: \.id) { agent in
+          Text("\(agent.name)已加入讨论")
             .font(.subheadline)
             .foregroundColor(.gray)
         }

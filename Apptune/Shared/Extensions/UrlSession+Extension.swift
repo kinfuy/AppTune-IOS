@@ -128,18 +128,41 @@ extension URLSession {
           responseObject = VoidCodable() as! T
         } else {
           let json = JSON(responseData.value)
+          print("🔍 解析 JSON 数据:")
+          print(json)
 
           if let jsonData = try? json.rawData() {
             decoder.dateDecodingStrategy = .millisecondsSince1970
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            responseObject = try decoder.decode(T.self, from: jsonData)
+            do {
+              responseObject = try decoder.decode(T.self, from: jsonData)
+            } catch {
+              print("❌ JSON 解析错误:")
+              print("错误详情: \(error)")
+              if let decodingError = error as? DecodingError {
+                switch decodingError {
+                case .keyNotFound(let key, let context):
+                  print("缺少字段: \(key.stringValue)")
+                  print("解析路径: \(context.codingPath)")
+                case .typeMismatch(let type, let context):
+                  print("类型不匹配: 期望 \(type)")
+                  print("解析路径: \(context.codingPath)")
+                case .valueNotFound(let type, let context):
+                  print("值为空: 期望 \(type)")
+                  print("解析路径: \(context.codingPath)")
+                default:
+                  print("其他解析错误: \(decodingError)")
+                }
+              }
+              throw APIError.systemError(message: "数据解析失败: \(error.localizedDescription)")
+            }
           } else {
             throw APIError.systemError(message: "JSON 序列化失败")
           }
         }
       } catch {
         await NoticeManager.shared.open(open: .toast(Toast(msg: "数据解析失败")))
-        throw APIError.systemError(message: "数据解析失败\(urlRequest.url!)")
+        throw APIError.systemError(message: "数据解析失败: \(error.localizedDescription)")
       }
 
       if loadId != "" {

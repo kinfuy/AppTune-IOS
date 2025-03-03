@@ -34,7 +34,7 @@ enum GeneralRouterDestination: Hashable {
   case joinedActive  // 参与的活动
   case promotion  // 促销码
   case selectChat  // 选择群聊
-  case mindChat(roles: Set<AgentRole>) // 聊天室
+  case mindChat(agents: [Agent]) // 聊天室
 
   static func isWhiteListRoute(to: GeneralRouterDestination) -> Bool {
     switch to {
@@ -114,8 +114,8 @@ extension GeneralRouterDestination {
       PromotionView()
     case .selectChat:
       SelectChatView()
-    case let .mindChat(roles):
-      MindView(activeRoles: roles)
+    case let .mindChat(agents):
+      MindView(agents: agents)
     }
   }
 }

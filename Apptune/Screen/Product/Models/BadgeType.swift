@@ -6,6 +6,7 @@ enum BadgeType {
   case ai
   case vip
   case pro
+  case pending
 
   var text: String {
     switch self {
@@ -14,6 +15,7 @@ enum BadgeType {
     case .ai: return "AI"
     case .vip: return "VIP"
     case .pro: return "Pro"
+    case .pending: return "Soon"
     }
   }
 
@@ -24,6 +26,7 @@ enum BadgeType {
     case .pro: return 3
     case .vip: return 2
     case .beta: return 1
+    case .pending: return 0
     }
   }
 
@@ -34,6 +37,7 @@ enum BadgeType {
     case .ai: return .blue
     case .vip: return .purple
     case .pro: return .indigo
+    case .pending: return .gray
     }
   }
 }

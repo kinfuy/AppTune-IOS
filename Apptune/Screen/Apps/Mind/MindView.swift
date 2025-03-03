@@ -12,8 +12,8 @@ struct MindView: View {
   @StateObject private var viewModel: MindViewModel
   @FocusState private var isFocused: Bool
 
-  init(activeRoles: Set<AgentRole>) {
-    _viewModel = StateObject(wrappedValue: MindViewModel(activeRoles: activeRoles))
+  init(agents: [Agent]) {
+    _viewModel = StateObject(wrappedValue: MindViewModel(agents: agents))
   }
 
   var body: some View {
@@ -21,13 +21,13 @@ struct MindView: View {
       GroupChatView(viewModel: viewModel)
     }
     .customNavigationBar(
-      title: "AI 头脑风暴",
+      title: "头脑风暴",
       router: router,
       trailingItem: {
         Button(action: {
-          viewModel.resetChat()
+          // 聊天设置
         }) {
-          Image(systemName: "arrow.clockwise")
+          Image(systemName: "gear")
         }
       })
   }
@@ -35,7 +35,7 @@ struct MindView: View {
 
 #Preview {
   NavigationStack {
-    MindView(activeRoles: [])
+    MindView(agents: [])
       .environmentObject(Router())
   }
 }
