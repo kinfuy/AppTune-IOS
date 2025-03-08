@@ -24,9 +24,7 @@ class CoinShopViewModel: ObservableObject {
 
   func fetchItems() async {
     // TODO: 从服务器获取商品列表
-    items = [
-     
-    ]
+    items = []
   }
 
   func fetchUserCoin() async {

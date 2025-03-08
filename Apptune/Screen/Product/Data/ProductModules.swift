@@ -94,12 +94,23 @@ struct ProductModules {
         ModuleDefinition(
           tab: .productIncubator,
           icon: "leaf.fill",
-          title: "产品孵化",
-          description: "从创意到产品的孵化工具",
+          title: "灵感工坊",
+          description: "灵感碰撞，创意孵化",
           color: .mint,
           roles: ["user", "developer", "admin"],
           badges: [.pending],
           order: 2,
+          isEnabled: false
+        ),
+        ModuleDefinition(
+          tab: .designer,
+          icon: "pencil.and.outline",
+          title: "原型设计",
+          description: "创意原型设计工具",
+          color: .mint,
+          roles: ["user", "developer", "admin"],
+          badges: [.pending],
+          order: 3,
           isEnabled: false
         ),
         ModuleDefinition(

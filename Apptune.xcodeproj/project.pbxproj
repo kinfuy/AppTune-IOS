@@ -217,6 +217,7 @@
 		F283B04C2D0EBC8F0051FBF1 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		F285F3832D74503C00BF13E3 /* RolesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RolesView.swift; sourceTree = "<group>"; };
 		F285F3852D7454B200BF13E3 /* Agent+API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Agent+API.swift"; path = "Apptune/Apis/Agent+API.swift"; sourceTree = SOURCE_ROOT; };
+		F285F38A2D78A4E600BF13E3 /* AppTune.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = AppTune.storekit; sourceTree = "<group>"; };
 		F288297B2CF20D37002D012A /* Product+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Product+Service.swift"; sourceTree = "<group>"; };
 		F288297D2CF20EDD002D012A /* Active+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Active+Service.swift"; sourceTree = "<group>"; };
 		F288297F2CF21328002D012A /* Active+API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Active+API.swift"; sourceTree = "<group>"; };
@@ -580,6 +581,7 @@
 				F27C65872CB16F1C0074B608 /* Apptune.entitlements */,
 				F27C65882CB16F1C0074B608 /* Preview Content */,
 				F283B04C2D0EBC8F0051FBF1 /* Localizable.xcstrings */,
+				F285F38A2D78A4E600BF13E3 /* AppTune.storekit */,
 			);
 			path = Apptune;
 			sourceTree = "<group>";
