@@ -10,7 +10,7 @@ struct MyActivesView: View {
 
   var body: some View {
     Group {
-      if acticeService.isSelfLoading {
+      if acticeService.selfPage.loading {
         VStack {
           Spacer()
           LoadingComponent()

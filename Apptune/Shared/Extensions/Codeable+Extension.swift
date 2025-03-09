@@ -11,7 +11,7 @@ extension Encodable {
   func asDictionary() -> [String: Any] {
     let encoder = JSONEncoder()
     encoder.dateEncodingStrategy = .iso8601
-    encoder.keyEncodingStrategy = .convertToSnakeCase
+    encoder.keyEncodingStrategy = .useDefaultKeys
 
     // 尝试编码，失败则返回空字典
     guard let data = try? encoder.encode(self),

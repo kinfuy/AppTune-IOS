@@ -20,6 +20,7 @@ enum Catalog: String, CaseIterable, Codable {
   case money
   case game
   case news
+  case other
 
   init(from decoder: Decoder) throws {
     let container = try decoder.singleValueContainer()
@@ -39,6 +40,7 @@ enum Catalog: String, CaseIterable, Codable {
     case .money: return "财务"
     case .game: return "游戏"
     case .news: return "新闻"
+    case .other: return "其他"
     }
   }
 }
@@ -137,7 +139,7 @@ struct ActiveHomeView: View {
 
   var body: some View {
     ScrollView {
-      if activeService.isAllLoading && activeService.needsInitialLoad() {
+      if activeService.allPage.loading && activeService.needsInitialLoad() {
         VStack {
           Spacer()
           LoadingComponent()
@@ -148,7 +150,7 @@ struct ActiveHomeView: View {
         mainContent
       }
     }
-    .animation(.easeInOut(duration: 0.3), value: activeService.isAllLoading)
+    .animation(.easeInOut(duration: 0.3), value: activeService.allPage.loading)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Color(hex: "#f4f4f4"))
     .onAppear {

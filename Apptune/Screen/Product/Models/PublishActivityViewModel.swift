@@ -32,6 +32,7 @@ final class PublishActivityViewModel: ObservableObject {
   @Published var rewardType: RewardType = .selfManaged  // 奖励类型
   @Published var rewardDesc: String = ""  // 奖励说明
   @Published var isAudit: Bool = true  // 是否需要审核
+  @Published var isAutoReward: Bool = false  // 是否自动发放奖励
   @Published var points: Int = 0
   @Published var promoGroups: [String] = []
 
@@ -108,7 +109,8 @@ final class PublishActivityViewModel: ObservableObject {
       tags: tags,
       link: nil,
       reward: rewardDesc,
-      isAudit: isAudit,
+      auditType: isAudit ? .manual : .noAudit,
+      isAutoReward: isAutoReward,
       rewardPoints: points,
       rewardPromoCodes: promoGroups,
       userId: "",
@@ -190,7 +192,7 @@ final class PublishActivityViewModel: ObservableObject {
     originalActive = active
 
     // 如果有产品信息,设置基本产品信息
-    if !active.productId.isEmpty {
+    if active.productId != "" {
       product = ProductBasicInfo(
         id: active.productId,
         name: active.productName,
@@ -210,6 +212,8 @@ final class PublishActivityViewModel: ObservableObject {
     limit = active.limit
     publishMode = active.pubMode
     rewardType = active.rewardType
+    isAudit = active.auditType == .manual
+    isAutoReward = active.isAutoReward ?? false
     rewardDesc = active.reward ?? ""
     points = active.rewardPoints ?? 0
     promoGroups = active.rewardPromoCodes ?? []

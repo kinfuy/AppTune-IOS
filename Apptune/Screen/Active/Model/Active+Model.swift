@@ -12,6 +12,25 @@ enum RewardType: String, Codable, CaseIterable {
   case promoCode = "promocode"
 }
 
+enum AuditType: Int, Codable, CaseIterable {
+  case manual = 1  // 人工审核
+  case noAudit = 2  // 无需审核
+
+  var title: String {
+    switch self {
+    case .manual: return "人工审核"
+    case .noAudit: return "无需审核"
+    }
+  }
+
+  var description: String {
+    switch self {
+    case .manual: return "需要人工审核，需要报名后需要提交审核附件"
+    case .noAudit: return "无需审核，用户报名即可获得奖励"
+    }
+  }
+}
+
 struct ActiveInfo: Codable, Identifiable, Hashable {
   let id: String
   let title: String
@@ -33,7 +52,8 @@ struct ActiveInfo: Codable, Identifiable, Hashable {
   let tags: [TagEntity]
   let link: String?
   let reward: String?  // 奖励说明
-  let isAudit: Bool?  // 是否需要审核
+  let auditType: AuditType  // 审核类型
+  let isAutoReward: Bool?  // 是否自动发放奖励
   let rewardPoints: Int?  // 奖励积分
   let rewardPromoCodes: [String]?  // 奖励优惠码
   let userId: String

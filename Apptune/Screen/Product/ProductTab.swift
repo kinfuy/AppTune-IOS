@@ -15,6 +15,7 @@ enum ProductTab: Int, CaseIterable {
   case eventHall = 13
   case productShow = 14
   case designer = 15
+  case messageCenter = 16
 
   var route: GeneralRouterDestination {
     switch self {
@@ -50,6 +51,8 @@ enum ProductTab: Int, CaseIterable {
       return .productShow
     case .designer:
       return .community
+    case .messageCenter:
+      return .messageCenter
     }
   }
 }

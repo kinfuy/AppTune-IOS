@@ -10,7 +10,7 @@ struct JoinedActiveView: View {
 
   var body: some View {
     Group {
-      if acticeService.isJoinedLoading {
+      if acticeService.joinedPage.loading {
         VStack {
           Spacer()
           LoadingComponent()

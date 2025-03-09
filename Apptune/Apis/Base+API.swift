@@ -28,6 +28,10 @@ class API {
   }
 
   func createRequest(url: String, method: String, body: [String: Any]?) throws -> URLRequest {
+    print("🚀 API Request:")
+    print("URL: \(url)")
+    print("Method: \(method)")
+
     var urlString = url
     if method == "GET" && body != nil {
       let queryItems = body!.map { key, value in
@@ -36,6 +40,7 @@ class API {
 
       urlString += urlString.contains("?") ? "&" : "?"
       urlString += queryItems
+      print("GET 请求参数: \(queryItems)")
     }
 
     guard let url = URL(string: urlString) else {
@@ -50,10 +55,21 @@ class API {
       request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     }
 
+    print("请求头: \(request.allHTTPHeaderFields ?? [:])")
+
     if method != "GET" && body != nil {
-      let jsonData = try JSONSerialization.data(withJSONObject: body!, options: [])
+      let jsonData = try JSONSerialization.data(withJSONObject: body ?? {}, options: [])
       request.httpBody = jsonData
+
+      if let bodyString = String(data: jsonData, encoding: .utf8) {
+        print("请求体: \(bodyString)")
+      }
     }
+
+    print("📡 请求完整信息:")
+    print("----------------------------------------")
+    print("\(request.curlString)")
+    print("----------------------------------------")
 
     return request
   }
@@ -81,5 +97,35 @@ class API {
       await Router.shared.navigate(to: .login)
       throw APIError.serveError(code: "100006", message: "Token刷新失败")
     }
+  }
+}
+
+// 添加一个扩展来生成 cURL 命令字符串
+extension URLRequest {
+  var curlString: String {
+    guard let url = url else { return "" }
+    var baseCommand = "curl \"\(url.absoluteString)\""
+
+    if httpMethod == "HEAD" {
+      baseCommand += " -I"
+    }
+
+    var command = [baseCommand]
+
+    if let method = httpMethod, method != "GET" && method != "HEAD" {
+      command.append("-X \(method)")
+    }
+
+    if let headers = allHTTPHeaderFields {
+      for (key, value) in headers {
+        command.append("-H \"\(key): \(value)\"")
+      }
+    }
+
+    if let bodyData = httpBody, let bodyString = String(data: bodyData, encoding: .utf8) {
+      command.append("-d '\(bodyString)'")
+    }
+
+    return command.joined(separator: " \\\n\t")
   }
 }

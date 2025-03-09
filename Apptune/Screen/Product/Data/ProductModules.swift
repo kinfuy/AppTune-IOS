@@ -65,12 +65,23 @@ struct ProductModules {
         ModuleDefinition(
           tab: .promotion,
           icon: "tag.fill",
-          title: "推广中心",
-          description: "管理和优化推广活动",
+          title: "促销码",
+          description: "管理和优化促销码",
           color: .indigo,
           roles: ["developer", "admin"],
           badges: [],
           order: 6,
+          isEnabled: true
+        ),
+        ModuleDefinition(
+          tab: .messageCenter,
+          icon: "message.fill",
+          title: "消息中心",
+          description: "查看消息",
+          color: .green,
+          roles: ["user", "developer", "admin"],
+          badges: [],
+          order: 7,
           isEnabled: true
         ),
       ]

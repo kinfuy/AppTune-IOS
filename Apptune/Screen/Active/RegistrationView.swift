@@ -102,11 +102,13 @@ struct RegistrationView: View {
   @EnvironmentObject var activeService: ActiveService
 
   @State private var registrationUsers: [RegistrationUser] = []
+  @State private var refreshID = UUID()  // 添加刷新标识
   let active: ActiveInfo
 
   // 统计数据
   @State private var statisticItems: [StatisticItem] = []
 
+  @MainActor
   private func loadStatisticItems() async {
     let stats = await activeService.getActiveRegistrationStats(activeId: active.id)
     statisticItems = [
@@ -131,6 +133,14 @@ struct RegistrationView: View {
         trend: nil
       ),
     ]
+  }
+
+  @MainActor
+  private func refreshData() async {
+    let users = await activeService.getActiveRegistrationList(activeId: active.id)
+    registrationUsers = users ?? []
+    await loadStatisticItems()
+    refreshID = UUID()  // 强制视图刷新
   }
 
   // 按状态分组的用户列表
@@ -175,20 +185,26 @@ struct RegistrationView: View {
               .padding(.top, 8)
           ) {
             ForEach(section.1, id: \.userId) { user in
-              RegistrationUserRow(user: user, active: active)
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.clear)
+              RegistrationUserRow(
+                user: user, active: active,
+                onRefresh: {
+                  Task { @MainActor in
+                    await refreshData()
+                  }
+                }
+              )
+              .listRowSeparator(.hidden)
+              .listRowBackground(Color.clear)
             }
           }
         }
       }
       .listStyle(.plain)
     }
+    .id(refreshID)  // 添加刷新标识
     .onAppear {
-      Task {
-        let users = await activeService.getActiveRegistrationList(activeId: active.id)
-        registrationUsers = users ?? []
-        await loadStatisticItems()
+      Task { @MainActor in
+        await refreshData()
       }
     }
     .background(Color(hex: "#f4f4f4"))
@@ -216,7 +232,80 @@ struct RegistrationView: View {
 struct RegistrationUserRow: View {
   let user: RegistrationUser
   let active: ActiveInfo
+  let onRefresh: () -> Void
   @EnvironmentObject var router: Router
+  @EnvironmentObject var sheet: SheetManager
+  @EnvironmentObject var notice: NoticeManager
+  @EnvironmentObject var activeService: ActiveService
+
+  // 提交审核结果
+  private func submitAuditResult(extra: SubmitExtraParams? = nil) async {
+    await activeService.submitAuditResult(
+      activeId: active.id,
+      userId: user.userId,
+      status: .approved,
+      reason: "",
+      extra: extra,
+      success: {
+        notice.open(open: .toast("奖励发放成功"))
+        // 刷新列表
+        onRefresh()
+      }
+    )
+  }
+
+  @MainActor
+  private func confirmReward(desc: String?, extra: SubmitExtraParams? = nil) async {
+    notice.open(
+      open: .confirm(
+        title: "确定发放奖励吗？",
+        desc: desc ?? "",
+        onSuccess: {
+          Task {
+            await submitAuditResult(extra: extra)
+
+          }
+        }))
+  }
+
+  @MainActor
+  private func checkRewardValidity() async {
+    if active.rewardType == .promoCode {
+      // rewardPromoCodes 多个需要用户选择
+      if active.rewardPromoCodes?.count ?? 0 > 1 {
+        sheet.show(
+          .preCodePicker(
+            productId: active.productId,
+            selectedGroups: [],
+            onSelect: { groups in
+              Task {
+                let group = groups[0]
+                let desc = "审核通过将奖励用户\(group)优惠码"
+                await confirmReward(
+                  desc: desc, extra: SubmitExtraParams(userId: user.userId, group: group))
+              }
+            },
+            onCancel: nil,
+            config: ProCodeSheetConfig(allowMultipleSelection: true, title: "绑定优惠码分组")))
+      } else {
+        await confirmReward(
+          desc: "审核通过将奖励用户 \(active.rewardPromoCodes?.first ?? "") 优惠码",
+          extra: SubmitExtraParams(userId: user.userId, group: active.rewardPromoCodes?.first ?? "")
+        )
+      }
+    }
+
+    if active.rewardType == .points {
+      if let points = active.rewardPoints {
+        await confirmReward(desc: "审核通过将奖励用户 \(points.description) 积分")
+      } else {
+        await confirmReward(desc: "审核通过将奖励用户")
+      }
+    }
+    if active.rewardType == .selfManaged {
+      await confirmReward(desc: "确认奖励已经发放？")
+    }
+  }
 
   var body: some View {
     HStack(spacing: 12) {
@@ -255,6 +344,17 @@ struct RegistrationUserRow: View {
             to: .submitActiveReview(active: active, mode: .review, userId: user.userId))
         }) {
           Text("查看")
+            .font(.system(size: 14))
+            .foregroundColor(Color(.systemBlue))
+        }
+      } else if active.auditType == .noAudit {
+        Button(action: {
+          Task {
+            Tap.shared.play(.light)
+            await checkRewardValidity()
+          }
+        }) {
+          Text("奖励发放")
             .font(.system(size: 14))
             .foregroundColor(Color(.systemBlue))
         }

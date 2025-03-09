@@ -24,39 +24,11 @@ class ActiveService: ObservableObject {
   @Published var pendingActiveReviews: [ActiveInfo] = []
   @Published var topActives: [ActiveInfo] = []
 
-  // 加载状态
-  @Published var isSelfLoading = false
-  @Published var isAllLoading = false
-  @Published var isJoinedLoading = false
-  @Published var isTopLoading = false
-  // 总数统计
-  @Published var totalSelfActive: Int = 0
-  @Published var totalAllActive: Int = 0
-  @Published var totalJoinedActive: Int = 0
-  @Published var totalTopActive: Int = 0
-  // 使用 actor 来管理页码
-  private actor PageManager {
-    private var pages: [ActiveType: Int]
-
-    init() {
-      pages = [.my: 1, .all: 1, .joined: 1]
-    }
-
-    func getCurrentPage(for type: ActiveType) -> Int {
-      return pages[type, default: 1]
-    }
-
-    func updatePage(for type: ActiveType, refresh: Bool) {
-      if refresh {
-        pages[type] = 1
-      } else {
-        pages[type] = pages[type, default: 1] + 1
-      }
-    }
-  }
-
-  private let pageManager = PageManager()
-  private let pageSize = 150
+  @Published var selfPage = Page(page: 1, pageSize: 150, total: 0, loading: false)
+  @Published var allPage = Page(page: 1, pageSize: 150, total: 0, loading: false)
+  @Published var joinedPage = Page(page: 1, pageSize: 150, total: 0, loading: false)
+  @Published var pendingPage = Page(page: 1, pageSize: 150, total: 0, loading: false)
+  @Published var topPage = Page(page: 1, pageSize: 150, total: 0, loading: false)
 
   // 添加数据加载状态追踪
   @Published private var hasLoadedInitialData = false
@@ -71,26 +43,26 @@ class ActiveService: ObservableObject {
     case .my:
       return (
         actives: .init(get: { self.selfActives }, set: { self.selfActives = $0 }),
-        isLoading: .init(get: { self.isSelfLoading }, set: { self.isSelfLoading = $0 }),
-        total: .init(get: { self.totalSelfActive }, set: { self.totalSelfActive = $0 })
+        isLoading: .init(get: { self.selfPage.loading }, set: { self.selfPage.loading = $0 }),
+        total: .init(get: { self.selfPage.total }, set: { self.selfPage.total = $0 })
       )
     case .all:
       return (
         actives: .init(get: { self.allActives }, set: { self.allActives = $0 }),
-        isLoading: .init(get: { self.isAllLoading }, set: { self.isAllLoading = $0 }),
-        total: .init(get: { self.totalAllActive }, set: { self.totalAllActive = $0 })
+        isLoading: .init(get: { self.allPage.loading }, set: { self.allPage.loading = $0 }),
+        total: .init(get: { self.allPage.total }, set: { self.allPage.total = $0 })
       )
     case .joined:
       return (
         actives: .init(get: { self.joinedActives }, set: { self.joinedActives = $0 }),
-        isLoading: .init(get: { self.isJoinedLoading }, set: { self.isJoinedLoading = $0 }),
-        total: .init(get: { self.totalJoinedActive }, set: { self.totalJoinedActive = $0 })
+        isLoading: .init(get: { self.joinedPage.loading }, set: { self.joinedPage.loading = $0 }),
+        total: .init(get: { self.joinedPage.total }, set: { self.joinedPage.total = $0 })
       )
     case .top:
       return (
         actives: .init(get: { self.topActives }, set: { self.topActives = $0 }),
-        isLoading: .init(get: { self.isTopLoading }, set: { self.isTopLoading = $0 }),
-        total: .init(get: { self.totalTopActive }, set: { self.totalTopActive = $0 })
+        isLoading: .init(get: { self.topPage.loading }, set: { self.topPage.loading = $0 }),
+        total: .init(get: { self.topPage.total }, set: { self.topPage.total = $0 })
       )
     }
   }
@@ -106,40 +78,34 @@ class ActiveService: ObservableObject {
   private func loadActives(type: ActiveType, refresh: Bool) async {
     let state = getState(for: type)
 
-    guard !state.isLoading.wrappedValue else { return }
-
     // 只在真正需要显示 loading 时才设置
     let shouldShowLoading = !hasLoadedInitialData || refresh
     if shouldShowLoading {
       state.isLoading.wrappedValue = true
     }
 
-    // 使用 actor 安全地管理页码
-    await pageManager.updatePage(for: type, refresh: refresh)
-    let currentPage = await pageManager.getCurrentPage(for: type)
-
     do {
       let response = try await {
         switch type {
         case .my:
           return try await API.getSelfActiveList(
-            page: currentPage,
-            pageSize: pageSize
+            page: selfPage.page,
+            pageSize: selfPage.pageSize
           )
         case .all:
           return try await API.getActiveList(
-            page: currentPage,
-            pageSize: pageSize
+            page: allPage.page,
+            pageSize: allPage.pageSize
           )
         case .joined:
           return try await API.getJoinedActiveList(
-            page: currentPage,
-            pageSize: pageSize
+            page: joinedPage.page,
+            pageSize: joinedPage.pageSize
           )
         case .top:
           return try await API.getTopActiveList(
-            page: currentPage,
-            pageSize: pageSize
+            page: topPage.page,
+            pageSize: topPage.pageSize
           )
         }
       }()
