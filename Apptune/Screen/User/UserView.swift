@@ -18,6 +18,10 @@ struct UserView: View {
         HStack(spacing: 16) {
           Group {
             Spacer()
+            SFSymbol.bell
+              .onTapGesture {
+                router.navigate(to: .messageCenter)
+              }
             SFSymbol.set
               .onTapGesture {
                 router.navigate(to: .setting)
@@ -41,22 +45,6 @@ struct UserView: View {
                 Text(role)
                   .font(.system(size: 12))
                   .colorTag(.theme)
-              }
-            }
-            HStack(spacing: 32) {
-              VStack(alignment: .leading) {
-                Text(userService.stats.follow.description)
-                  .font(.system(size: 16))
-                Text("关注")
-                  .foregroundColor(.gray)
-                  .font(.system(size: 12))
-              }
-              VStack(alignment: .leading) {
-                Text(userService.stats.fans.description)
-                  .font(.system(size: 16))
-                Text("粉丝")
-                  .foregroundColor(.gray)
-                  .font(.system(size: 12))
               }
             }
           }

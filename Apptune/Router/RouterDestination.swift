@@ -33,6 +33,7 @@ enum GeneralRouterDestination: Hashable {
   case myActive  // 我的活动
   case joinedActive  // 参与的活动
   case promotion  // 促销码
+  case promotionDetail(productId: String)  // 促销码详情
   case selectChat  // 选择群聊
   case mindChat(agents: [Agent])  // 聊天室
   case messageCenter  // 消息中心
@@ -113,6 +114,8 @@ extension GeneralRouterDestination {
       JoinedActiveView()
     case .promotion:
       PromotionView()
+    case let .promotionDetail(productId):
+      PromotionDetailView(productId: productId)
     case .selectChat:
       SelectChatView()
     case let .mindChat(agents):

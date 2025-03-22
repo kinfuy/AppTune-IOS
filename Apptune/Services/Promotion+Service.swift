@@ -46,7 +46,7 @@ class PromotionService: ObservableObject {
     }
   }
 
-  // 创建促��码
+  // 创建促销码
   @MainActor
   func createPromotion(productId: String, codes: [String], group: String) async {
     do {
@@ -60,11 +60,11 @@ class PromotionService: ObservableObject {
     }
   }
 
-  // 删除促销码
+  // 删除单个促销码
   @MainActor
-  func deletePromotion(id: String) async {
+  func deletePromotionCode(_ codes: [PromotionCode]) async {
     do {
-      try await API.deletePromotion(id: id)
+      try await API.deletePromotion(ids: codes.map { $0.id })
     } catch {
       print(error)
     }

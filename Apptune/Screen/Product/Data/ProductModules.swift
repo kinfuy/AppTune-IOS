@@ -7,17 +7,17 @@ struct ProductModules {
       description: "查看您参与的产品和活动",
       order: 2,
       modules: [
-        ModuleDefinition(
-          tab: .devCard,
-          icon: "person.text.rectangle.fill",
-          title: "开发名片",
-          description: "展示您的开发者档案",
-          color: .indigo,
-          roles: ["developer", "admin"],
-          badges: [.pending],
-          order: 1,
-          isEnabled: false
-        ),
+        // ModuleDefinition(
+        //   tab: .devCard,
+        //   icon: "person.text.rectangle.fill",
+        //   title: "开发名片",
+        //   description: "展示您的开发者档案",
+        //   color: .indigo,
+        //   roles: ["developer", "admin"],
+        //   badges: [.pending],
+        //   order: 1,
+        //   isEnabled: false
+        // ),
         ModuleDefinition(
           tab: .myProducts,
           icon: "cube.fill",
@@ -52,17 +52,6 @@ struct ProductModules {
           isEnabled: true
         ),
         ModuleDefinition(
-          tab: .dataCenter,
-          icon: "chart.bar.fill",
-          title: "数据中心",
-          description: "产品数据分析与洞察",
-          color: .teal,
-          roles: ["developer", "admin"],
-          badges: [.pending],
-          order: 5,
-          isEnabled: false
-        ),
-        ModuleDefinition(
           tab: .promotion,
           icon: "tag.fill",
           title: "促销码",
@@ -73,17 +62,6 @@ struct ProductModules {
           order: 6,
           isEnabled: true
         ),
-        ModuleDefinition(
-          tab: .messageCenter,
-          icon: "message.fill",
-          title: "消息中心",
-          description: "查看消息",
-          color: .green,
-          roles: ["user", "developer", "admin"],
-          badges: [],
-          order: 7,
-          isEnabled: true
-        ),
       ]
     ),
     ModuleGroup(
@@ -91,17 +69,17 @@ struct ProductModules {
       description: "激发创意的智能工具集",
       order: 3,
       modules: [
-        ModuleDefinition(
-          tab: .brainstormLab,
-          icon: "brain.head.profile",
-          title: "头脑风暴",
-          description: "AI驱动的创意激发工具",
-          color: .pink,
-          roles: ["user", "developer", "admin"],
-          badges: [.pro, .beta],
-          order: 1,
-          isEnabled: true
-        ),
+        // ModuleDefinition(
+        //   tab: .brainstormLab,
+        //   icon: "brain.head.profile",
+        //   title: "头脑风暴",
+        //   description: "AI驱动的创意激发工具",
+        //   color: .pink,
+        //   roles: ["user", "developer", "admin"],
+        //   badges: [.pro, .beta],
+        //   order: 1,
+        //   isEnabled: true
+        // ),
         ModuleDefinition(
           tab: .productIncubator,
           icon: "leaf.fill",
@@ -114,17 +92,6 @@ struct ProductModules {
           isEnabled: false
         ),
         ModuleDefinition(
-          tab: .designer,
-          icon: "pencil.and.outline",
-          title: "原型设计",
-          description: "创意原型设计工具",
-          color: .mint,
-          roles: ["user", "developer", "admin"],
-          badges: [.pending],
-          order: 3,
-          isEnabled: false
-        ),
-        ModuleDefinition(
           tab: .copywritingFactory,
           icon: "text.book.closed.fill",
           title: "文案工厂",
@@ -133,17 +100,6 @@ struct ProductModules {
           roles: ["user", "developer", "admin"],
           badges: [.pending],
           order: 3,
-          isEnabled: false
-        ),
-        ModuleDefinition(
-          tab: .competitorAnalysis,
-          icon: "binoculars.fill",
-          title: "竞品分析",
-          description: "智能竞品分析与对标",
-          color: .orange,
-          roles: ["developer", "admin"],
-          badges: [.pending],
-          order: 4,
           isEnabled: false
         ),
       ]

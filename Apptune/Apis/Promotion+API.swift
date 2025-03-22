@@ -55,11 +55,11 @@ extension API {
   }
 
   // 删除促销码
-  static func deletePromotion(id: String) async throws {
+  static func deletePromotion(ids: [String]) async throws {
     let request = try API.shared.createRequest(
-      url: "\(BASR_SERVE_URL)/promotion/\(id)",
+      url: "\(BASR_SERVE_URL)/promotion/delete",
       method: "POST",
-      body: nil
+      body: ["ids": ids]
     )
 
     let _: VoidCodable = try await API.shared.session.data(for: request)

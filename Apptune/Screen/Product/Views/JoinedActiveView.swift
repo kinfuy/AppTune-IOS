@@ -19,30 +19,30 @@ struct JoinedActiveView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
       } else {
         ScrollView {
-          LazyVStack(spacing: 16) {
-            if isEmpty {
-              EmptyView(text: "你还没有参加任何活动")
-                .padding(.horizontal)
-            } else {
-              ForEach(acticeService.joinedActives) { ac in
-                ActiveCard(
-                  title: ac.title,
-                  description: ac.description,
-                  startAt: ac.startAt,
-                  endAt: ac.endAt,
-                  joinCount: ac.joinCount ?? 0,
-                  status: ac.status,
-                  cover: ac.cover,
-                  productName: ac.productName,
-                  productLogo: ac.productLogo
-                )
-                .onTapGesture {
-                  router.navigate(to: .activeDetail(active: ac))
-                }
+          if isEmpty {
+            EmptyView(text: "你还没有参加任何活动")
+              .padding(.horizontal)
+          } else {
+            ForEach(acticeService.joinedActives) { ac in
+              ActiveCard(
+                title: ac.title,
+                description: ac.description,
+                startAt: ac.startAt,
+                endAt: ac.endAt,
+                joinCount: ac.joinCount ?? 0,
+                status: ac.status,
+                cover: ac.cover,
+                productName: ac.productName,
+                productLogo: ac.productLogo
+              )
+              .contentShape(Rectangle())
+              .onTapGesture {
+                router.navigate(to: .activeDetail(active: ac))
               }
             }
+            .padding(.horizontal)
           }
-          .padding(.horizontal)
+
         }
       }
     }

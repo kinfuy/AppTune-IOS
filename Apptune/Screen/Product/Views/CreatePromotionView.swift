@@ -26,6 +26,55 @@ struct CreatePromotionView: View {
   @State private var hasCheckedClipboard = false
 
   var body: some View {
+    Group {
+      if productService.selfPage.loading {
+        VStack {
+          Spacer()
+          LoadingComponent()
+          Spacer()
+        }
+        .frame(maxWidth: .infinity, minHeight: 400)
+      } else if productService.selfProducts.isEmpty {
+        noProductsView
+      } else {
+        mainView
+      }
+    }
+    .onAppear {
+      Task {
+        await productService.loadProducts(refresh: true)
+      }
+      if !hasCheckedClipboard {
+        checkClipboard()
+        hasCheckedClipboard = true
+      }
+
+      // 如果还没有选择产品且产品列表不为空,则选择第一个产品
+      if viewModel.selectedProduct == nil && !productService.selfProducts.isEmpty {
+        viewModel.setSelectedProduct(productService.selfProducts[0])
+      }
+    }
+    .customNavigationBar(title: "创建促销码", router: router)
+    .fileImporter(
+      isPresented: $isShowingFilePicker,
+      allowedContentTypes: [.commaSeparatedText]
+    ) { result in
+      switch result {
+      case let .success(url):
+        do {
+          let content = try String(contentsOf: url)
+          viewModel.processCSVContent(content)
+        } catch {
+          notice.open(open: .toast("CSV读取失败"))
+        }
+      case let .failure(error):
+        notice.open(open: .toast("文件选择失败\(error.localizedDescription)"))
+      }
+    }
+  }
+
+  // 主视图
+  private var mainView: some View {
     VStack {
       Form {
         // 产品选择区域
@@ -90,17 +139,6 @@ struct CreatePromotionView: View {
           }
         }
       }
-      .onAppear {
-        if !hasCheckedClipboard {
-          checkClipboard()
-          hasCheckedClipboard = true
-        }
-
-        // 如果还没有选择产品且产品列表不为空,则选择第一个产品
-        if viewModel.selectedProduct == nil && !productService.selfProducts.isEmpty {
-          viewModel.setSelectedProduct(productService.selfProducts[0])
-        }
-      }
 
       VStack {
         Text("保存")
@@ -121,6 +159,7 @@ struct CreatePromotionView: View {
                 notice.open(open: .toast("促销码创建成功"))
                 Task {
                   await promotionService.loadPromotions()
+                  router.back()
                 }
               })
             }
@@ -139,34 +178,45 @@ struct CreatePromotionView: View {
         .padding(.top, 4)
       }.padding()
     }
+  }
 
-    .background(Color(hex: "#f4f4f4"))
-    .navigationBarBackButtonHidden()
-    .navigationTitle("创建促销码")
-    .navigationBarTitleDisplayMode(.inline)
-    .navigationBarItems(
-      leading: Button(action: { router.back() }) {
-        Label("返回", systemImage: "chevron.left")
-          .foregroundStyle(Color(hex: "#333333"))
+  // 没有产品时的引导视图
+  private var noProductsView: some View {
+    VStack(spacing: 24) {
+      // 图标部分
+      VStack(spacing: 16) {
+        ImgLoader("empty")
+          .frame(width: 100, height: 100)
       }
-    )
 
-    .fileImporter(
-      isPresented: $isShowingFilePicker,
-      allowedContentTypes: [.commaSeparatedText]
-    ) { result in
-      switch result {
-      case let .success(url):
-        do {
-          let content = try String(contentsOf: url)
-          viewModel.processCSVContent(content)
-        } catch {
-          notice.open(open: .toast("CSV读取失败"))
+      // 文字说明部分
+      VStack(spacing: 12) {
+        Text("还没有创建产品")
+          .font(.title2)
+          .fontWeight(.medium)
+
+        Text("创建一个产品开始创建促销码吧")
+          .font(.subheadline)
+          .foregroundColor(.gray)
+          .multilineTextAlignment(.center)
+      }
+
+      // 按钮部分
+      Text("创建产品")
+        .onTapGesture {
+          router.navigate(to: .publishProduct)
         }
-      case let .failure(error):
-        notice.open(open: .toast("文件选择失败\(error.localizedDescription)"))
-      }
+        .buttonStyle(.black)
+        .frame(height: 42)
     }
+    .padding(30)
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(
+      RoundedRectangle(cornerRadius: 16)
+        .fill(Color.white)
+        .shadow(color: .gray.opacity(0.08), radius: 12)
+    )
+    .padding()
   }
 
   private func removePromoCode(_ code: String) {
@@ -244,10 +294,12 @@ private struct ProductSelectItem: View {
   productService.selfProducts = [
     ProductInfo(
       id: "1", name: "产品1", description: "描述1", icon: "https://picsum.photos/200", link: "",
-      category: .effect, price: nil, createTime: Date(), status: 1, developer: "开发者1", publisher: ""),
+      category: .effect, price: nil, createTime: Date(), status: 1, developer: "开发者1", publisher: ""
+    ),
     ProductInfo(
       id: "2", name: "产品2", description: "描述2", icon: "https://picsum.photos/200", link: "",
-      category: .effect, price: nil, createTime: Date(), status: 1, developer: "开发者2", publisher: ""),
+      category: .effect, price: nil, createTime: Date(), status: 1, developer: "开发者2", publisher: ""
+    ),
     ProductInfo(
       id: "3", name: "产品3", description: "描述3", icon: "https://picsum.photos/200", link: "",
       category: .life, price: nil, createTime: Date(), status: 1, developer: "开发者3", publisher: ""),

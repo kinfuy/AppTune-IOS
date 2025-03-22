@@ -12,6 +12,9 @@ struct TokenInfo: Decodable {
   var refreshToken: String
 }
 
+// 空响应类型
+struct EmptyResponse: Decodable {}
+
 class API {
   static let shared = API()
 

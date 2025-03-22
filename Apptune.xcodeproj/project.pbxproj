@@ -47,6 +47,7 @@
 		F23F8F752CBEB154005546EE /* ToggleStyle+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23F8F742CBEB154005546EE /* ToggleStyle+Extension.swift */; };
 		F23F8F792CBEB2BA005546EE /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23F8F782CBEB2BA005546EE /* UserView.swift */; };
 		F23F8F7B2CBEBC87005546EE /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23F8F7A2CBEBC87005546EE /* AppState.swift */; };
+		F24736DB2D8ECEE80009362E /* PromotionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24736DA2D8ECEE80009362E /* PromotionDetailView.swift */; };
 		F26F15982CC513C300848715 /* Confirm+Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F15972CC513C300848715 /* Confirm+Modal.swift */; };
 		F26F159A2CC5370900848715 /* EmailLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F15992CC5370900848715 /* EmailLoginView.swift */; };
 		F26F159D2CC538CE00848715 /* User+Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26F159C2CC538CE00848715 /* User+Service.swift */; };
@@ -203,6 +204,7 @@
 		F23F8F742CBEB154005546EE /* ToggleStyle+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToggleStyle+Extension.swift"; sourceTree = "<group>"; };
 		F23F8F782CBEB2BA005546EE /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		F23F8F7A2CBEBC87005546EE /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		F24736DA2D8ECEE80009362E /* PromotionDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromotionDetailView.swift; sourceTree = "<group>"; };
 		F26F15972CC513C300848715 /* Confirm+Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Confirm+Modal.swift"; sourceTree = "<group>"; };
 		F26F15992CC5370900848715 /* EmailLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginView.swift; sourceTree = "<group>"; };
 		F26F159C2CC538CE00848715 /* User+Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Service.swift"; sourceTree = "<group>"; };
@@ -406,6 +408,7 @@
 				F29395432D6A02D9007693EA /* BadgeView.swift */,
 				F29395582D6ADCC2007693EA /* ProductShowView.swift */,
 				F29395442D6A02D9007693EA /* ModuleCardView.swift */,
+				F24736DA2D8ECEE80009362E /* PromotionDetailView.swift */,
 				F293955A2D6ADE5B007693EA /* JoinedActiveView.swift */,
 				F293955C2D6ADE5B007693EA /* MyActivesView.swift */,
 				F293955B2D6ADE5B007693EA /* MyProductsView.swift */,
@@ -980,6 +983,7 @@
 				F2A0D6142CC4D37000536C58 /* UserAccountView.swift in Sources */,
 				F21CFD092CD691C000CAB613 /* CoinTasksViewModel.swift in Sources */,
 				F2A0D6022CC386DF00536C58 /* String+Extension.swift in Sources */,
+				F24736DB2D8ECEE80009362E /* PromotionDetailView.swift in Sources */,
 				F23F8F7B2CBEBC87005546EE /* AppState.swift in Sources */,
 				F26F159A2CC5370900848715 /* EmailLoginView.swift in Sources */,
 				F21CFCD52CD6462400CAB613 /* ActiveCard+Components.swift in Sources */,
