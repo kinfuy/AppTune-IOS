@@ -41,7 +41,7 @@ struct UserView: View {
                 }
               }
             HStack {
-              if let role = userService.role {
+              if let role = userService.roleLabel {
                 Text(role)
                   .font(.system(size: 12))
                   .colorTag(.theme)

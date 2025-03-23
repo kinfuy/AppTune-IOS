@@ -286,7 +286,7 @@ struct RegistrationUserRow: View {
               }
             },
             onCancel: nil,
-            config: ProCodeSheetConfig(allowMultipleSelection: true, title: "绑定优惠码分组")))
+            config: ProCodeSheetConfig(allowMultipleSelection: false, title: "绑定优惠码分组")))
       } else {
         await confirmReward(
           desc: "审核通过将奖励用户 \(active.rewardPromoCodes?.first ?? "") 优惠码",

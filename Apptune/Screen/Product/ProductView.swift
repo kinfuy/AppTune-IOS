@@ -59,6 +59,7 @@ struct ProductView: View {
       ProductGridView(
         moduleGroups: ProductModules.groups,
         isAnimating: isAnimating,
+        userRoles: userService.role,
         onModuleTap: { tab, isEnabled in
           handleModuleTap(tab, isEnabled: isEnabled)
         }

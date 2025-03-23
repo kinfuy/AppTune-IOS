@@ -61,6 +61,17 @@ struct CreatePromotionView: View {
     ) { result in
       switch result {
       case let .success(url):
+        // 开始访问安全作用域资源
+        guard url.startAccessingSecurityScopedResource() else {
+          notice.open(open: .toast("无法访问文件"))
+          return
+        }
+
+        defer {
+          // 确保在退出作用域时停止访问
+          url.stopAccessingSecurityScopedResource()
+        }
+
         do {
           let content = try String(contentsOf: url)
           viewModel.processCSVContent(content)

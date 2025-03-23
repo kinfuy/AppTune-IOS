@@ -108,7 +108,11 @@ class CreatePromotionViewModel: ObservableObject {
     return
       content
       .components(separatedBy: .newlines)
-      .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+      .map { line -> String in
+        // 分割每一行并获取第一列
+        let columns = line.components(separatedBy: ",")
+        return columns.first?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+      }
       .filter { !$0.isEmpty }
   }
 
@@ -122,7 +126,7 @@ class CreatePromotionViewModel: ObservableObject {
     return promoCodes.contains(code)
   }
 
-  // ��加产品选择时的验证
+  // 添加产品选择时的验证
   func setSelectedProduct(_ product: ProductInfo) {
     selectedProduct = product
 

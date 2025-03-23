@@ -24,7 +24,7 @@ struct ProductModules {
           title: "我的产品",
           description: "查看和管理我的产品",
           color: .purple,
-          roles: ["user", "developer", "admin"],
+          roles: [],
           badges: [],
           order: 2,
           isEnabled: true
@@ -46,7 +46,7 @@ struct ProductModules {
           title: "我参与的",
           description: "查看已参与的产品活动",
           color: .orange,
-          roles: ["user", "developer", "admin"],
+          roles: [],
           badges: [],
           order: 4,
           isEnabled: true
@@ -75,7 +75,7 @@ struct ProductModules {
         //   title: "头脑风暴",
         //   description: "AI驱动的创意激发工具",
         //   color: .pink,
-        //   roles: ["user", "developer", "admin"],
+        //   roles: [],
         //   badges: [.pro, .beta],
         //   order: 1,
         //   isEnabled: true
@@ -86,7 +86,7 @@ struct ProductModules {
           title: "灵感工坊",
           description: "灵感碰撞，创意孵化",
           color: .mint,
-          roles: ["user", "developer", "admin"],
+          roles: [],
           badges: [.pending],
           order: 2,
           isEnabled: false
@@ -97,7 +97,7 @@ struct ProductModules {
           title: "文案工厂",
           description: "生成高质量文案的智能工具",
           color: .green,
-          roles: ["user", "developer", "admin"],
+          roles: [],
           badges: [.pending],
           order: 3,
           isEnabled: false
@@ -133,7 +133,7 @@ struct ProductModules {
           title: "社区经验",
           description: "分享和获取产品开发经验",
           color: .blue,
-          roles: ["user", "developer", "admin"],
+          roles: [],
           badges: [.new],
           order: 2,
           isEnabled: true
@@ -144,7 +144,7 @@ struct ProductModules {
           title: "活动大厅",
           description: "浏览和参与最新活动",
           color: .purple,
-          roles: ["user", "developer", "admin"],
+          roles: [],
           badges: [],
           order: 1,
           isEnabled: true
@@ -155,7 +155,7 @@ struct ProductModules {
           title: "产品发布会",
           description: "浏览社区发布的产品",
           color: .orange,
-          roles: ["user", "developer", "admin"],
+          roles: [],
           badges: [.new],
           order: 3,
           isEnabled: true

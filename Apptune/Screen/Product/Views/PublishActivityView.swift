@@ -516,7 +516,7 @@ struct PublishActivityView: View {
                       },
                       onCancel: nil,
                       config: ProCodeSheetConfig(
-                        allowMultipleSelection: false,
+                        allowMultipleSelection: true,
                         title: "选择奖励促销码"
                       )
                     ))

@@ -95,7 +95,10 @@ struct PromotionDetailView: View {
                   onSuccess: {
                     Tap.shared.play(.light)
                     Task {
-                      await promotionService.deletePromotionCode(codes)
+                      let deleteCodes = codes.filter { selectedCodes.contains($0.code) }
+                      await promotionService.deletePromotionCode(deleteCodes)
+                      notice.open(open: .toast("删除成功"))
+                      selectedCodes.removeAll()
                     }
                   })))
           }) {

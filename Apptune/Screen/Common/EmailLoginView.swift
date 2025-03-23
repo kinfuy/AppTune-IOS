@@ -5,6 +5,8 @@
 //  Created by 杨杨杨 on 2024/10/20.
 //
 
+import AuthenticationServices
+import Security
 import SwiftUI
 
 struct EmailLoginView: View {
@@ -69,6 +71,9 @@ struct EmailLoginView: View {
                 .padding(8)
                 .background(Color(hex: "#fafafa"))
                 .cornerRadius(4)
+                .textContentType(.username)
+                .autocapitalization(.none)
+                .keyboardType(.emailAddress)
             }
           }
           VStack {
@@ -79,10 +84,19 @@ struct EmailLoginView: View {
             }
 
             SecureField("", text: $password, prompt: Text("输入密码"))
-
               .padding(8)
               .background(Color(hex: "#fafafa"))
               .cornerRadius(4)
+              .textContentType(.password)
+              .autocapitalization(.none)
+              .disableAutocorrection(true)
+
+            if !isLoginEmail {
+              HStack {
+                Spacer()
+              }
+              .padding(.top, 4)
+            }
           }
 
           if isLoginEmail {

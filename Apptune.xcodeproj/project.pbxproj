@@ -21,6 +21,7 @@
 		F215B37A2D2BE7F1003829BF /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F215B3792D2BE7F1003829BF /* WebView.swift */; };
 		F215B37C2D2C0CA3003829BF /* UIPasteboard+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = F215B37B2D2C0CA3003829BF /* UIPasteboard+Util.swift */; };
 		F215B37E2D2C2E13003829BF /* CoinBuy+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F215B37D2D2C2E13003829BF /* CoinBuy+Sheet.swift */; };
+		F21977832D8FBF23002D270E /* Keychain+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21977822D8FBF23002D270E /* Keychain+Util.swift */; };
 		F21CFCD52CD6462400CAB613 /* ActiveCard+Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD02CD6462300CAB613 /* ActiveCard+Components.swift */; };
 		F21CFCD62CD6462400CAB613 /* ModuleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD12CD6462300CAB613 /* ModuleCard.swift */; };
 		F21CFCD72CD6462400CAB613 /* ProductCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21CFCD22CD6462300CAB613 /* ProductCard.swift */; };
@@ -178,6 +179,7 @@
 		F215B3792D2BE7F1003829BF /* WebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		F215B37B2D2C0CA3003829BF /* UIPasteboard+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPasteboard+Util.swift"; sourceTree = "<group>"; };
 		F215B37D2D2C2E13003829BF /* CoinBuy+Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoinBuy+Sheet.swift"; sourceTree = "<group>"; };
+		F21977822D8FBF23002D270E /* Keychain+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Keychain+Util.swift"; sourceTree = "<group>"; };
 		F21CFCD02CD6462300CAB613 /* ActiveCard+Components.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ActiveCard+Components.swift"; sourceTree = "<group>"; };
 		F21CFCD12CD6462300CAB613 /* ModuleCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModuleCard.swift; sourceTree = "<group>"; };
 		F21CFCD22CD6462300CAB613 /* ProductCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCard.swift; sourceTree = "<group>"; };
@@ -668,6 +670,7 @@
 				F2A0D5FD2CC3862700536C58 /* UserDefault+Util.swift */,
 				F2A0D6112CC4AFB200536C58 /* Const+Util.swift */,
 				F215B37B2D2C0CA3003829BF /* UIPasteboard+Util.swift */,
+				F21977822D8FBF23002D270E /* Keychain+Util.swift */,
 				F299FE582CC94D2F0009C956 /* MD5+Util.swift */,
 				F29395602D6AFF37007693EA /* Page+Util.swift */,
 				F285F3852D7454B200BF13E3 /* Agent+API.swift */,
@@ -1013,6 +1016,7 @@
 				F22377E12CC6ABBB00F780AE /* UrlSession+Extension.swift in Sources */,
 				F28829842CF2EB3D002D012A /* ActivityTemplates+Sheet.swift in Sources */,
 				F237E5A02CCE6BFB00CC1074 /* AboutAuthorView.swift in Sources */,
+				F21977832D8FBF23002D270E /* Keychain+Util.swift in Sources */,
 				F215B3652D2843D0003829BF /* Post.swift in Sources */,
 				F2B269F52CB6C2C5008C46B8 /* ActiveHomeView.swift in Sources */,
 				F293957B2D6B18D2007693EA /* ChatMessage.swift in Sources */,

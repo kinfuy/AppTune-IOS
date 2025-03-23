@@ -43,7 +43,6 @@ struct ActiveCard: View {
 
   var body: some View {
     VStack(spacing: 12) {
-      // 顶部图片和标题部分
       VStack {
         ImgLoader(cover)
           .frame(height: 100)
@@ -75,9 +74,7 @@ struct ActiveCard: View {
         }
       }
 
-      // 底部信息栏
       HStack {
-        // 产品信息
         HStack {
           ImgLoader(productLogo)
             .frame(width: 24, height: 24)
@@ -88,17 +85,13 @@ struct ActiveCard: View {
         }
 
         Spacer()
-
-        // 参与人数
-        //                Text("已有 \(String(describing: joinCount)) 人参与")
-        //                    .font(.system(size: 12))
-        //                    .foregroundColor(.gray)
       }
     }
     .padding(12)
     .background(Color.white)
     .cornerRadius(16)
     .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+    .contentShape(Rectangle())
   }
 }
 

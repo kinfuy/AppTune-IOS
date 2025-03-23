@@ -46,7 +46,11 @@ class UserService: ObservableObject {
     return isLogin && profile.role == "developer"
   }
 
-  var role: String? {
+  var role: String {
+    return profile.role
+  }
+
+  var roleLabel: String? {
     switch profile.role {
     case "admin":
       return "管理员"

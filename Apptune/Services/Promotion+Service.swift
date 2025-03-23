@@ -65,6 +65,7 @@ class PromotionService: ObservableObject {
   func deletePromotionCode(_ codes: [PromotionCode]) async {
     do {
       try await API.deletePromotion(ids: codes.map { $0.id })
+      await loadPromotions()
     } catch {
       print(error)
     }

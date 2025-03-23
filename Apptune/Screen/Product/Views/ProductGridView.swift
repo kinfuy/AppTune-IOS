@@ -3,16 +3,26 @@ import SwiftUI
 struct ProductGridView: View {
   let moduleGroups: [ModuleGroup]
   let isAnimating: Bool
+  let userRoles: String
   let onModuleTap: (ProductTab, Bool) -> Void
 
   var body: some View {
     ScrollView(showsIndicators: false) {
       VStack(alignment: .leading, spacing: ProductConstants.groupSpacing) {
         ForEach(moduleGroups.sorted(by: { $0.order < $1.order })) { group in
-          VStack(alignment: .leading, spacing: 16) {
-            GroupHeaderView(title: group.title, description: group.description)
-            ModuleGridView(
-              modules: group.modules, isAnimating: isAnimating, onModuleTap: onModuleTap)
+          let filteredModules = group.modules.filter { module in
+            module.roles.count > 0 ? module.roles.contains(userRoles) : true
+          }
+
+          if !filteredModules.isEmpty {
+            VStack(alignment: .leading, spacing: 16) {
+              GroupHeaderView(title: group.title, description: group.description)
+              ModuleGridView(
+                modules: filteredModules,
+                isAnimating: isAnimating,
+                onModuleTap: onModuleTap
+              )
+            }
           }
         }
       }

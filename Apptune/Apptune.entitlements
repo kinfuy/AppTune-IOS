@@ -10,5 +10,9 @@
 	</array>
 	<key>com.apple.developer.aps-environment</key>
 	<string>development</string>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)kinfuy.Apptune</string>
+	</array>
 </dict>
 </plist>

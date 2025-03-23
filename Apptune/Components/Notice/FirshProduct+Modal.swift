@@ -36,7 +36,6 @@ struct FirshProduct_Modal: View {
 
         // 创建按钮
         Button(action: {
-          // TODO: 跳转到创建产品页面
           notice.close(id: FIRST_PRODUCT_NOTICE_ID)
           router.navigate(to: .publishProduct)
         }) {
