@@ -30,7 +30,7 @@ struct AppStoreSearchResponse: Codable {
   let results: [AppSearchInfo]
 }
 
-struct ProductInfo: Codable, Identifiable {
+struct ProductInfo: Codable, Identifiable, Hashable {
   let id: String
   let name: String
   let description: String
@@ -41,7 +41,7 @@ struct ProductInfo: Codable, Identifiable {
   let createTime: Date
   let status: Int?
   let developer: String?
-  let publisher:String?
+  let publisher: String?
 }
 
 struct ListResponse<T: Codable>: Codable {
@@ -96,6 +96,32 @@ extension API {
     let _ = try await API.shared.session.data(for: request)
   }
 
+  static func updateProduct(
+    id: String, name: String, description: String, icon: String, link: String,
+    category: Catalog, appId: String?, developer: String?,
+    price: Double?, bundleId: String?, version: String?
+  ) async throws {
+    let params: [String: Any] = [
+      "id": id,
+      "name": name,
+      "description": description,
+      "icon": icon,
+      "link": link,
+      "category": category.rawValue,
+      "appId": appId,
+      "developer": developer,
+      "price": price,
+      "bundleId": bundleId,
+      "version": version,
+    ].compactMapValues { $0 }  // 移除所有 nil 值
+
+    let request = try API.shared.createRequest(
+      url: "\(BASR_SERVE_URL)/product/update",
+      method: "POST",
+      body: params
+    )
+    let _ = try await API.shared.session.data(for: request)
+  }
   static func getSelfProductList(page: Int = 1, pageSize: Int = 10) async throws -> ListResponse<
     ProductInfo
   > {

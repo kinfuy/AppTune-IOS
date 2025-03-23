@@ -37,7 +37,7 @@ struct FirshProduct_Modal: View {
         // 创建按钮
         Button(action: {
           notice.close(id: FIRST_PRODUCT_NOTICE_ID)
-          router.navigate(to: .publishProduct)
+            router.navigate(to: .publishProduct(product: nil))
         }) {
           Text("立即创建")
             .font(.system(size: 16))

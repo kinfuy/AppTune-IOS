@@ -90,4 +90,16 @@ class ProductService: ObservableObject {
       print(error)
     }
   }
+
+  @MainActor
+  func deleteProduct(id: String, success: @escaping () -> Void, failure: @escaping () -> Void) async
+  {
+    do {
+      try await API.deleteProduct(id: id)
+      await loadProducts(refresh: true)
+      success()
+    } catch {
+      failure()
+    }
+  }
 }

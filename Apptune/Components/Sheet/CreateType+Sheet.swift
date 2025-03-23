@@ -104,7 +104,7 @@ struct CreateTypeSheet: View {
     case .activity:
       router.navigate(to: .publishActivity(active: nil))
     case .product:
-      router.navigate(to: .publishProduct)
+        router.navigate(to: .publishProduct(product: nil))
     case .promoCode:
       router.navigate(to: .createPromotion)
     case .experience:

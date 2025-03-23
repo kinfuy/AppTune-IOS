@@ -3,8 +3,10 @@ import UIKit
 
 @MainActor
 class PublishProductViewModel: ObservableObject {
+  @Published var isEditMode: Bool = false
   @Published var searchResults: [AppSearchInfo] = []
 
+  @Published var id: String?
   @Published var productName: String = ""
   @Published var productDescription: String = ""
   @Published var price: String = ""
@@ -69,18 +71,35 @@ class PublishProductViewModel: ObservableObject {
     isLoading = true
     do {
       let priceValue = Double(price)
-      try await API.publishProduct(
-        name: productName,
-        description: productDescription,
-        icon: iconUrl,
-        link: link,
-        category: category,
-        appId: appId.isEmpty ? nil : appId,
-        developer: developer.isEmpty ? nil : developer,
-        price: priceValue,
-        bundleId: bundleId.isEmpty ? nil : bundleId,
-        version: version.isEmpty ? nil : version
-      )
+      if isEditMode && id != nil {
+        let _ = try await API.updateProduct(
+          id: id!,
+          name: productName,
+          description: productDescription,
+          icon: iconUrl,
+          link: link,
+          category: category,
+          appId: appId.isEmpty ? nil : appId,
+          developer: developer.isEmpty ? nil : developer,
+          price: priceValue,
+          bundleId: bundleId.isEmpty ? nil : bundleId,
+          version: version.isEmpty ? nil : version
+        )
+      } else {
+        try await API.publishProduct(
+          name: productName,
+          description: productDescription,
+          icon: iconUrl,
+          link: link,
+          category: category,
+          appId: appId.isEmpty ? nil : appId,
+          developer: developer.isEmpty ? nil : developer,
+          price: priceValue,
+          bundleId: bundleId.isEmpty ? nil : bundleId,
+          version: version.isEmpty ? nil : version
+        )
+      }
+
       isLoading = false
       success()
     } catch {
@@ -113,5 +132,14 @@ class PublishProductViewModel: ObservableObject {
         // 处理错误...
       }
     }
+  }
+
+  func editProduct(product: ProductInfo) {
+    self.productName = product.name
+    self.productDescription = product.description
+    self.iconUrl = product.icon
+    self.link = product.link ?? ""
+    self.category = product.category
+    self.isEditMode = true
   }
 }

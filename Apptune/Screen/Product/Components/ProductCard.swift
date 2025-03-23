@@ -21,11 +21,11 @@ struct ProductCard: View {
   var statusInfo: (String, Color) {
     switch status {
     case 1:
-      ("审核中", .orange)
+      return ("审核中", .orange)
     case 3:
-      ("已拒绝", .red)
+      return ("已拒绝", .red)
     default:
-      ("已通过", .green)
+      return ("已通过", .green)
     }
   }
 

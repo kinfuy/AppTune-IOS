@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct PublishProductView: View {
+  var product: ProductInfo?
   @StateObject private var viewModel: PublishProductViewModel = PublishProductViewModel()
   @EnvironmentObject private var router: Router
   @EnvironmentObject private var notice: NoticeManager
@@ -142,7 +143,7 @@ struct PublishProductView: View {
       }
       Spacer()
       VStack {
-        Text("发布产品")
+        Text(product == nil ? "发布产品" : "更新产品")
           .loadingButton(loading: viewModel.isLoading)
           .buttonStyle(.black)
           .frame(height: 42)
@@ -168,7 +169,15 @@ struct PublishProductView: View {
           .frame(height: 38)
       }.padding()
     }
-    .customNavigationBar(title: "发布产品", router: router)
+    .onAppear {
+      Task {
+        await productService.loadProducts(refresh: true)
+      }
+      if let product = product {
+        viewModel.editProduct(product: product)
+      }
+    }
+    .customNavigationBar(title: product == nil ? "发布产品" : "编辑产品", router: router)
     .overlay(
       Group {
         if viewModel.isLoading {
@@ -184,7 +193,7 @@ struct PublishProductView: View {
 
 #Preview {
   NavigationStack {
-    PublishProductView()
+    PublishProductView(product: nil)
       .environmentObject(Router())
       .environmentObject(NoticeManager())
       .environmentObject(SheetManager())

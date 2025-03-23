@@ -215,7 +215,7 @@ struct CreatePromotionView: View {
       // 按钮部分
       Text("创建产品")
         .onTapGesture {
-          router.navigate(to: .publishProduct)
+          router.navigate(to: .publishProduct(product: nil))
         }
         .buttonStyle(.black)
         .frame(height: 42)
