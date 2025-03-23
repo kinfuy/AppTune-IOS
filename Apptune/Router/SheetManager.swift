@@ -84,6 +84,8 @@ enum SheetType: Identifiable {
     case .createType:
       return SheetConfig(
         fullScreen: false, dismissible: true, height: 0.68, showDragIndicator: true)
+    case .activityPreview:
+      return SheetConfig(fullScreen: false, dismissible: true, showDragIndicator: true)
     default:
       return SheetConfig(fullScreen: false, dismissible: true)
     }

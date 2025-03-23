@@ -36,6 +36,15 @@ struct MyProductsView: View {
                   status: product.status ?? 1
                 )
                 .contextMenu {
+
+                  Button {
+                    router.navigate(to: .publishProduct(product: product))
+                  } label: {
+                    Label("编辑", systemImage: "pencil")
+                  }
+
+                  Divider()
+
                   Button(role: .destructive) {
                     notice.open(
                       open: .confirm(
@@ -45,11 +54,14 @@ struct MyProductsView: View {
                           onSuccess: {
                             Tap.shared.play(.light)
                             Task {
-                              await productService.deleteProduct(id: product.id, success: {
-                                notice.open(open: .toast("删除成功"))
-                              }, failure: {
-                                notice.open(open: .toast("删除失败"))
-                              })
+                              await productService.deleteProduct(
+                                id: product.id,
+                                success: {
+                                  notice.open(open: .toast("删除成功"))
+                                },
+                                failure: {
+                                  notice.open(open: .toast("删除失败"))
+                                })
                             }
                           })))
 
@@ -57,11 +69,6 @@ struct MyProductsView: View {
                     Label("删除", systemImage: "trash")
                   }
 
-                  Button {
-                    router.navigate(to: .publishProduct(product: product))
-                  } label: {
-                    Label("编辑", systemImage: "pencil")
-                  }
                 }
               }
             }
