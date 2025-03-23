@@ -141,5 +141,6 @@ class PublishProductViewModel: ObservableObject {
     self.link = product.link ?? ""
     self.category = product.category
     self.isEditMode = true
+    self.id = product.id
   }
 }
